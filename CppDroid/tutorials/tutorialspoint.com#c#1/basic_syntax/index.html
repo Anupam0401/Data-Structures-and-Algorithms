@@ -1,0 +1,104 @@
+
+<p>You have seen a basic structure of C program, so it will be easy to understand other basic building blocks of the C programming language.</p>
+<h2>Tokens in C</h2>
+<p>A C program consists of various tokens and a token is either a keyword, an identifier, a constant, a string literal, or a symbol. For example, the following C statement consists of five tokens:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+printf("Hello, World! \n");
+</pre></td></tr></table>
+<p>The individual tokens are:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+printf
+(
+"Hello, World! \n"
+)
+;
+</pre></td></tr></table>
+<h2>Semicolons ;</h2>
+<p>In C program, the semicolon is a statement terminator. That is, each individual statement must be ended with a semicolon. It indicates the end of one logical entity.</p>
+<p>For example, following are two different statements:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+printf("Hello, World! \n");
+return 0;
+</pre></td></tr></table>
+<h2>Comments</h2>
+<p>Comments are like helping text in your C program and they are ignored by the compiler. They start with /* and terminates with the characters */ as shown below:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+/* my first program in C */
+</pre></td></tr></table>
+<p>You cannot have comments within comments and they do not occur within a string or character literals.</p>
+<h2>Identifiers</h2>
+<p>A C identifier is a name used to identify a variable, function, or any other user-defined item. An identifier starts with a letter A to Z or a to z or an underscore _ followed by zero or more letters, underscores, and digits (0 to 9).</p>
+<p>C does not allow punctuation characters such as @, $, and % within identifiers. C is a <b>case sensitive</b> programming language. Thus, <i>Manpower</i> and <i>manpower</i> are two different identifiers in C. Here are some examples of acceptable identifiers:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+mohd       zara    abc   move_name  a_123
+myname50   _temp   j     a23b9      retVal
+</pre></td></tr></table>
+<h2>Keywords</h2>
+<p>The following list shows the reserved words in C. These reserved words may not be used as constant or variable or any other identifier names.</p>
+<table class="src">
+<tr>
+<td style="width:25%">auto</td>
+<td style="width:25%">else</td>
+<td style="width:25%">long</td>
+<td style="width:25%">switch</td>
+</tr>
+<tr>
+<td>break</td>
+<td>enum</td>
+<td>register</td>
+<td>typedef</td>
+</tr>
+<tr>
+<td>case</td>
+<td>extern</td>
+<td>return</td>
+<td>union</td>
+</tr>
+<tr>
+<td>char</td>
+<td>float</td>
+<td>short</td>
+<td>unsigned</td>
+</tr>
+<tr>
+<td>const</td>
+<td>for</td>
+<td>signed</td>
+<td>void</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>goto</td>
+<td>sizeof</td>
+<td>volatile</td>
+</tr>
+<tr>
+<td>default</td>
+<td>if</td>
+<td>static</td>
+<td>while</td>
+</tr>
+<tr>
+<td>do</td>
+<td>int</td>
+<td>struct</td>
+<td>_Packed</td>
+</tr>
+<tr>
+<td>double</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</table>
+<h2>Whitespace in C</h2>
+<p>A line containing only whitespace, possibly with a comment, is known as a blank line, and a C compiler totally ignores it.</p>
+<p>Whitespace is the term used in C to describe blanks, tabs, newline characters and comments. Whitespace separates one part of a statement from another and enables the compiler to identify where one element in a statement, such as int, ends and the next element begins. Therefore, in the following statement:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+int age;
+</pre></td></tr></table>
+<p>There must be at least one whitespace character (usually a space) between int and age for the compiler to be able to distinguish them. On the other hand, in the following statement:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+fruit = apples + oranges;   // get the total fruit
+</pre></td></tr></table>
+<p>No whitespace characters are necessary between fruit and =, or between = and apples, although you are free to include some if you wish for readability purpose.</p>

@@ -1,0 +1,1 @@
+cMark = cNancy = cFred = cJoe; // assign cJoe to everyone

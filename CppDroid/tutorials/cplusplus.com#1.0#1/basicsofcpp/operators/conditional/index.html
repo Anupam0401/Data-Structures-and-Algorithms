@@ -1,0 +1,36 @@
+
+<h3>Conditional ternary operator ( ? )</h3>
+The conditional operator evaluates an expression, returning one value if that expression evaluates to <code>true</code>, and a different one if the expression evaluates as <code>false</code>. Its syntax is:<br>
+<br>
+<code>condition ? result1 : result2</code> <br>
+<br>
+If <code>condition</code> is <code>true</code>, the entire expression evaluates to <code>result1</code>, and otherwise to <code>result2</code>.<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>7==5 ? 4 : 3     <cite>// evaluates to 3, since 7 is not equal to 5.</cite>
+7==5+2 ? 4 : 3   <cite>// evaluates to 4, since 7 is equal to 5+2.</cite>
+5&gt;3 ? a : b      <cite>// evaluates to the value of a, since 5 is greater than 3.</cite>
+a&gt;b ? a : b      <cite>// evaluates to whichever is greater, a or b.  </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><cite>// conditional operator</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>int</var> a,b,c;
+
+  a=2;
+  b=7;
+  c = (a&gt;b) ? a : b;
+
+  cout &lt;&lt; c &lt;&lt; <kbd>'\n'</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>7</samp></pre></td></tr></table></div>
+<br>
+<br>
+In this example, <code>a</code> was 2, and <code>b</code> was 7, so the expression being evaluated (<code>a&gt;b</code>) was not <code>true</code>, thus the first value specified after the question mark was discarded in favor of the second value (the one after the colon) which was <code>b</code> (with a value of 7).<br>

@@ -1,0 +1,196 @@
+
+<h3>Iteration statements (loops)</h3>
+Loops repeat a statement a certain number of times, or while a condition is fulfilled. They are introduced by the keywords <code>while</code>, <code>do</code>, and <code>for</code>.<br>
+<br>
+<div id="while">
+<h4>The while loop</h4>
+The simplest kind of loop is the while-loop. Its syntax is:<br>
+<br>
+<code>
+while (expression) statement<br>
+</code>
+<br>
+The while-loop simply repeats <code>statement</code> while <code>expression</code> is true. If, after any execution of <code>statement</code>, <code>expression</code> is no longer true, the loop ends, and the program continues right after the loop. For example, let's have a look at a countdown using a while-loop:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br></code></pre></td>
+<td class="source"><pre><code><cite>// custom countdown using while</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>int</var> n = 10;
+
+  <var>while</var> (n&gt;0) {
+    cout &lt;&lt; n &lt;&lt; <kbd>", "</kbd>;
+    --n;
+  }
+
+  cout &lt;&lt; <kbd>"liftoff!\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>10, 9, 8, 7, 6, 5, 4, 3, 2, 1, liftoff!</samp></pre></td></tr></table></div>
+<br>
+<br>
+The first statement in <code>main</code> sets <var>n</var> to a value of 10. This is the first number in the countdown. Then the while-loop begins: if this value fulfills the condition <code>n&gt;0</code> (that <var>n</var> is greater than zero), then the block that follows the condition is executed, and repeated for as long as the condition (<code>n&gt;0</code>) remains being true.<br>
+<br>
+The whole process of the previous program can be interpreted according to the following script (beginning in <code>main</code>):<br>
+<br>
+<ol>
+<li><code>n</code> is assigned a value</li>
+<li>The <code>while</code> condition is checked (<code>n&gt;0</code>). At this point there are two possibilities:<br>
+<ul>
+<li>condition is true: the statement is executed (to step 3)<br>
+<li>condition is false: ignore statement and continue after it (to step 5)<br>
+</ul>
+</li>
+<li>Execute statement:<br>
+<code>
+cout &lt;&lt; n &lt;&lt; ", ";<br>
+--n;<br>
+</code>
+(prints the value of <code>n</code> and decreases <code>n</code> by 1)<br>
+</li>
+<li>End of block. Return automatically to step 2.</li>
+<li>Continue the program right after the block:<br>
+print <code>liftoff!</code> and end the program.</li>
+</ol>
+<br>
+A thing to consider with while-loops is that the loop should end at some point, and thus the statement shall alter values checked in the condition in some way, so as to force it to become false at some point. Otherwise, the loop will continue looping forever. In this case, the loop includes <code>--n</code>, that decreases the value of the variable that is being evaluated in the condition (<code>n</code>) by one - this will eventually make the condition (<code>n&gt;0</code>) false after a certain number of loop iterations. To be more specific, after 10 iterations, <code>n</code> becomes 0, making the condition no longer true, and ending the while-loop.<br>
+<br>
+Note that the complexity of this loop is trivial for a computer, and so the whole countdown is performed instantly, without any practical delay between elements of the count (if interested, see <code><a href="/sleep_for">sleep_for</a></code> for a countdown example with delays).<br>
+</div>
+<br>
+<div id="dowhile">
+<h4>The do-while loop</h4>
+A very similar loop is the do-while loop, whose syntax is:<br>
+<br>
+<code>
+do statement while (condition);<br>
+</code>
+<br>
+It behaves like a while-loop, except that <code>condition</code> is evaluated after the execution of <code>statement</code> instead of before, guaranteeing at least one execution of <code>statement</code>, even if <code>condition</code> is never fulfilled. For example, the following example program echoes any text the user introduces until the user enters goodbye:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><cite>// echo machine</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  string str;
+  <var>do</var> {
+    cout &lt;&lt; <kbd>"Enter text: "</kbd>;
+    getline (cin,str);
+    cout &lt;&lt; <kbd>"You entered: "</kbd> &lt;&lt; str &lt;&lt; <kbd>'\n'</kbd>;
+  } <var>while</var> (str != <kbd>"goodbye"</kbd>);
+}</code></pre></td>
+<td class="output"><pre><samp>Enter text: hello
+You entered: hello
+Enter text: who's there?
+You entered: who's there?
+Enter text: goodbye
+You entered: goodbye</samp></pre></td></tr></table></div>
+<br>
+<br>
+The do-while loop is usually preferred over a while-loop when the <code>statement</code> needs to be executed at least once, such as when the condition that is checked to end of the loop is determined within the loop statement itself. In the previous example, the user input within the block is what will determine if the loop ends. And thus, even if the user wants to end the loop as soon as possible by entering <samp>goodbye</samp>, the block in the loop needs to be executed at least once to prompt for input, and the condition can, in fact, only be determined after it is executed.<br>
+</div>
+<br>
+<div id="for">
+<h4>The for loop</h4>
+The <code>for</code> loop is designed to iterate a number of times. Its syntax is:<br>
+<br>
+<code>
+for (initialization; condition; increase) statement;<br>
+</code>
+<br>
+Like the while-loop, this loop repeats <code>statement</code> while <code>condition</code> is true. But, in addition, the for loop provides specific locations to contain an <code>initialization</code> and an <code>increase</code> expression, executed before the loop begins the first time, and after each iteration, respectively. Therefore, it is especially useful to use counter variables as <code>condition</code>.<br>
+<br>
+It works in the following way:<br>
+<br>
+<ol>
+<li><code>initialization</code> is executed. Generally, this declares a counter variable, and sets it to some initial value. This is executed a single time, at the beginning of the loop.</li>
+<li><code>condition</code> is checked. If it is true, the loop continues; otherwise, the loop ends, and <code>statement</code> is skipped, going directly to step 5.</li>
+<li><code>statement</code> is executed. As usual, it can be either a single statement or a block enclosed in curly braces <code>{ }</code>.</li>
+<li><code>increase</code> is executed, and the loop gets back to step 2.</li>
+<li>the loop ends: execution continues by the next statement after it.</li>
+</ol>
+<br>
+Here is the countdown example using a for loop:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br></code></pre></td>
+<td class="source"><pre><code><cite>// countdown using a for loop</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>for</var> (<var>int</var> n=10; n&gt;0; n--) {
+    cout &lt;&lt; n &lt;&lt; <kbd>", "</kbd>;
+  }
+  cout &lt;&lt; <kbd>"liftoff!\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>10, 9, 8, 7, 6, 5, 4, 3, 2, 1, liftoff!</samp></pre></td></tr></table></div>
+<br>
+<br>
+The three fields in a for-loop are optional. They can be left empty, but in all cases the semicolon signs between them are required. For example, <code>for (;n&lt;10;)</code> is a loop without <i>initialization</i> or <i>increase</i> (equivalent to a while-loop); and <code>for (;n&lt;10;++n)</code> is a loop with <i>increase</i>, but no <i>initialization</i> (maybe because the variable was already initialized before the loop). A loop with no <i>condition</i> is equivalent to a loop with <code>true</code> as condition (i.e., an infinite loop).<br>
+<br>
+Because each of the fields is executed in a particular time in the life cycle of a loop, it may be useful to execute more than a single expression as any of <i>initialization</i>, <i>condition</i>, or <i>statement</i>. Unfortunately, these are not statements, but rather, simple expressions, and thus cannot be replaced by a block. As expressions, they can, however, make use of the comma operator (<code>,</code>): This operator is an expression separator, and can separate multiple expressions where only one is generally expected. For example, using it, it would be possible for a for loop to handle two counter variables, initializing and increasing both:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>for</var> ( n=0, i=100 ; n!=i ; ++n, --i )
+{
+   <cite>// whatever here...</cite>
+}</code></pre></td></tr></table></div>
+<br>
+<br>
+This loop will execute 50 times if neither <code>n</code> or <code>i</code> are modified within the loop:<br>
+<br>
+<img src="for_loop.png" alt=""> <br>
+ <br>
+<code>n</code> starts with a value of 0, and <code>i</code> with 100, the condition is <code>n!=i</code> (i.e., that <code>n</code> is not equal to <code>i</code>). Because <code>n</code> is increased by one, and <code>i</code> decreased by one on each iteration, the loop's condition will become false after the 50th iteration, when both <code>n</code> and <code>i</code> are equal to 50.<br>
+</div>
+<br>
+<div id="rangefor">
+<h4>Range-based for loop</h4>
+The for-loop has another syntax, which is used exclusively with ranges:<br>
+<br>
+<code>
+for ( declaration : range ) statement;<br>
+</code>
+<br>
+This kind of for loop iterates over all the elements in <code>range</code>, where <code>declaration</code> declares some variable able to take the value of an element in this range. Ranges are sequences of elements, including arrays, containers, and any other type supporting the functions <samp>begin</samp> and <samp>end</samp>; Most of these types have not yet been introduced in this tutorial, but we are already acquainted with at least one kind of range: strings, which are sequences of characters.<br>
+<br>
+An example of range-based for loop using strings:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><cite>// range-based for loop</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  string str {<kbd>"Hello!"</kbd>};
+  <var>for</var> (<var>char</var> c : str)
+  {
+    std::cout &lt;&lt; <kbd>"["</kbd> &lt;&lt; c &lt;&lt; <kbd>"]"</kbd>;
+  }
+  std::cout &lt;&lt; <kbd>'\n'</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>[H][e][l][l][o][!]</samp></pre></td></tr></table></div>
+<br>
+<br>
+Note how what precedes the colon (<code>:</code>) in the for loop is the declaration of a <code>char</code> variable (the elements in a string are of type <code>char</code>). We then use this variable, <code>c</code>, in the statement block to represent the value of each of the elements in the range.<br>
+<br>
+This loop is automatic and does not require the explicit declaration of any counter variable.<br>
+<br>
+Range based loops usually make also use of type deduction for the type of the elements with <code>auto</code>. Typically, the range-based loop above can also be written as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>for</var> (<var>auto</var> c : str)
+  std::cout &lt;&lt; <kbd>"["</kbd> &lt;&lt; c &lt;&lt; <kbd>"]"</kbd>;</code></pre></td></tr></table></div>
+<br>
+<br>
+Here, the type of <code>c</code> is automatically deduced as the type of the elements in <code>str</code>.<br>
+</div>

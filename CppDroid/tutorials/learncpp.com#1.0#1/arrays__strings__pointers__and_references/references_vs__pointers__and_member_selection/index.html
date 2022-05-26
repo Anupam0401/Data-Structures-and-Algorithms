@@ -1,0 +1,43 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>References and pointers</strong></p>
+<p>References and pointers have an interesting relationship &#8212; a reference acts like a const pointer that is implicitly dereferenced.  Thus given the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+int *const pnValue = &amp;nValue;
+int &amp;rnValue = nValue;
+</pre></td></tr></table>
+<p><code>*pnValue</code> and <code>rnValue</code> evaluate identically.  As a result, the following two statements produce the same effect:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+*pnValue = 6;
+rnValue = 6;
+</pre></td></tr></table>
+<p>Similarly, a const reference acts just like a const pointer to a const object that is implicitly dereferenced.</p>
+<p>Because references always &#8220;point&#8221; to valid objects, and can never be pointed to deallocated memory, references are safer to use than pointers.  If a task can be solved with either a reference or a pointer, the reference should generally be preferred.  Pointers should generally only be used in situations where references are not sufficient (such as dynamically allocating memory).</p>
+<p><strong>Member selection</strong></p>
+<p>It is common to have either a pointer or a reference to a struct (or class).  As you learned previously, you can select the member of a struct using the <strong>member selection operator (.)</strong>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct Something
+{
+    int nValue;
+    float fValue;
+};
+
+// Member selection using actual struct variable
+Something sSomething;
+sSomething.nValue = 5;
+
+// Member selection using reference to struct
+Something &amp;rsSomething = sSomething;
+rsSomething.nValue = 5;
+
+// Member selection using pointer to struct
+Something *psSomething = &amp;sSomething;
+(*psSomething).nValue = 5;
+</pre></td></tr></table>
+<p>Note that the pointer dereference must be enclosed in parenthesis, because the member selection operator has a higher precedence than the dereference operator.</p>
+<p>Because the syntax for access to structs and class members through a pointer is awkward, C++ offers a second member selection operator (->) for doing member selection from pointers.  The following two lines are equivalent:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+(*psSomething).nValue = 5;
+psSomething-&gt;nValue = 5;
+</pre></td></tr></table>
+<p>This is not only easier to type, but is also much less prone to error because there are no precedence issues to worry about.  Consequently, when doing member access through a pointer, always use the -> operator.</p>

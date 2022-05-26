@@ -1,0 +1,1 @@
+void *pVoid; // pVoid is a void pointer

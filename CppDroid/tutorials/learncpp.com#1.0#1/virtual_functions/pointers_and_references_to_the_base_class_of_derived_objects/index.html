@@ -1,0 +1,202 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous chapter, you learned all about how to use inheritance to derive new classes from existing classes.  In this chapter, we are going to focus on one of the most important and powerful aspects of inheritance &#8212; virtual functions.</p>
+<p>But before we discuss what virtual functions are, let&#8217;s first set the table for why we need them.</p>
+<p>In the chapter on <a href="http://www.learncpp.com/cpp-tutorial/113-order-of-construction-of-derived-classes/">construction of derived classes</a>, you learned that when you create a derived class, it is composed of multiple parts: one part for each inherited class, and a part for itself.</p>
+<p>For example, here&#8217;s a simple case:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+protected:
+    int m_nValue;
+
+public:
+    Base(int nValue)
+        : m_nValue(nValue)
+    {
+    }
+
+    const char* GetName() { return &quot;Base&quot;; }
+    int GetValue() { return m_nValue; }
+};
+
+class Derived: public Base
+{
+public:
+    Derived(int nValue)
+        : Base(nValue)
+    {
+    }
+
+    const char* GetName() { return &quot;Derived&quot;; }
+    int GetValueDoubled() { return m_nValue * 2; }
+};
+</pre></td></tr></table>
+<p>When we create a Derived object, it contains a Base part (which is constructed first), and a Derived part (which is constructed second).  Remember that inheritance implies an is-a relationship between two classes.  Since a Derived is-a Base, it is appropriate that Derived contain a Base part of it.</p>
+<p><strong>Pointers, references, and derived classes</strong></p>
+<p>It should be fairly intuitive that we can set Derived pointers and references to Derived objects:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+    Derived cDerived(5);
+    cout &lt;&lt; &quot;cDerived is a &quot; &lt;&lt; cDerived.GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; cDerived.GetValue() &lt;&lt; endl;
+
+    Derived &amp;rDerived = cDerived;
+    cout &lt;&lt; &quot;rDerived is a &quot; &lt;&lt; rDerived.GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; rDerived.GetValue() &lt;&lt; endl;
+
+    Derived *pDerived = &amp;cDerived;
+    cout &lt;&lt; &quot;pDerived is a &quot; &lt;&lt; pDerived-&gt;GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; pDerived-&gt;GetValue() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the following output:</p>
+<pre>
+cDerived is a Derived and has value 5
+rDerived is a Derived and has value 5
+pDerived is a Derived and has value 5
+</pre>
+<p>However, since Derived has a Base part, a more interesting question is whether C++ will let us set a Base pointer or reference to a Derived object.  It turns out, we can!</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+    Derived cDerived(5);
+
+    // These are both legal!
+    Base &amp;rBase = cDerived;
+    Base *pBase = &amp;cDerived;
+
+    cout &lt;&lt; &quot;cDerived is a &quot; &lt;&lt; cDerived.GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; cDerived.GetValue() &lt;&lt; endl;
+    cout &lt;&lt; &quot;rBase is a &quot; &lt;&lt; rBase.GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; rBase.GetValue() &lt;&lt; endl;
+    cout &lt;&lt; &quot;pBase is a &quot; &lt;&lt; pBase-&gt;GetName() &lt;&lt; &quot; and has value &quot; &lt;&lt; pBase-&gt;GetValue() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+cDerived is a Derived and has value 5
+rBase is a Base and has value 5
+pBase is a Base and has value 5
+</pre>
+<p>This result may not be quite what you were expecting at first!</p>
+<p>It turns out that because rBase and pBase are a Base reference and pointer, they can only see members of Base (or any classes that Base inherited).  So even though Derived::GetName() is an override of Base::GetName(), the Base pointer/reference can not see Derived::GetName().  Consequently, they call Base::GetName(), which is why rBase and pBase report that they are a Base rather than a Derived.</p>
+<p>Note that this also means it is not possible to call Derived::GetValueDoubled() using rBase or pBase.  They are unable to see anything in Derived.</p>
+<p>Here&#8217;s another slightly more complex example that we&#8217;ll build on in the next lesson:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Animal
+{
+protected:
+    std::string m_strName;
+
+    // We're making this constructor protected because
+    // we don't want people creating Animal objects directly,
+    // but we still want derived classes to be able to use it.
+    Animal(std::string strName)
+        : m_strName(strName)
+    {
+    }
+
+public:
+    std::string GetName() { return m_strName; }
+    const char* Speak() { return &quot;???&quot;; }
+};
+
+class Cat: public Animal
+{
+public:
+    Cat(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    const char* Speak() { return &quot;Meow&quot;; }
+};
+
+class Dog: public Animal
+{
+public:
+    Dog(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    const char* Speak() { return &quot;Woof&quot;; }
+};
+
+int main()
+{
+    Cat cCat(&quot;Fred&quot;);
+    cout &lt;&lt; &quot;cCat is named &quot; &lt;&lt; cCat.GetName() &lt;&lt; &quot;, and it says &quot; &lt;&lt; cCat.Speak() &lt;&lt; endl;
+
+    Dog cDog(&quot;Garbo&quot;);
+    cout &lt;&lt; &quot;cDog is named &quot; &lt;&lt; cDog.GetName() &lt;&lt; &quot;, and it says &quot; &lt;&lt; cDog.Speak() &lt;&lt; endl;
+
+    Animal *pAnimal = &amp;cCat;
+    cout &lt;&lt; &quot;pAnimal is named &quot; &lt;&lt; pAnimal-&gt;GetName() &lt;&lt; &quot;, and it says &quot; &lt;&lt; pAnimal-&gt;Speak() &lt;&lt; endl;
+
+    Animal *pAnimal = &amp;cDog;
+    cout &lt;&lt; &quot;pAnimal is named &quot; &lt;&lt; pAnimal-&gt;GetName() &lt;&lt; &quot;, and it says &quot; &lt;&lt; pAnimal-&gt;Speak() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+cCat is named Fred, and it says Meow
+cDog is named Garbo, and it says Woof
+pAnimal is named Fred, and it says ???
+pAnimal is named Garbo, and it says ???
+</pre>
+<p>We see the same issue here.  Because pAnimal is an Animal pointer, it can only see the Animal class.  Consequently, <code>pAnimal-&gt;Speak()</code> calls Animal::Speak() rather than the Dog::Speak() or Cat::Speak() function.</p>
+<p><strong>Use for pointers and references to base classes</strong></p>
+<p>Now you might be saying, &#8220;The above examples seem kind of silly.  Why would I set a pointer or reference to the base class of a derived object when I can just use the derived object?&#8221;  It turns out that there are quite a few good reasons.</p>
+<p>First, let&#8217;s say you wanted to write a function that printed an animal&#8217;s name and sound.  Without using a pointer to a base class, you&#8217;d have to write it like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void Report(Cat &amp;cCat)
+{
+    cout &lt;&lt; cCat.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; cCat.Speak() &lt;&lt; endl;
+}
+
+void Report(Dog &amp;cDog)
+{
+    cout &lt;&lt; cDog.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; cDog.Speak() &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Not too difficult, but consider what would happen if we had 30 different animal types instead of 2.  You&#8217;d have to write 30 almost identical functions!   Plus, if you ever added a new type of animal, you&#8217;d have to write a new function for that one too.  This is a huge waste of time considering the only real difference is the type of the parameter.</p>
+<p>However, because Cat and Dog are derived from Animal, Cat and Dog have an Animal part.  Therefore, it makes sense that we should be able to do something like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void Report(Animal &amp;rAnimal)
+{
+    cout &lt;&lt; rAnimal.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; rAnimal.Speak() &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This would let us pass in any class derived from Animal, even ones that we haven&#8217;t thought of yet!  Instead of one function per animal, we get one function that works with all classes derived from Animal!</p>
+<p>The problem, is of course, that because cAnimal is an Animal reference, <code>cAnimal.Speak()</code> will call Animal::Speak() instead of the derived version of Speak().</p>
+<p>Second, let&#8217;s say you had 3 cats and 3 dogs that you wanted to keep in an array for easy access.  Because arrays can only hold objects of one type, without a pointer or reference to a base class, you&#8217;d have to do it like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cat acCats[] = { Cat(&quot;Fred&quot;), Cat(&quot;Tyson&quot;), Cat(&quot;Zeke&quot;) };
+Dog acDogs[] = { Dog(&quot;Garbo&quot;), Dog(&quot;Pooky&quot;), Dog(&quot;Truffle&quot;) };
+
+for (int iii=0; iii &lt; 3; iii++)
+    cout &lt;&lt; acCats[iii].GetName() &lt;&lt; &quot; says &quot; &lt;&lt; acCats[iii].Speak() &lt;&lt; endl;
+
+for (int iii=0; iii &lt; 3; iii++)
+    cout &lt;&lt; acDogs[iii].GetName() &lt;&lt; &quot; says &quot; &lt;&lt; acDogs[iii].Speak() &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Now, consider what would happen if you had 30 different types of animals.  You&#8217;d need 30 arrays, one for each type of animal!</p>
+<p>However, because both Cat and Dog are Animal, it makes sense that we should be able to do something like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cat cFred(&quot;Fred&quot;), cTyson(&quot;Tyson&quot;), cZeke(&quot;Zeke&quot;);
+Dog cGarbo(&quot;Garbo&quot;), cPooky(&quot;Pooky&quot;), cTruffle(&quot;Truffle&quot;);
+
+// Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
+Animal *apcAnimals[] = { &amp;cFred, &amp;cGarbo, &amp;cPooky, &amp;cTruffle, &amp;cTyson, &amp;cZeke };
+for (int iii=0; iii &lt; 6; iii++)
+    cout &lt;&lt; apcAnimals[iii]-&gt;GetName() &lt;&lt; &quot; says &quot; &lt;&lt; apcAnimals[iii]-&gt;Speak() &lt;&lt; endl;
+</pre></td></tr></table>
+<p>While this compiles and executes, unfortunately the fact that apcAnimals is a pointer to an Animal means that <code>apcAnimals[iii]-&gt;Speak()</code> will call Animal::Speak() instead of the proper derived class version of Speak().</p>
+<p>Although both of these techniques could save us a lot of time and energy, they have the same problem.  The pointer or reference to the base class calls the base version of the function rather than the derived version.  If only there was some way to make those base pointers call the derived version of a function instead of the base version&#8230;</p>
+<p>Want to take a guess what virtual functions are for? :)</p>

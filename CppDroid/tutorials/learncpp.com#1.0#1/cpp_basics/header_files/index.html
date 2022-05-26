@@ -1,0 +1,84 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Code files (with a .cpp extension) are not the only files commonly seen in programs.  The other type of file is called a <strong>header file</strong>, sometimes known as an <strong>include file</strong>.  Header files almost always have a .h extension.  The purpose of a header file is to hold declarations for other files to use.</p>
+<p><strong>Using standard library header files</strong></p>
+<p>Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Hello, world!&quot; &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program prints &#8220;Hello, world!&#8221; to the console using cout.  However, our program never defines cout, so how does the compiler know what cout is?  The answer is that cout has been declared in a header file called &#8220;iostream&#8221;.  When we use the line <code>#include &lt;iostream&gt;</code>, we are telling the compiler to locate and then read all the declarations from a header file named &#8220;iostream&#8221;.</p>
+<p>Keep in mind that header files typically only contain declarations.  They do not define how something is implemented, and you already know that your program won&#8217;t link if it can&#8217;t find the implementation of something you use.  So if cout is only <em>defined</em> in the &#8220;iostream&#8221; header file, where is it actually implemented?  It is implemented in the runtime support library, which is automatically linked into your program during the link phase.</p>
+<p><img src="{path}/IncludeLibrary.png"></p>
+<p>A <strong>library</strong> is a package of code that is meant to be reused in many programs.  Typically, a library includes a header file that contains declarations for everything the library wishes to expose (make public) to users, and a precompiled object that contains all of the implementation code compiled into machine language.  These libraries typically have a .lib or .dll extension on Windows, and a .a or .so extension on Unix.  Why are libraries precompiled?  First, since libraries rarely change, they do not need to be recompiled often, if ever.  It would be a waste of time to compile them every time you wrote a program that used them.  Second, because precompiled objects are in machine language, it prevents people from accessing or changing the source code, which is important to businesses or people who don&#8217;t want to make their source code available for intellectual property reasons.  </p>
+<p><strong>Writing your own header files</strong></p>
+<p>Now let&#8217;s go back to the example we were discussing in the previous lesson.  When we left off, we had two files, add.cpp and main.cpp, that looked like this:</p>
+<p>add.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int add(int x, int y)
+{
+    return x + y;
+}
+</pre></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int add(int x, int y); // forward declaration using function prototype
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>We&#8217;d used a forward declaration so that the compiler would know what add was when compiling main.cpp.  As previously mentioned, writing forward declarations for every function you want to use that lives in another file can get tedious quickly.</p>
+<p>Header files can relieve us of this burden.  A header file only has to be written once, and it can be included in as many files as needed.  This also helps with maintenance by minimizing the number of changes that need to be made if a function prototype ever changes (eg. by adding a new parameter).</p>
+<p>Writing our own header files is surprisingly easy.  Header files consist of two parts.  The first part is called a <strong>header guard</strong>, which is discussed in the next lesson (on the <a href="http://www.learncpp.com/cpp-tutorial/110-a-first-look-at-the-preprocessor/">preprocessor</a>).  The second part is the actual content of the .h file, which should be the declarations for all of the functions we want other files to be able to see.  Our header files should all have a .h extension, so we&#8217;ll call our new header file add.h:</p>
+<p>add.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef ADD_H
+#define ADD_H
+
+int add(int x, int y); // function prototype for add.h
+
+#endif
+</pre></td></tr></table>
+<p>In order to use this header file in main.cpp, we have to include it.  Here is the new main.cpp:</p>
+<p>main.cpp that includes add.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &quot;add.h&quot; // this brings in the declaration for add()
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>When the compiler compiles the <code>#include &quot;add.h&quot;</code> line, it copies the contents of add.h into the current file.  Because our add.h contains a function prototype for add(), this prototype is now being used as a forward declaration of add()!</p>
+<p>Consequently, our program will compile and link correctly.</p>
+<p><img src="{path}/IncludeHeader.png"></p>
+<p>You&#8217;re probably curious why we use angled brackets for iostream, and double quotes for add.h.  The answer is that angled brackets are used to tell the compiler that we are including a header file that was included with the compiler.  The double-quotes tell the compiler that this is a header file we are supplying, which causes it to look for that header file in the current directory containing our source code first.</p>
+<p><em>Rule: Use angled brackets to include header files that come with the compiler.  Use double quotes to include any other header files.</em></p>
+<p>Another commonly asked question is &#8220;why doesn&#8217;t iostream have a .h extension?&#8221;.  The answer is, because iostream.h is a different header file than iostream is!  To explain requires a very short history lesson.</p>
+<p>When C++ was first created, all of the files in the standard runtime library ended in .h.  Life was consistent, and it was good.  The original version of cout and cin lived in iostream.h.  When the language was standardized by the ANSI committee, they decided to move all of the functions in the runtime library into the std namespace (which is generally a good idea).  However, this presented a problem: if they moved all the functions into the std namespace, none of the old programs would work any more!</p>
+<p>To try to get around this issue and provide backwards compatibility for older programs, a new set of header files was introduced that use the same names but lack the .h extension.  These new header files have all their functionality inside the std namespace.  This way, older programs that include <code>#include &lt;iosteam.h&gt;</code> do not need to be rewritten, and newer programs can <code>#include &lt;iostream&gt;</code>.</p>
+<p>Make sure when you include a header file from the standard library that you use the non .h version if it exists.  Otherwise you will be using a deprecated version of the header that is no longer supported.</p>
+<p>As a side note, many headers in the standard library do not have a non .h version, only a .h version.  For these files, it is fine to include the .h version.  Many of these libraries are backwards compatible with standard C programming, and C does not support namespaces.  Consequently, the functionality of these libraries will not be accessed through the std namespace.  Also, when you write your own header files, they will all have a .h extension, since you will not be putting your code in the std namespace.</p>
+<p><em>Rule: use the non .h version of a library if it exists, and access the functionality through the std namespace.  If the non .h version does not exist, or you are creating your own headers, use the .h version</em></p>
+<p><strong>Header file best practices</strong></p>
+<p>Here are a few best practices for creating your own header files.</p>
+<ul>
+<li>Always include header guards.</li>
+<li>Do not declare variables in header files unless they are constants.  Header files should generally only be used for declarations.</li>
+<li>Do not define functions in header files unless they are trivial.  Doing so makes your header files harder for humans to read.</li>
+<li>Each header file should have a specific job, and be as independent as possible.  For example, you might put all your declarations related to functionality A in A.h and all your declarations related to functionality B in B.h.  That way if you only care about A later, you can just include A.h and not get any of the stuff related to B.
+<li>Try to include as few other header files as possible in your header files.</li>
+</ul>

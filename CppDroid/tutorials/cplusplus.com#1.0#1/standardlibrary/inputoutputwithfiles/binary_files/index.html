@@ -1,0 +1,61 @@
+
+<h3>Binary files</h3>
+For binary files, reading and writing data with the extraction and insertion operators (<code>&lt;&lt;</code> and <code>&gt;&gt;</code>) and functions like <code>getline</code> is not efficient, since we do not need to format any data and data is likely not formatted in lines.<br>
+<br>
+File streams include two member functions specifically designed to read and write binary data sequentially: <code>write</code> and <code>read</code>. The first one (<code>write</code>) is a member function of <code>ostream</code> (inherited by <code>ofstream</code>). And <code>read</code> is a member function of <code>istream</code> (inherited by <code>ifstream</code>). Objects of class <code>fstream</code> have both. Their prototypes are:<br>
+<br>
+<tt>
+write ( memory_block, size );<br>
+read ( memory_block, size );<br>
+</tt>
+<br>
+Where <code>memory_block</code> is of type <code>char*</code> (pointer to <code>char</code>), and represents the address of an array of bytes where the read data elements are stored or from where the data elements to be written are taken. The <code>size</code> parameter is an integer value that specifies the number of characters to be read or written from/to the memory block.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br></code></pre></td>
+<td class="source"><pre><code><cite>// reading an entire binary file</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;fstream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main () {
+  streampos size;
+  <var>char</var> * memblock;
+
+  ifstream file (<kbd>"example.bin"</kbd>, ios::in|ios::binary|ios::ate);
+  <var>if</var> (file.is_open())
+  {
+    size = file.tellg();
+    memblock = <var>new</var> <var>char</var> [size];
+    file.seekg (0, ios::beg);
+    file.read (memblock, size);
+    file.close();
+
+    cout &lt;&lt; <kbd>"the entire file content is in memory"</kbd>;
+
+    <var>delete</var>[] memblock;
+  }
+  <var>else</var> cout &lt;&lt; <kbd>"Unable to open file"</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>the entire file content is in memory</samp></pre></td></tr></table></div>
+<br>
+<br>
+In this example, the entire file is read and stored in a memory block. Let's examine how this is done:<br>
+<br>
+First, the file is open with the <code>ios::ate</code> flag, which means that the get pointer will be positioned at the end of the file. This way, when we call to member <code>tellg()</code>, we will directly obtain the size of the file.<br>
+<br>
+Once we have obtained the size of the file, we request the allocation of a memory block large enough to hold the entire file:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>memblock = <var>new</var> <var>char</var>[size];</code></pre></td></tr></table></div>
+<br>
+<br>
+Right after that, we proceed to set the <i>get position</i> at the beginning of the file (remember that we opened the file with this pointer at the end), then we read the entire file, and finally close it:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code>file.seekg (0, ios::beg);
+file.read (memblock, size);
+file.close();</code></pre></td></tr></table></div>
+<br>
+<br>
+At this point we could operate with the data obtained from the file. But our program simply announces that the content of the file is in memory and then finishes.<br>

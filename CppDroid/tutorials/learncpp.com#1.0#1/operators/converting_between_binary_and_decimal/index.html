@@ -1,0 +1,203 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In order to understand the bit manipulation operators, it is first necessary to understand how integers are represented in binary.  Consider a normal decimal number, such as 5623.  We intuitively understand that these digits mean (5 * 1000) + (6 * 100) + (2 * 10) + (3 * 1).  Because there are 10 decimal numbers, the value of each digit increases by a factor of 10.</p>
+<p>Binary numbers work the same way, except because there are only 2 binary numbers (0 and 1), the value of each digit increases by a factor of 2.  Just like commas are often used to make a large decimal number easy to read (eg. 1,427,435), we often write binary numbers in groups of 4 bits to make them easier to read.</p>
+<p><strong>Converting binary to decimal</strong></p>
+<p>In the following examples, we assume that we&#8217;re dealing with unsigned numbers.</p>
+<p>Consider the 8 bit (1 byte) binary number 0101 1110.  0101 1110 means (0 * 128) + (1 * 64) + (0 * 32) + (1 * 16) + (1 * 8) + (1 * 4) + (1 * 2) + (0 * 1).  If we sum up all of these parts, we get the decimal number 64 + 16 + 8 + 4 + 2 = 94.  </p>
+<p>Here is the same process in table format.  We multiple each binary digit by it&#8217;s bit value (determined by it&#8217;s position).  Summing up all these values gives us the total.</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>Binary digit</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td>* Bit value
+<td>128</td>
+<td>64</td>
+<td>32</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>= Total (94)
+<td>0</td>
+<td>64</td>
+<td>0</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>0</td>
+</tr>
+</table>
+<p>Let&#8217;s convert 1001 0111 to decimal:</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>Binary digit</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td>* Bit value
+<td>128</td>
+<td>64</td>
+<td>32</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>= Total (151)
+<td>128</td>
+<td>0</td>
+<td>0</td>
+<td>16</td>
+<td>0</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</table>
+<p>1001 0111 binary = 151 in decimal.</p>
+<p>This can easily be extended to 16 or 32 bit binary numbers simply by adding more columns.</p>
+<p><strong>Converting decimal to binary</strong></p>
+<p>Converting from decimal to binary is a little more tricky, but still pretty straightforward.  The easiest way to do this is to work backwards to figure out what each of the bits must be.</p>
+<p>Consider the decimal number 148.</p>
+<p>Is 148 >= 128?  Yes, so the 128 bit must be 1.  148 &#8211; 128 = 20, which means we need to find bits worth 20 more.<br />
+Is 20 >= 64?  No, so the 64 bit must be 0.<br />
+Is 20 >= 32?  No, so the 32 bit must be 0.<br />
+Is 20 >= 16?  Yes, so the 16 bit must be 1.  20 &#8211; 16 = 4, which means we need to find bits worth 4 more.</p>
+<p>Is 4 >= 8?  No, so the 8 bit must be 0.<br />
+Is 4 >= 4?  Yes, so the 4 bit must be 1.  4 &#8211; 4 = 0, which means all the rest of the bits must be 0.</p>
+<p>148 = (1 * 128) + (0 * 64) + (0 * 32) + (1 * 16) + (0 * 8) + (1 * 4) + (0 * 2) + (0 * 1) = 1001 0100</p>
+<p>In table format:</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>Binary number</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td>* Bit value
+<td>128</td>
+<td>64</td>
+<td>32</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>= Total (148)
+<td>128</td>
+<td>0</td>
+<td>0</td>
+<td>16</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</table>
+<p>Let&#8217;s convert 117 to binary:</p>
+<p>Is 117 >= 128?  No, so the 128 bit must be 0.<br />
+Is 117 >= 64?  Yes, so the 64 bit must be 1.  117 &#8211; 64 = 53.<br />
+Is 53 >= 32?  Yes, so the 32 bit must be 1.  53 &#8211; 32 = 21.<br />
+Is 21 >= 16?  Yes, so the 16 bit must be 1.  21 &#8211; 16 = 5.</p>
+<p>Is 5 >= 8?  No, so the 8 bit must be 0.<br />
+Is 5 >= 4?  Yes, so the 4 bit must be 1.  5 &#8211; 4 = 1.<br />
+Is 1 >= 2?  No, so the 2 bit must be 0.<br />
+Is 1 >= 1?  Yes, so the 1 bit must be 1.</p>
+<p>117 decimal = 0111 0101 binary.</p>
+<p><strong>Signed numbers</strong></p>
+<p>The following section is optional.  Most of the time when we deal with binary numbers and bit operations, we use unsigned numbers.  However, it is interesting to examine how signed numbers are dealt with.</p>
+<p>Signed numbers are typically stored using a method known as <strong>two&#8217;s complement</strong>.  In two&#8217;s complement, the leftmost (most significant) bit is used as the sign bit.  A 0 bit means the number is positive, and a 1 bit means the number is negative.  Positive signed numbers are stored just like positive unsigned numbers.  Negative signed numbers are stored as the inverse of the positive number, plus 1.</p>
+<p>For example, here&#8217;s how we convert -5 to binary:</p>
+<p>First we figure out the binary representation for 5: 0000 0101<br />
+Then we invert all of the bits: 1111 1010<br />
+Then we add 1: 1111 1011</p>
+<p>Converting -76 to binary:</p>
+<p>Positive 76 in binary: 0100 1100<br />
+Invert all the bits: 1011 0011<br />
+Add 1: 1011 0100</p>
+<p>Why do we add 1?  Consider the number 0.  If a negative value was simply represented as the inverse of the positive number, 0 would have two representations: 0000 0000 (positive zero) and 1111 1111 (negative zero).  By adding 1, 1111 1111 intentionally overflows and becomes 0000 0000.  This prevents 0 from having two representations, and simplifies some of the internal logic needed to deal with negative numbers.</p>
+<p><strong>Quiz</strong></p>
+<p>1) Convert 0100 1101 to decimal.<br />
+2) Convert 93 to an 8-bit binary number.</p>
+<p><strong>Quiz answers</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id2046015865'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id2046015865" style="display:none">
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>Binary digit</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+<td>0&nbsp;&nbsp;</td>
+<td>1&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td>* Bit value
+<td>128</td>
+<td>64</td>
+<td>32</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>= Total (77)
+<td>0</td>
+<td>64</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>4</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</table>
+<p>The answer is 77.
+</p></div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1851910507'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1851910507" style="display:none">
+Is 93 >= 128?  No, so the 128 bit is 0.<br />
+Is 93 >= 64?  Yes, so the 64 bit is 1.  93 &#8211; 64 = 29.<br />
+Is 29 >= 32?  No, so the 32 bit is 0.<br />
+Is 29 >= 16?  Yes, so the 16 bit is 1.  29 &#8211; 16 = 13.<br />
+Is 13 >= 8?  Yes, so the 8 bit is 1.  13 &#8211; 8 = 5.<br />
+Is 5 >= 4?  Yes, so the 4 bit is 1.  5 &#8211; 4 = 1.<br />
+Is 1 >= 2?  No, so the 2 bit is 0.<br />
+Is 1 >= 1?  Yes, so the 1 bit is 1.</p>
+<p>The answer is 0101 1101.
+</p></div>

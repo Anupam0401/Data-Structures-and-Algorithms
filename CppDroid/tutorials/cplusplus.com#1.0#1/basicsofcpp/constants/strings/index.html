@@ -1,0 +1,107 @@
+
+<h4>Character and string literals</h4>
+Character and string literals are enclosed in quotes:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><kbd>'z'</kbd>
+<kbd>'p'</kbd>
+<kbd>"Hello world"</kbd>
+<kbd>"How do you do?"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+The first two expressions represent <i>single-character literals</i>, and the following two represent <i>string literals</i> composed of several characters. Notice that to represent a single character, we enclose it between single quotes (<code>'</code>), and to express a string (which generally consists of more than one character), we enclose the characters between double quotes (<code>"</code>).<br>
+<br>
+Both single-character and string literals require quotation marks surrounding them to distinguish them from possible variable identifiers or reserved keywords. Notice the difference between these two expressions:<br>
+<br>
+<code>
+x<br>
+'x'<br>
+</code>
+<br>
+Here, <code>x</code> alone would refer to an identifier, such as the name of a variable or a compound type, whereas <code>'x'</code> (enclosed within single quotation marks) would refer to the character literal <code>'x'</code> (the character that represents a lowercase <i>x</i> letter).<br>
+<br>
+Character and string literals can also represent special characters that are difficult or impossible to express otherwise in the source code of a program, like newline (<code>\n</code>) or tab (<code>\t</code>). These special characters are all of them preceded by a backslash character (<code>\</code>).<br>
+<br>
+Here you have a list of the single character escape codes: <br>
+<br>
+<table class="boxed">
+<tr><th>Escape code</th><th>Description</th></tr>
+<tr><td><code>\n</code></td><td>newline</td></tr>
+<tr><td><code>\r</code></td><td>carriage return</td></tr>
+<tr><td><code>\t</code></td><td>tab</td></tr>
+<tr><td><code>\v</code></td><td>vertical tab</td></tr>
+<tr><td><code>\b</code></td><td>backspace</td></tr>
+<tr><td><code>\f</code></td><td>form feed (page feed)</td></tr>
+<tr><td><code>\a</code></td><td>alert (beep)</td></tr>
+<tr><td><code>\'</code></td><td>single quote (<code>'</code>)</td></tr>
+<tr><td><code>\"</code></td><td>double quote (<code>"</code>)</td></tr>
+<tr><td><code>\?</code></td><td>question mark (<code>?</code>)</td></tr>
+<tr><td><code>\\</code></td><td>backslash (<code>\</code>)</td></tr>
+</table>
+<br>
+For example:<br>
+<br>
+<code>
+'\n'<br>
+'\t'<br>
+"Left \t Right"<br>
+"one\ntwo\nthree"<br>
+</code>
+<br>
+Internally, computers represent characters as numerical codes: most typically, they use one extension of the <a href="/ascii">ASCII</a> character encoding system (see <a href="/ascii">ASCII code</a> for more info). Characters can also be represented in literals using its numerical code by writing a backslash character (<code>\</code>) followed by the code expressed as an octal (base-8) or hexadecimal (base-16) number. For an octal value, the backslash is followed directly by the digits; while for hexadecimal, an <code>x</code> character is inserted between the backslash and the hexadecimal digits themselves (for example: <code>\x20</code> or <code>\x4A</code>).<br>
+<br>
+Several string literals can be concatenated to form a single string literal simply by separating them by one or more blank spaces, including tabs, newlines, and other valid blank characters. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><kbd>"this forms"</kbd> <kbd>"a single"</kbd>     <kbd>" string "</kbd>
+<kbd>"of characters"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+The above is a string literal equivalent to:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><kbd>"this formsa single string of characters"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+Note how spaces within the quotes are part of the literal, while those outside them are not.<br>
+<br>
+Some programmers also use a trick to include long string literals in multiple lines: In C++, a backslash (<code>\</code>) at the end of line is considered a <i>line-continuation</i> character that merges both that line and the next into a single line. Therefore the following code:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>x = <kbd>"string expressed in \
+two lines"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+is equivalent to:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>x = <kbd>"string expressed in two lines"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+All the character literals and string literals described above are made of characters of type <code>char</code>. A different character type can be specified by using one of the following prefixes:<br>
+<br>
+<table class="boxed">
+<tr><th>Prefix</th><th>Character type</th></tr>
+<tr><td><code>u</code></td><td><code>char16_t</code></td></tr>
+<tr><td><code>U</code></td><td><code>char32_t</code></td></tr>
+<tr><td><code>L</code></td><td><code>wchar_t</code></td></tr>
+</table>
+<br>
+Note that, unlike type suffixes for integer literals, these prefixes are <i>case sensitive</i>: lowercase for <code>char16_t</code> and uppercase for <code>char32_t</code> and <code>wchar_t</code>.<br>
+<br>
+For string literals, apart from the above <code>u</code>, <code>U</code>, and <code>L</code>, two additional prefixes exist:<br>
+<br>
+<table class="boxed">
+<tr><th>Prefix</th><th>Description</th></tr>
+<tr><td><code>u8</code></td><td>The string literal is encoded in the executable using UTF-8</td></tr>
+<tr><td><code>R</code></td><td>The string literal is a raw string</td></tr>
+</table>
+<br>
+In raw strings, backslashes and single and double quotes are all valid characters; the content of the literal is delimited by an initial <code>R"<i>sequence</i>(</code> and a final <code>)<i>sequence</i>"</code>, where <code><i>sequence</i></code> is any sequence of characters (including an empty sequence). The content of the string is what lies inside the parenthesis, ignoring the delimiting sequence itself. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>R<kbd>"(string with \backslash)"</kbd>
+R<kbd>"&amp;%$(string with \backslash)&amp;%$"</kbd></code></pre></td></tr></table></div>
+<br>
+<br>
+Both strings above are equivalent to <code>"string with \\backslash"</code>. The <code>R</code> prefix can be combined with any other prefixes, such as <code>u</code>, <code>L</code> or <code>u8</code>.<br>

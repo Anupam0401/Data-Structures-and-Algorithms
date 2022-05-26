@@ -1,0 +1,1 @@
+MyStruct(int x, float y): m_nX(x), m_nY(y) {}; // m_nX and m_nY are part of the initialization list

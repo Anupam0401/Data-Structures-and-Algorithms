@@ -1,0 +1,1 @@
+value of g = 10

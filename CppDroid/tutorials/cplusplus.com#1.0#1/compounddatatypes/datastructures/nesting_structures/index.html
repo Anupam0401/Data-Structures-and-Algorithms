@@ -1,0 +1,29 @@
+
+<h3>Nesting structures</h3>
+Structures can also be nested in such a way that an element of a structure is itself another structure:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br></code></pre></td>
+<td class="source"><pre><code><var>struct</var> movies_t {
+  string title;
+  <var>int</var> year;
+};
+
+<var>struct</var> friends_t {
+  string name;
+  string email;
+  movies_t favorite_movie;
+} charlie, maria;
+
+friends_t * pfriends = &amp;charlie;</code></pre></td></tr></table></div>
+<br>
+<br>
+After the previous declarations, all of the following expressions would be valid:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>charlie.name
+maria.favorite_movie.title
+charlie.favorite_movie.year
+pfriends-&gt;favorite_movie.year</code></pre></td></tr></table></div>
+<br>
+<br>
+(where, by the way, the last two expressions refer to the same member). <br>

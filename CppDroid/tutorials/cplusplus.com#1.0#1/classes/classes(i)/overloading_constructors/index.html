@@ -1,0 +1,48 @@
+
+<h3>Overloading constructors</h3>
+Like any other function, a constructor can also be overloaded with different versions taking different parameters: with a different number of parameters and/or parameters of different types. The compiler will automatically call the one whose parameters match the arguments:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br></code></pre></td>
+<td class="source"><pre><code><cite>// overloading class constructors</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Rectangle {
+    <var>int</var> width, height;
+  <var>public</var>:
+    Rectangle ();
+    Rectangle (<var>int</var>,<var>int</var>);
+    <var>int</var> area (<var>void</var>) {<var>return</var> (width*height);}
+};
+
+Rectangle::Rectangle () {
+  width = 5;
+  height = 5;
+}
+
+Rectangle::Rectangle (<var>int</var> a, <var>int</var> b) {
+  width = a;
+  height = b;
+}
+
+<var>int</var> main () {
+  Rectangle rect (3,4);
+  Rectangle rectb;
+  cout &lt;&lt; <kbd>"rect area: "</kbd> &lt;&lt; rect.area() &lt;&lt; endl;
+  cout &lt;&lt; <kbd>"rectb area: "</kbd> &lt;&lt; rectb.area() &lt;&lt; endl;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>rect area: 12
+rectb area: 25  </samp></pre></td></tr></table></div>
+<br>
+<br>
+In the above example, two objects of class <code>Rectangle</code> are constructed: <code>rect</code> and <code>rectb</code>. <code>rect</code> is constructed with two arguments, like in the example before.<br>
+<br>
+But this example also introduces a special kind constructor: the <i>default constructor</i>. The <i>default constructor</i> is the constructor that takes no parameters, and it is special because it is called when an object is declared but is not initialized with any arguments. In the example above, the <i>default constructor</i> is called for <code>rectb</code>. Note how <code>rectb</code> is not even constructed with an empty set of parentheses - in fact, empty parentheses cannot be used to call the default constructor:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>Rectangle rectb;   <cite>// ok, default constructor called</cite>
+Rectangle rectc(); <cite>// oops, default constructor NOT called </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+This is because the empty set of parentheses would make of <code>rectc</code> a function declaration instead of an object declaration: It would be a function that takes no arguments and returns a value of type <code>Rectangle</code>.<br>

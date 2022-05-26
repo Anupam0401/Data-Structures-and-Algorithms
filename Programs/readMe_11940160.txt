@@ -1,0 +1,5 @@
+The formula for stack permutation in general is C(2*n,n)/(n+1); if n is the number of digits
+The user provides the no. of digits and then the number itself.
+
+This works for  all possible finite integer values.
+This program implements queue as well as stack concepts of dta structure and a special stackpermutation() to find the permutation.

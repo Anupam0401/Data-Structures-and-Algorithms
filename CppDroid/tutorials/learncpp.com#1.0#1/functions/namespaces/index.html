@@ -1,0 +1,206 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Namespaces don&#8217;t really fit into the functions category, but they are an important concept that we need to cover before we get to classes and object oriented programming, and this is really as good a place as any.</p>
+<p>Pretend you are the teacher of a classroom of students.  For sake of example, let&#8217;s say there are two boys named &#8220;Alex&#8221;.  If you were to say, &#8220;Alex got an A on his test&#8221;, which Alex are you referring to?  Nobody knows, unless you have a way to disambiguate which Alex you mean.  Perhaps you point at one, or use their last names.  If the two Alex&#8217;s were in different classrooms, there wouldn&#8217;t be a problem &#8212; the problem is really that there are two things with the same name in the same place.  And in fact, as the number of students in the classroom increase, the odds of having two students with the same first name increases exponentially.</p>
+<p>A similar issue can arise in programming when two identifiers (variable and/or function names) with the same name are introduced into the same scope.  When this happens, a <strong>naming collision</strong> will result, and the compiler will produce an error because it does not have enough information to resolve the ambiguity.  As programs get larger and larger, the number of identifiers increases linearly, which in turn causes the probability of naming collisions to increase exponentially.</p>
+<p>Let&#8217;s take a look at an example of a naming collision.  In the following example, foo.h and goo.h are the header files that contain functions that do different things but have the same name and parameters.</p>
+<p>foo.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// This DoSomething() adds it's parameters
+int DoSomething(int nX, int nY)
+{
+    return nX + nY;
+}
+</pre></td></tr></table>
+<p>goo.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// This DoSomething() subtracts it's parameters
+int DoSomething(int nX, int nY)
+{
+    return nX - nY;
+}
+</pre></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;foo.h&gt;
+#include &lt;goo.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; DoSomething(4, 3); // which DoSomething will we get?
+    return 0;
+}
+</pre></td></tr></table>
+<p>If foo.h and goo.h are compiled separately, they will each compile without incident.  However, by including them in the same program, we have now introduced two different functions with the same name and parameters into the program, which causes a naming collision.  As a result, the compiler will issue an error:</p>
+<pre>
+c:\\VCProjects\\goo.h(4) : error C2084: function 'int __cdecl DoSomething(int,int)' already has a body
+</pre>
+<p>In order to help address this type of problem, the concept of namespaces was introduced.</p>
+<p><strong>What is a namespace?</strong></p>
+<p>A namespace defines an area of code in which all identifiers are guaranteed to be unique.  By default, all variables and functions are defined in the <strong>global namespace</strong>.  For example, take a look at the following snippet:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nX = 5;
+int foo(int nX)
+{
+    return -nX;
+}
+</pre></td></tr></table>
+<p>Both nX and foo() are defined in the global namespace.</p>
+<p>In the example program above that had the naming collision, when main() #included both foo.h and goo.h, the compiler tried to put both versions of DoSomething() into the global namespace, which is why the naming collision resulted.</p>
+<p>In order to help avoid issues where two independent pieces of code have naming collisions with each other when used together, C++ allows us to declare our own namespaces via the <strong>namespace</strong> keyword.  Anything declared inside a user-defined namespace belongs to that namespace, not the global namespace.</p>
+<p>Here is an example of the headers in the first example rewritten using namespaces:</p>
+<p>foo.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+namespace Foo
+{
+    // This DoSomething() belongs to namespace Foo
+    int DoSomething(int nX, int nY)
+    {
+        return nX + nY;
+    }
+}
+</pre></td></tr></table>
+<p>goo.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+namespace Goo
+{
+    // This DoSomething() belongs to namespace Goo
+    int DoSomething(int nX, int nY)
+    {
+        return nX - nY;
+    }
+}
+</pre></td></tr></table>
+<p>Now the DoSomething() inside of foo.h is inside the Foo namespace, and the DoSomething() inside of goo.h is inside the Goo namespace.  Let&#8217;s see what happens when we recompile main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; DoSomething(4, 3) &lt;&lt; endl; // which DoSomething will we get?
+    return 0;
+}
+</pre></td></tr></table>
+<p>The answer is that we now get another error!</p>
+<pre>
+C:\\VCProjects\\Test.cpp(15) : error C2065: 'DoSomething' : undeclared identifier
+</pre>
+<p>What happened is that when we tried to call the DoSomething() function, the compiler looked in the global namespace to see if it could find a definition of DoSomething().  However, because neither of our DoSomething() functions live in the global namespace any more, it failed to find a definition at all!</p>
+<p>There are two different ways to tell the compiler which version of DoSomething to use.</p>
+<p><strong>The scope resolution operator (::)</strong></p>
+<p>The first way to tell the compiler to look in a particular namespace for an identifier is to use the scope resolution operator (::).  This operator allows you to prefix an identifier name with the namespace you wish to use.</p>
+<p>Here is an example of using the scope resolution operator to tell the compiler that we explicitly want to use the version of DoSomething that lives in the Foo namespace:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    cout &lt;&lt; Foo::DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+7
+</pre>
+<p>If we wanted to use the version of DoSomething() that lives in Goo instead:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    cout &lt;&lt; Goo::DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+1
+</pre>
+<p>The scope resolution operator is very nice because it allows us to specifically pick which namespace we want to look in.  It even allows us to do the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    cout &lt;&lt; Foo::DoSomething(4, 3) &lt;&lt; endl;
+    cout &lt;&lt; Goo::DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+7
+1
+</pre>
+<p>It is also possible to use the scope resolution operator without any namespace (eg. <code>::DoSomething</code>).  In that case, it refers to the global namespace.</p>
+<p><strong>The using keyword</strong></p>
+<p>The second way to tell the compiler to look in a particular namespace for an identifier is to use the <strong>using</strong> keyword.  The using keyword tells the compiler that if it can not find the definition for an identifier, it should look in a particular namespace to see if it exists there.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    using namespace Foo; // look in namespace Foo
+    cout &lt;&lt; DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>The <code>using namespace Foo</code> line causes DoSomething(4, 3) to resolve to Foo::DoSomething(4, 3).  Consequently, this program prints:</p>
+<pre>
+7
+</pre>
+<p>Similarly, the following example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    using namespace Goo; // look in namespace Goo
+    cout &lt;&lt; DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>causes <code>DoSomething(4, 3)</code> to resolve to Goo::DoSomething(4, 3).  Consequently, this program prints:</p>
+<pre>
+1
+</pre>
+<p>One more example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main(void)
+{
+    using namespace std;
+    using namespace Foo; // look in namespace Foo
+    using namespace Goo; // look in namespace Goo
+    cout &lt;&lt; DoSomething(4, 3) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>As you might have guessed, this causes an error:</p>
+<pre>
+C:\\VCProjects\\Test.cpp(15) : error C2668: 'DoSomething' : ambiguous call to overloaded function
+</pre>
+<p>In this case, it couldn&#8217;t find DoSomething() in the global namespace, so it looked in both the Foo namespace and the Goo namespace (and the std namespace).  Since DoSomething() was found in more than one namespace, the compiler couldn&#8217;t figure out which one to use.</p>
+<p>The using keyword is scoped just like a normal variable &#8212; if it is declared inside a function, it is only in effect during that function.  If it is declared outside of a function, it affects the whole file from that point forward.  The using keyword can save a lot of typing when you have code that needs to use many identifiers from a particular namespace&#8230; like when you&#8217;re doing input and output!</p>
+<p>Consider the following example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int nX;
+    cin &gt;&gt; nX;
+    cout &lt;&lt; &quot;You entered &quot; &lt;&lt; nX &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Because of the <code>using namespace std</code> line, this function is identical to the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    std::cout &lt;&lt; &quot;Enter a number: &quot;;
+    int nX;
+    std::cin &gt;&gt; nX;
+    std::cout &lt;&lt; &quot;You entered &quot; &lt;&lt; nX &lt;&lt; std::endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>However, the top example is generally considered easier to read!</p>
+<p>Using the <em>using</em> keyword judiciously can make your code neater and easier to read.  Although the using keyword can be used outside of a function to help resolve every identifier in the file, this is not recommended, as it increase the chance of identifiers from multiple namespaces conflicting, which somewhat defeats the point of namespaces in the first place.</p>

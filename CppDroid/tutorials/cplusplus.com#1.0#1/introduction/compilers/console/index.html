@@ -1,0 +1,24 @@
+
+<h3>Console programs</h3>
+Console programs are programs that use text to communicate with the user and the environment, such as printing text to the screen or reading input from a keyboard.<br>
+<br>
+Console programs are easy to interact with, and generally have a predictable behavior that is identical across all platforms. They are also simple to implement and thus are very useful to learn the basics of a programming language: The examples in these tutorials are all console programs.<br>
+<br>
+The way to compile console programs depends on the particular tool you are using.<br>
+<br>
+The easiest way for beginners to compile C++ programs is by using an Integrated Development Environment (IDE). An IDE generally integrates several development tools, including a text editor and tools to compile programs directly from it.<br>
+<br>
+Here you have instructions on how to compile and run console programs using different free Integrated Development Interfaces (IDEs):<br>
+<br>
+<table class="boxed"><tr><th>IDE</th><th>Platform</th><th>Console programs</th></tr>
+<tr><td><b>Code::blocks</b></td><td>Windows/Linux/MacOS</td><td><a href="codeblocks/">Compile console programs using Code::blocks</a></td></tr>
+<tr><td><b>Visual Studio Express</b></td><td>Windows</td><td><a href="visualstudio/">Compile console programs using VS Express 2013</a></td></tr>
+<tr><td><b>Dev-C++</b></td><td>Windows</td><td><a href="devcpp/">Compile console programs using Dev-C++</a></td></tr>
+</table>
+<br>
+If you happen to have a Linux or Mac environment with development features, you should be able to compile any of the examples directly from a terminal just by including C++11 flags in the command for the compiler:<br>
+<br>
+<table class="boxed"><tr><th>Compiler</th><th>Platform</th><th>Commad</th></tr>
+<tr><td><b>GCC</b></td><td>Linux, among others...</td><td><code>g++ -std=c++0x example.cpp -o example_program</code></td></tr>
+<tr><td><b>Clang</b></td><td>OS X, among others...</td><td><code>clang++ -std=c++11 -stdlib=libc++ example.cpp -o example_program</code></td></tr>
+</table>

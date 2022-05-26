@@ -1,0 +1,72 @@
+
+<h3>Another selection statement: switch.</h3>
+The syntax of the switch statement is a bit peculiar. Its purpose is to check for a value among a number of possible constant expressions. It is something similar to concatenating <code>if</code>-<code>else</code> statements, but limited to constant expressions. Its most typical syntax is:<br>
+<br>
+<pre ><code>switch (expression)
+{
+  case constant1:
+     group-of-statements-1;
+     break;
+  case constant2:
+     group-of-statements-2;
+     break;
+  .
+  .
+  .
+  default:
+     default-group-of-statements
+}</code></pre>
+<br>
+It works in the following way: <code>switch</code> evaluates expression and checks if it is equivalent to <code>constant1</code>; if it is, it executes <code>group-of-statements-1</code> until it finds the <code>break</code> statement. When it finds this <code>break</code> statement, the program jumps to the end of the entire <code>switch</code> statement (the closing brace).<br>
+<br>
+If expression was not equal to <code>constant1</code>, it is then checked against <code>constant2</code>. If it is equal to this, it executes <code>group-of-statements-2</code> until a <code>break</code> is found, when it jumps to the end of the switch.<br>
+<br>
+Finally, if the value of expression did not match any of the previously specified constants (there may be any number of these), the program executes the statements included after the <code>default:</code> label, if it exists (since it is optional).<br>
+<br>
+Both of the following code fragments have the same behavior, demonstrating the if-else equivalent of a switch statement:<br>
+<br>
+<table class="boxed">
+<tr><th>switch example</th><th>if-else equivalent</th></tr>
+<tr><td>
+<pre ><code>switch (x) {
+  case 1:
+    cout &lt;&lt; "x is 1";
+    break;
+  case 2:
+    cout &lt;&lt; "x is 2";
+    break;
+  default:
+    cout &lt;&lt; "value of x unknown";
+  }</code></pre>
+</td><td>
+<pre ><code>if (x == 1) {
+  cout &lt;&lt; "x is 1";
+}
+else if (x == 2) {
+  cout &lt;&lt; "x is 2";
+}
+else {
+  cout &lt;&lt; "value of x unknown";
+}
+</code></pre></td></tr>
+</table>
+<br>
+The <code>switch</code> statement has a somewhat peculiar syntax inherited from the early times of the first C compilers, because it uses labels instead of blocks. In the most typical use (shown above), this means that <code>break</code> statements are needed after each group of statements for a particular label. If <code>break</code> is not included, all statements following the case (including those under any other labels) are also executed, until the end of the switch block or a jump statement (such as <code>break</code>) is reached.<br>
+<br>
+If the example above lacked the break statement after the first group for case one, the program would not jump automatically to the end of the switch block after printing <code>x is 1</code>, and would instead continue executing the statements in case two (thus printing also <code>x is 2</code>). It would then continue doing so until a <code>break</code> statement is encountered, or the end of the <code>switch</code> block. This makes unnecessary to enclose the statements for each case in braces <code>{}</code>, and can also be useful to execute the same group of statements for different possible values. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br></code></pre></td>
+<td class="source"><pre><code><var>switch</var> (x) {
+  <var>case</var> 1:
+  <var>case</var> 2:
+  <var>case</var> 3:
+    cout &lt;&lt; <kbd>"x is 1, 2 or 3"</kbd>;
+    <var>break</var>;
+  <var>default</var>:
+    cout &lt;&lt; <kbd>"x is not 1, 2 nor 3"</kbd>;
+  }</code></pre></td></tr></table></div>
+<br>
+<br>
+Notice that <code>switch</code> is limited to compare its evaluated expression against labels that are constant expressions. It is not possible to use variables as labels or ranges, because they are not valid C++ constant expressions.<br>
+<br>
+To check for ranges or values that are not constant, it is better to use concatenations of <code>if</code> and <code>else if</code> statements.<br>

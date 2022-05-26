@@ -1,0 +1,30 @@
+
+<h3>Preprocessor definitions (#define)</h3>
+Another mechanism to name constant values is the use of preprocessor definitions. They have the following form:<br>
+<br>
+<code>#define identifier replacement</code> <br>
+<br>
+After this directive, any occurrence of <code>identifier</code> in the code is interpreted as <code>replacement</code>, where replacement is any sequence of characters (until the end of the line). This replacement is performed by the preprocessor, and happens before the program is compiled, thus causing a sort of blind replacement: the validity of the types or syntax involved is not checked in any way.<br>
+<br>
+For example:<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></code></pre></td>
+<td class="source"><pre><code><dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<dfn>#define PI 3.14159</dfn>
+<dfn>#define NEWLINE '\n'</dfn>
+
+<var>int</var> main ()
+{
+  <var>double</var> r=5.0;               <cite>// radius</cite>
+  <var>double</var> circle;
+
+  circle = 2 * PI * r;
+  cout &lt;&lt; circle;
+  cout &lt;&lt; NEWLINE;
+
+}</code></pre></td>
+<td class="output"><pre><samp>31.4159</samp></pre></td></tr></table></div>
+<br>
+<br>
+Note that the <code>#define</code> lines are preprocessor directives, and as such are single-line instructions that -unlike C++ statements- do not require semicolons (;) at the end; the directive extends automatically until the end of the line. If a semicolon is included in the line, it is part of the replacement sequence and is also included in all replaced occurrences.<br>

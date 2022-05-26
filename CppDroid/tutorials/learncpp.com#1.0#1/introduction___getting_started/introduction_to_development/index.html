@@ -1,0 +1,48 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Before we can write and execute our first program, we need to understand in more detail how programs get developed.  Here is a graphic outlining a simplistic approach:</p>
+<p><img src="{path}/Development.png" alt="The software development process" /></p>
+<p><strong>Step 1: Define the problem that you would like to solve.</strong></p>
+<p>This is the &#8220;what&#8221; step, where you figure out what you are going to solve.  Coming up with the initial idea for what you would like to program can be the easiest step, or the hardest.  But conceptually, it is the simplest.  All you need is a an idea that can be well defined, and you&#8217;re ready for the next step.</p>
+<p><strong>Step 2: Determine how you are going to solve the problem.</strong></p>
+<p>This is the &#8220;how&#8221; step, where you determine how you are going to solve the problem you came up with in step 1.  It is also the step that is most neglected in software development.  The crux of the issue is that there are many ways to solve a problem &#8212; however, some of these solutions are good and some of them are bad.  Too often, a programmer will get an idea, sit down, and immediately start coding a solution.  This almost always generates a solution that falls into the bad category.</p>
+<p>Typically, good solutions have the following characteristics:<br />
+* They are straightforward<br />
+* They are well documented<br />
+* They can be easily extended (to add new features that were not originally anticipated)<br />
+* They are modularized</p>
+<p>The problem is largely with the third and fourth bullets &#8212; while it&#8217;s possible to generate programs that are straightforward and well documented without using a lot of forethought, designing software that is extensible and sufficiently modularized can be a much tougher challenge.  </p>
+<p>As far as extensibility goes, when you sit down and start coding right away, you&#8217;re typically thinking &#8220;I want to do _this_&#8221;, and you never consider that tomorrow you might want to do _that_.  Studies have shown that only 20% of a programmers time is actually spent writing the initial program.  The other 80% is spent debugging (fixing errors) or maintaining (adding features to) a program.  Consequently, it&#8217;s worth your time to spend a little extra time up front before you start coding thinking about the best way to tackle a problem, and how you might plan for the future, in order to save yourself a lot of time and trouble down the road.</p>
+<p>Modularization helps keep code understandable and reusable.  Code that is not properly modularized is much harder to debug and maintain, and also harder to extend later.  We will talk more about modularization in the future.</p>
+<p><strong>Step 3: Write the program</strong></p>
+<p>In order the write the program, we need two things: First we need knowledge of a programming language &#8212; that&#8217;s what these tutorials are for!  Second, we need an editor.  It&#8217;s possible to write a program using any editor you want, be it Window&#8217;s notepad or Linux&#8217;s gedit.  However, we strongly urge you to use an editor that is designed for coding.</p>
+<p>A typical editor designed for coding has a few features that make programming much easier, including:</p>
+<p>1) Line numbering.  Line numbering is useful when the compiler gives us an error.  A typical compiler error will state &#8220;error, line 64&#8243;.  Without an editor that shows line numbers, finding line 64 can be a real hassle.</p>
+<p>2) Syntax highlighting and coloring.  Syntax highlighting and coloring changes the color of various parts of your program to make it easier to see the overall structure of your program.  </p>
+<p>3) An unambiguous font.  Non-programming fonts often make it hard to distinguish between the number 0 and the letter O, or between the number 1, the letter l (lower case L), and the letter I (upper case i).  A good programming font will differentiate these symbols in order to ensure one isn&#8217;t accidentally used in place of the other.</p>
+<p>Your C++ programs should be called <em>name</em>.cpp, where <em>name </em>is replaced with the name of your program.  The .cpp extension tells the compiler (and you) that this is a C++ source code file that contains C++ instructions.  Note that some people use the extension .cc instead of .cpp, but we recommend you use .cpp.</p>
+<p>Also note that many complex C++ programs have multiple .cpp files.  Although most of the programs you will be creating initially will only have a single .cpp file, it is possible to write single programs that have tens if not hundreds of individual .cpp files.</p>
+<p><strong>Step 4: Compiling</strong></p>
+<p>In order to compile a program, we need a <strong>compiler</strong>.  The job of the compiler is twofold:<br />
+1) To check your program and make sure it follows the syntactical rules of the C++ language:<br />
+2) To take your source code as input and produce a machine language <strong>object file</strong> as output.  Object files are typically named <em>name</em>.o or <em>name</em>.obj, where <em>name</em> is the same name as the .cpp file it was produced from.  If your program had 5 .cpp files, the compiler would generate 5 object files.</p>
+<p><img src="{path}/Compile.png" alt="The compilation process" /></p>
+<p>For illustrative purposes only, most Linux and Mac OS X systems come with a C++ compiler called g++.  To use g++ to compile a file from the command line, we would do this:</p>
+<p><code>&quot;g++&quot; -c file1.cpp file2.cpp file3.cpp</code> *</p>
+<p>This would create file1.o, file2.o, and file3.o.  The -c means &#8220;compile only&#8221;, which tells g++ to just produce .o files.</p>
+<p>Other compilers are available for Linux, Windows, and just about every other system.  We will discuss installing a compiler in the next section, so there is no need to do so now.</p>
+<p>For complex projects, some development environments use a <strong>makefile</strong>, which is a file that tells the compiler which files to compile.  Makefiles are an advanced topic, and entire books have been written about them.  We will not discuss them here.</p>
+<p><strong>Step 5: Linking</strong></p>
+<p>Linking is the process of taking all the object files for a program and combining them into a single executable.</p>
+<p><img src="{path}/Link.png" alt="The linking process" /></p>
+<p>In addition to the object files for a program, the linker includes files from the runtime support library.  The C++ language itself is fairly small and simple.  However, it comes with a large library of optional components that may be utilized by your program, and these components live in the runtime support library.  For example, if you wanted to output something to the screen, your program would include a special command to tell the compiler that you wanted to use the I/O (input/output) routines from the runtime support library.</p>
+<p>Once the linker is finished linking all the object files (assuming all goes well), you will have an executable file.</p>
+<p>Again, for illustrative purposes, to link the .o files we created above on a Linux or OS X machine, we can again use g++:</p>
+<p><code>g++ -o prog file1.o file2.o file3.o</code></p>
+<p>The -o tells g++ that we want an executable file named &#8220;prog&#8221; that is built from file1.o, file2.o, and file3.o</p>
+<p>The compile and link steps can be combined together if desired:</p>
+<p><code>g++ -o prog file1.cpp file2.cpp file3.cpp</code></p>
+<p>Which will combine the compile and link steps together and directly produce an executable file named &#8220;prog&#8221;.</p>
+<p><strong>Step 6: Testing and Debugging</strong></p>
+<p>This is the fun part (hopefully)!  You are able to run your executable and see whether it produces the output you were expecting.  If not, then it&#8217;s time for some debugging.  We will discuss debugging in more detail soon.</p>
+<p>Note that steps 3, 4, 5, and 6 all involve software.  While you can use separate programs for each of these functions, a software package known as an <strong>integrated development environment (IDE)</strong> bundles and integrates all of these features together.  With a typical IDE, you get a code editor that does line numbering and syntax highlighting.  The IDE will automatically generate the parameters necessary to compile and link your program into an executable, even if it includes multiple files.  And when you need to debug your program, you can use the integrated debugger.  Furthermore, IDE&#8217;s typically bundle a number of other helpful editing features, such as integrated help, name completion, a class hierarchy browser, and sometimes a version control system.</p>
+<p>We will talk more about installing and using IDEs in the next section.</p>

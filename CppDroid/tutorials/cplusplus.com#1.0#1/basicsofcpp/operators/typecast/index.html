@@ -1,0 +1,17 @@
+
+<h3>Explicit type casting operator</h3>
+Type casting operators allow to convert a value of a given type to another type. There are several ways to do this in C++. The simplest one, which has been inherited from the C language, is to precede the expression to be converted by the new type enclosed between parentheses (()):<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> i;
+<var>float</var> f = 3.14;
+i = (<var>int</var>) f;</code></pre></td></tr></table></div>
+<br>
+<br>
+The previous code converts the floating-point number <code>3.14</code> to an integer value (<code>3</code>); the remainder is lost. Here, the typecasting operator was <code>(int)</code>. Another way to do the same thing in C++ is to use the functional notation preceding the expression to be converted by the type and enclosing the expression between parentheses:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>i = <var>int</var> (f);</code></pre></td></tr></table></div>
+<br>
+<br>
+Both ways of casting types are valid in C++.<br>

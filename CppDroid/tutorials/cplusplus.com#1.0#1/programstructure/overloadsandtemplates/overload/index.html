@@ -1,0 +1,36 @@
+
+<h3>Overloaded functions</h3>
+In C++, two different functions can have the same name if their parameters are different; either because they have a different number of parameters, or because any of their parameters are of a different type. For example: <br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br></code></pre></td>
+<td class="source"><pre><code><cite>// overloading functions</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> operate (<var>int</var> a, <var>int</var> b)
+{
+  <var>return</var> (a*b);
+}
+
+<var>double</var> operate (<var>double</var> a, <var>double</var> b)
+{
+  <var>return</var> (a/b);
+}
+
+<var>int</var> main ()
+{
+  <var>int</var> x=5,y=2;
+  <var>double</var> n=5.0,m=2.0;
+  cout &lt;&lt; operate (x,y) &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; operate (n,m) &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>10
+2.5</samp></pre></td></tr></table></div>
+<br>
+<br>
+In this example, there are two functions called <code>operate</code>, but one of them has two parameters of type <code>int</code>, while the other has them of type <code>double</code>. The compiler knows which one to call in each case by examining the types passed as arguments when the function is called. If it is called with two <code>int</code> arguments, it calls to the function that has two <code>int</code> parameters, and if it is called with two <code>double</code>s, it calls the one with two <code>double</code>s.<br>
+<br>
+In this example, both functions have quite different behaviors, the <code>int</code> version multiplies its arguments, while the <code>double</code> version divides them. This is generally not a good idea. Two functions with the same name are generally expected to have -at least- a similar behavior, but this example demonstrates that is entirely possible for them not to. Two overloaded functions (i.e., two functions with the same name) have entirely different definitions; they are, for all purposes, different functions, that only happen to have the same name.<br>
+<br>
+Note that a function cannot be overloaded only by its return type. At least one of its parameters must have a different type.<br>

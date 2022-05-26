@@ -1,0 +1,50 @@
+
+<h3>Type aliases (typedef / using)</h3>
+A type alias is a different name by which a type can be identified. In C++, any valid type can be aliased so that it can be referred to with a different identifier.<br>
+<br>
+In C++, there are two syntaxes for creating such type aliases: The first, inherited from the C language, uses the <code>typedef</code> keyword:<br>
+<br>
+<code>
+typedef existing_type new_type_name ;<br>
+</code>
+<br>
+where <code>existing_type</code> is any type, either fundamental or compound, and <code>new_type_name</code> is an identifier with the new name given to the type.<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>typedef</var> <var>char</var> C;
+<var>typedef</var> <var>unsigned</var> <var>int</var> WORD;
+<var>typedef</var> <var>char</var> * pChar;
+<var>typedef</var> <var>char</var> field [50]; </code></pre></td></tr></table></div>
+<br>
+<br>
+This defines four type aliases: <code>C</code>, <code>WORD</code>, <code>pChar</code>, and <code>field</code> as <code>char</code>, <code>unsigned int</code>, <code>char*</code> and <code>char[50]</code>, respectively. Once these aliases are defined, they can be used in any declaration just like any other valid type:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>C mychar, anotherchar, *ptc1;
+WORD myword;
+pChar ptc2;
+field name; </code></pre></td></tr></table></div>
+<br>
+<br>
+More recently, a second syntax to define type aliases was introduced in the C++ language:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>using</var> new_type_name = existing_type ;</code></pre></td></tr></table></div>
+<br>
+<br>
+For example, the same type aliases as above could be defined as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>using</var> C = <var>char</var>;
+<var>using</var> WORD = <var>unsigned</var> <var>int</var>;
+<var>using</var> pChar = <var>char</var> *;
+<var>using</var> field = <var>char</var> [50]; </code></pre></td></tr></table></div>
+<br>
+<br>
+Both aliases defined with <code>typedef</code> and aliases defined with <code>using</code> are semantically equivalent. The only difference being that <code>typedef</code> has certain limitations in the realm of templates that <code>using</code> has not. Therefore, <code>using</code> is more generic, although <code>typedef</code> has a longer history and is probably more common in existing code.<br>
+<br>
+Note that neither <code>typedef</code> nor <code>using</code> create new distinct data types. They only create synonyms of existing types. That means that the type of <code>myword</code> above, declared with type <code>WORD</code>, can as well be considered of type <code>unsigned int</code>; it does not really matter, since both are actually referring to the same type.<br>
+<br>
+Type aliases can be used to reduce the length of long or confusing type names, but they are most useful as tools to abstract programs from the underlying types they use. For example, by using an alias of <code>int</code> to refer to a particular kind of parameter instead of using <code>int</code> directly, it allows for the type to be easily replaced by <code>long</code> (or some other type) in a later version, without having to change every instance where it is used.<br>

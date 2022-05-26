@@ -1,0 +1,138 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>While C++ provides a number of basic data types (eg. char, int, long, float, double, etc&#8230;) that are often sufficient for solving relatively simple problems, it can be difficult to solve complex problems using just these types.  One of C++&#8217;s more useful features is the ability to define your own data types that better correspond to the problem being worked upon.  You have already seen how <a href="http://www.learncpp.com/cpp-tutorial/45-enumerated-types/">enumerated types</a> and <a href="http://www.learncpp.com/cpp-tutorial/47-structs/">structs</a> can be used to create your own custom data types.</p>
+<p>Here is an example of a struct used to hold a date:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct DateStruct
+{
+    int nMonth;
+    int nDay;
+    int nYear;
+};
+</pre></td></tr></table>
+<p>Enumerated types and structs represent the traditional non-object-oriented programming world, as they can only hold data.  If you want to initialize or manipulate this data, you either have to do so directly, or write functions that take a DateStruct as a parameter:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// Declare a DateStruct variable
+DateStruct sToday;
+
+// Initialize it manually
+sToday.nMonth = 10;
+sToday.nDay = 14;
+sToday.nYear = 2020;
+
+// Here is a function to initialize a date
+void SetDate(DateStruct &amp;sDate, int nMonth, int nDay, int Year)
+{
+    sDate.nMonth = nMonth;
+    sDate.nDay = nDay;
+    sDate.nYear = nYear;
+}
+
+// Init our date to the same date using the function
+SetDate(sToday, 10, 14, 2020);
+</pre></td></tr></table>
+<p>In the world of object-oriented programming, we often want our types to not only hold data, but provide functions that work with the data as well.  In C++, this is done via the <strong>class</strong> keyword.  Using the class keyword defines a new user-defined type called a class.</p>
+<p><strong>Classes</strong></p>
+<p>In C++, classes are very much like structs, except that classes provide much more power and flexibility.  In fact, the following struct and class are effectively identical:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct DateStruct
+{
+    int nMonth;
+    int nDay;
+    int nYear;
+};
+
+class Date
+{
+public:
+    int m_nMonth;
+    int m_nDay;
+    int m_nYear;
+};
+</pre></td></tr></table>
+<p>Note that the only difference is the <em>public:</em> keyword in the class.  We will discuss it&#8217;s function in the next lesson.</p>
+<p>Just like a struct definition, a class definition does not declare any memory.  It only defines what the class looks like.  In order to use a class, a variable of that class type must be declared:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Date cToday; // declare a variable of class Date
+
+// Assign values to our members using the member selector operator (.)
+cToday.m_nMonth = 10;
+cToday.m_nDay = 14;
+cToday.m_nYear = 2020;
+</pre></td></tr></table>
+<p>In C++, when we declare a variable of a class, we call it <strong>instantiating</strong> the class.  The variable itself is called an <strong>instance</strong> of the class.  A variable of a class type is also called an <strong>object</strong>.</p>
+<p><strong>Member Functions</strong></p>
+<p>In addition to holding data, classes can also contain functions!  Here is our Date class with a function to set the date:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Date
+{
+public:
+    int m_nMonth;
+    int m_nDay;
+    int m_nYear;
+
+    void SetDate(int nMonth, int nDay, int nYear)
+    {
+        m_nMonth = nMonth;
+        m_nDay = nDay;
+        m_nYear = nYear;
+    }
+};
+</pre></td></tr></table>
+<p>Just like member variables of a struct or class, member functions of a class are accessed using the member selector operator (.):</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Date cToday;
+cToday.SetDate(10, 14, 2020); // call SetDate() on cToday
+</pre></td></tr></table>
+<p>Note that in the original struct version of SetDate(), we needed to pass the struct itself to the SetDate() function as the first parameter.  Otherwise, SetDate() wouldn&#8217;t know what DateStruct we wanted to work on.</p>
+<p>However, in our class version of SetDate(), we do not need to pass cToday to SetDate()!  Because SetDate() is being called on cToday, the member variables in SetDate() will refer to the member variables of cToday!  Thus, inside function SetDate(), <code>m_nDay</code> is actually referring to <code>cToday.m_nDay</code>.  If we called cTomorrow.SetDate(), <code>m_nDay</code> inside of SetDate() would refer to <code>cTomorrow.m_nDay</code>.</p>
+<p>Using the &#8220;m_&#8221; prefix for member variables helps distinguish member variables from function parameters or local variables inside member functions.  This is useful for several reasons.  First, when we see an assignment to a variable with the &#8220;m_&#8221; prefix, we know that we are changing the state of the class.  Second, unlike function parameters or local variables, which are declared within the function, member variables are declared in the class definition.  Consequently, if we want to know how a variable with the &#8220;m_&#8221; prefix is declared, we know that we should look in the class definition instead of within the function.</p>
+<p>By convention, class names should begin with an upper case letter.</p>
+<p>Here&#8217;s another example of a class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+class Employee
+{
+public:
+    char m_strName[25];
+    int m_nID;
+    double m_dWage;
+
+    // Set the employee information
+    void SetInfo(char *strName, int nID, double dWage)
+    {
+        strncpy(m_strName, strName, 25);
+        m_nID = nID;
+        m_dWage = dWage;
+    }
+
+    // Print employee information to the screen
+    void Print()
+    {
+        using namespace std;
+        cout &lt;&lt; &quot;Name: &quot; &lt;&lt; m_strName &lt;&lt; &quot;  Id: &quot; &lt;&lt;
+            m_nID &lt;&lt; &quot;  Wage: $&quot; &lt;&lt; m_dWage &lt;&lt; endl;
+    }
+};
+
+int main()
+{
+    // Declare two employees
+    Employee cAlex;
+    cAlex.SetInfo(&quot;Alex&quot;, 1, 25.00);
+
+    Employee cJoe;
+    cJoe.SetInfo(&quot;Joe&quot;, 2, 22.25);
+
+    // Print out the employee information
+    cAlex.Print();
+    cJoe.Print();
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This produces the output:</p>
+<pre>
+Name: Alex  Id: 1  Wage: $25
+Name: Joe  Id: 2  Wage: $22.25
+</pre>
+<p>Warning: One of the most common C++ mistakes is to forget to end all class (and struct) declarations with a semicolon.  This can cause the compiler to report all sorts of weird, seemingly-unrelated errors!</p>

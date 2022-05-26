@@ -1,0 +1,49 @@
+
+<p>The <b>call by value</b> method of passing arguments to a function copies the actual value of an argument into the formal parameter of the function. In this case, changes made to the parameter inside the function have no effect on the argument.</p>
+<p>By default, C programming language uses <i>call by value</i> method to pass arguments. In general, this means that code within a function cannot alter the arguments used to call the function. Consider the function <b>swap()</b> definition as follows.</p>
+<table><tr><td class="source"><pre class="prettyprint" id="support">
+/* function definition to swap the values */
+void swap(int x, int y)
+{
+   int temp;
+
+   temp = x; /* save the value of x */
+   x = y;    /* put y into x */
+   y = temp; /* put temp into y */
+  
+   return;
+}
+</pre></td></tr></table>
+<p>Now, let us call the function <b>swap()</b> by passing actual values as in the following example:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit" title="support">
+#include &lt;stdio.h&gt;
+ 
+/* function declaration */
+void swap(int x, int y);
+ 
+int main ()
+{
+   /* local variable definition */
+   int a = 100;
+   int b = 200;
+ 
+   printf("Before swap, value of a : %d\n", a );
+   printf("Before swap, value of b : %d\n", b );
+ 
+   /* calling a function to swap the values */
+   swap(a, b);
+ 
+   printf("After swap, value of a : %d\n", a );
+   printf("After swap, value of b : %d\n", b );
+ 
+   return 0;
+}
+</pre></td></tr></table>
+<p>Let us put above code in a single C file, compile and execute it, it will produce the following result:</p>
+<table><tr><td class="source"><pre class="result">
+Before swap, value of a :100
+Before swap, value of b :200
+After swap, value of a :100
+After swap, value of b :200
+</pre></td></tr></table>
+<p>Which shows that there is no change in the values though they had been changed inside the function.</p>

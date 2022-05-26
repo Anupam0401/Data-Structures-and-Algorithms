@@ -1,0 +1,13 @@
+
+<h3>Identifiers</h3>
+A <dfn>valid identifier</dfn> is a sequence of one or more letters, digits, or underscore characters (<code>_</code>). Spaces, punctuation marks, and symbols cannot be part of an identifier. In addition, identifiers shall always begin with a letter. They can also begin with an underline character (<code>_</code>), but such identifiers are -on most cases- considered reserved for compiler-specific keywords or external identifiers, as well as identifiers containing two successive underscore characters anywhere. In no case can they begin with a digit.<br>
+<br>
+C++ uses a number of keywords to identify operations and data descriptions; therefore, identifiers created by a programmer cannot match these keywords.  The standard reserved keywords that cannot be used for programmer created identifiers are:<br>
+<br>
+<code>
+alignas, alignof, and, and_eq, asm, auto, bitand, bitor, bool, break, case, catch, char, char16_t, char32_t, class, compl, const, constexpr, const_cast, continue, decltype, default, delete, do, double, dynamic_cast, else, enum, explicit, export, extern, false, float, for, friend, goto, if, inline, int, long, mutable, namespace, new, noexcept, not, not_eq, nullptr, operator, or, or_eq, private, protected, public, register, reinterpret_cast, return, short, signed, sizeof, static, static_assert, static_cast, struct, switch, template, this, thread_local, throw, true, try, typedef, typeid, typename, union, unsigned, using, virtual, void, volatile, wchar_t, while, xor, xor_eq<br>
+</code>
+<br>
+Specific compilers may also have additional specific reserved keywords.<br>
+<br>
+<b>Very important:</b> The C++ language is a "case sensitive" language. That means that an identifier written in capital letters is not equivalent to another one with the same name but written in small letters. Thus, for example, the <code>RESULT</code> variable is not the same as the <code>result</code> variable or the <code>Result</code> variable. These are three different identifiers identifiying three different variables.<br>

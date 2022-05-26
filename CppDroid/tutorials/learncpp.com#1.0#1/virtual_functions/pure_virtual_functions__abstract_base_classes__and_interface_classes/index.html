@@ -1,0 +1,202 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Finally, we arrive at the end of our long journey through inheritance! This is the last topic we will cover on the subject.  So congratulations in advance on making it through the hardest part of the language!</p>
+<p><strong>Pure virtual (abstract) functions and abstract base classes</strong></p>
+<p>So far, all of the virtual functions we have written have a body (a definition).  However, C++ allows you to create a special kind of virtual function called a <strong>pure virtual function</strong> (or <strong>abstract function</strong>) that has no body at all!  A pure virtual function simply acts as a placeholder that is meant to be redefined by derived classes.</p>
+<p>To create a pure virtual function, rather than define a body for the function, we simply assign the function the value 0.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+public:
+    const char* SayHi() { return &quot;Hi&quot;; } // a normal non-virtual function    
+
+    virtual const char* GetName() { return &quot;Base&quot;; } // a normal virtual function
+
+    virtual int GetValue() = 0; // a pure virtual function
+};
+</pre></td></tr></table>
+<p>When we add a pure virtual function to our class, we are effectively saying, &#8220;it is up to the derived classes to implement this function&#8221;.</p>
+<p>Using a pure virtual function has two main consequences: First, any class with one or more pure virtual functions becomes an <strong>abstract base class</strong>, which means that it can not be instantiated!  Consider what would happen if we could create an instance of Base:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Base cBase; // pretend this was legal
+    cBase.GetValue(); // what would this do?
+}
+</pre></td></tr></table>
+<p>Second, any derived class must define a body for this function, or that derived class will be considered an abstract base class as well.</p>
+<p>Let&#8217;s take a look at an example of a pure virtual function in action.  In a previous lesson, we wrote a simple Animal base class and derived a Cat and a Dog class from it.  Here&#8217;s the code as we left it:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Animal
+{
+protected:
+    std::string m_strName;
+
+    // We're making this constructor protected because
+    // we don't want people creating Animal objects directly,
+    // but we still want derived classes to be able to use it.
+    Animal(std::string strName)
+        : m_strName(strName)
+    {
+    }
+
+public:
+    std::string GetName() { return m_strName; }
+    virtual const char* Speak() { return &quot;???&quot;; }
+};
+
+class Cat: public Animal
+{
+public:
+    Cat(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    virtual const char* Speak() { return &quot;Meow&quot;; }
+};
+
+class Dog: public Animal
+{
+public:
+    Dog(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    virtual const char* Speak() { return &quot;Woof&quot;; }
+};
+</pre></td></tr></table>
+<p>We&#8217;ve prevented people from allocating objects of type Animal by making the constructor protected.  However, there&#8217;s one problem that has not been addressed.  It is still possible to create derived classes that do not redefine Speak().  For example:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cow: public Animal
+{
+public:
+    Cow(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    // We forgot to redefine Speak
+};
+
+int main()
+{
+    Cow cCow(&quot;Betsy&quot;);
+    cout &lt;&lt; cCow.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; cCow.Speak() &lt;&lt; endl;
+}
+</pre></td></tr></table></td></tr></table>
+<p>This will print:</p>
+<pre>
+Betsy says ???
+</pre>
+<p>What happened?  We forgot to redefine Speak, so cCow.Speak() resolved to Animal.Speak(), which isn&#8217;t what we wanted.</p>
+<p>A better solution to this problem is to use a pure virtual function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Animal
+{
+protected:
+    std::string m_strName;
+
+public:
+    Animal(std::string strName)
+        : m_strName(strName)
+    {
+    }
+
+    std::string GetName() { return m_strName; }
+    virtual const char* Speak() = 0; // pure virtual function
+};
+</pre></td></tr></table>
+<p>There are a couple of things to note here.  First, Speak() is now a pure virtual function.  This means Animal is an abstract base class, and can not be instantiated.  Consequently, we do not need to make the constructor protected any longer (though it doesn&#8217;t hurt).  Second, because our Cow class was derived from Animal, but we did not define Cow::Speak(), Cow is also an abstract base class.  Now when we try to compile this code:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cow: public Animal
+{
+public:
+    Cow(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    // We forgot to redefine Speak
+};
+
+int main()
+{
+    Cow cCow(&quot;Betsy&quot;);
+    cout &lt;&lt; cCow.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; cCow.Speak() &lt;&lt; endl;
+}
+</pre></td></tr></table></td></tr></table>
+<p>The compiler will give us a warning because Cow is an abstract base class and we can not create instances of abstract base classes:</p>
+<pre>
+C:\\Test.cpp(141) : error C2259: &#039;Cow&#039; : cannot instantiate abstract class due to following members:
+        C:\Test.cpp(128) : see declaration of &#039;Cow&#039;
+C:\\Test.cpp(141) : warning C4259: &#039;const char *__thiscall Animal::Speak(void)&#039; : pure virtual function was not defined
+</pre>
+<p>This tells us that we will only be able to instantiate Cow if Cow provides a body for Speak().</p>
+<p>Let&#8217;s go ahead and do that:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cow: public Animal
+{
+public:
+    Cow(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    virtual const char* Speak() { return &quot;Moo&quot;; }
+};
+
+int main()
+{
+    Cow cCow(&quot;Betsy&quot;);
+    cout &lt;&lt; cCow.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; cCow.Speak() &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Now this program will compile and print:</p>
+<pre>
+Betsy says Moo
+</pre>
+<p>A pure virtual function is useful when we have a function that we want to put in the base class, but only the derived classes know what it should return.  A pure virtual function makes it so the base class can not be instantiated, and the derived classes are forced to define these function before they can be instantiated.  This helps ensure the derived classes do not forget to redefine functions that the base class was expecting them to.</p>
+<p><strong>Interface classes</strong></p>
+<p>An <strong>interface class</strong> is a class that has no members variables, and where all of the functions are pure virtual!  In other words, the class is purely a definition, and has no actual implementation.  Interfaces are useful when you want to define the functionality that derived classes must implement, but leave the details of how the derived class implements that functionality entirely up to the derived class.</p>
+<p>Interface classes are often named beginning with an I.  Here&#8217;s a sample interface class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class IErrorLog
+{
+    virtual bool OpenLog(const char *strFilename) = 0;
+    virtual bool CloseLog() = 0;
+
+    virtual bool WriteError(const char *strErrorMessage) = 0;
+};
+</pre></td></tr></table>
+<p>Any class inheriting from IErrorLog must provide implementations for all three functions in order to be instantiated.  You could derive a class named FileErrorLog, where OpenLog() opens a file on disk, CloseLog() closes it, and WriteError() writes the message to the file.  You could derive another class called ScreenErrorLog, where OpenLog() and CloseLog() do nothing, and WriteError() prints the message in a pop-up message box on the screen.</p>
+<p>Now, let&#8217;s say you need to write some code that uses an error log.  If you write your code so it includes FileErrorLog or ScreenErrorLog directly, then you&#8217;re effectively stuck using that kind of error log.  For example, the following function effectively forces callers of MySqrt() to use a FileErrorLog, which may or may not be what they want.  </p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double MySqrt(double dValue, FileErrorLog &amp;cLog)
+{
+    if (dValue &lt; 0.0)
+    {
+        cLog.WriteError(&quot;Tried to take square root of value less than 0&quot;);
+        return 0.0;
+    }
+    else
+        return dValue;
+}
+</pre></td></tr></table>
+<p>A much better way to implement this function is to use IErrorLog instead:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double MySqrt(double dValue, IErrorLog &amp;cLog)
+{
+    if (dValue &lt; 0.0)
+    {
+        cLog.WriteError(&quot;Tried to take square root of value less than 0&quot;);
+        return 0.0;
+    }
+    else
+        return dValue;
+}
+</pre></td></tr></table>
+<p>Now the caller can pass in any class that conforms to the IErrorLog interface.  If they want the error to go to a file, they can pass in an instance of FileErrorLog.  If they want it to go to the screen, they can pass in an instance of ScreenErrorLog.  Or if they want to do something you haven&#8217;t even thought of, such as sending an email to someone when there&#8217;s an error, they can derive a new class from IErrorLog (eg. EmailErrorLog) and use an instance of that!  By using IErrorLog, your function becomes more independent and flexible.</p>
+<p>Interface classes have become extremely popular because they are easy to use, easy to extend, and easy to maintain.  In fact, some modern languages, such as Java and C#, have added an &#8220;interface&#8221; keyword that allows programmers to directly define an interface class without having to explicitly mark all of the member functions as abstract.  Furthermore, although Java and C# will not let you use multiple inheritance on normal classes, they will let you multiply inherit as many interfaces as you like.  Because interfaces have no data and no function bodies, they avoid a lot of the traditional problems with multiple inheritance while still providing much of the flexibility.</p>

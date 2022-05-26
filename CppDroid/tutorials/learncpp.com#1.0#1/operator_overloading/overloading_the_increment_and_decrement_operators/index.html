@@ -1,0 +1,133 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Overloading the increment (<code>++</code>) and decrement (<code>--</code>) operators are pretty straightforward, with one small exception.  There are actually two versions of the increment and decrement operators: a prefix increment and decrement (eg. <code>++nX; --nY;</code>) and a postfix increment and decrement (eg. <code>nX++; nY--;</code>).</p>
+<p>Because the increment and decrement operators modify their operands, they&#8217;re best overloaded as member functions.  We&#8217;ll tackle the prefix versions first because they&#8217;re the most straightforward.</p>
+<p><strong>Overloading prefix increment and decrement</strong></p>
+<p>Prefix increment and decrement is overloaded exactly the same as any normal unary operator.  We&#8217;ll do this one by example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Digit
+{
+private:
+    int m_nDigit;
+public:
+    Digit(int nDigit=0)
+    {
+        m_nDigit = nDigit;
+    }
+
+    Digit&amp; operator++();
+    Digit&amp; operator--();
+
+    int GetDigit() const { return m_nDigit; }
+};
+
+Digit&amp; Digit::operator++()
+{
+    // If our number is already at 9, wrap around to 0
+    if (m_nDigit == 9)
+        m_nDigit = 0;
+    // otherwise just increment to next number
+    else
+        ++m_nDigit;
+
+    return *this;
+}
+
+Digit&amp; Digit::operator--()
+{
+    // If our number is already at 0, wrap around to 9
+    if (m_nDigit == 0)
+        m_nDigit = 9;
+    // otherwise just decrement to next number
+    else
+        --m_nDigit;
+
+    return *this;
+}
+</pre></td></tr></table>
+<p>Our Digit class holds a number between 0 and 9.  We&#8217;ve overloaded increment and decrement so they increment/decrement the digit, wrapping around if the digit is incremented/decremented out range.</p>
+<p>Note that we return *this.  The overloaded increment and decrement operators return a Digit so multiple operators can be &#8220;chained&#8221; together.  Consequently, we need to return an item of type Digit.  Since these operators are implemented as member functions, we can just return *this, which is an item of type Digit!</p>
+<p><strong>Overloading postfix increment and decrement</strong></p>
+<p>Normally, functions can be overloaded when they have the same name but a different number and/or different type of parameters.  However, consider the case of the prefix and postfix increment and decrement operators.  Both have the same name (eg. operator++), are unary, and take one parameter of the same type.  So how it is possible to differentiate the two when overloading?</p>
+<p>The answer is that C++ uses a &#8220;dummy variable&#8221; or &#8220;dummy argument&#8221; for the postfix operators.  This argument is a fake integer parameter that only serves to distinguish the postfix version of increment/decrement from the prefix version.  Here is the above Digit class with both prefix and postfix overloads:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Digit
+{
+private:
+    int m_nDigit;
+public:
+    Digit(int nDigit=0)
+    {
+        m_nDigit = nDigit;
+    }
+
+    Digit&amp; operator++(); // prefix
+    Digit&amp; operator--(); // prefix
+
+    Digit operator++(int); // postfix
+    Digit operator--(int); // postfix
+
+    int GetDigit() const { return m_nDigit; }
+};
+
+Digit&amp; Digit::operator++()
+{
+    // If our number is already at 9, wrap around to 0
+    if (m_nDigit == 9)
+        m_nDigit = 0;
+    // otherwise just increment to next number
+    else
+        ++m_nDigit;
+
+    return *this;
+}
+
+Digit&amp; Digit::operator--()
+{
+    // If our number is already at 0, wrap around to 9
+    if (m_nDigit == 0)
+        m_nDigit = 9;
+    // otherwise just decrement to next number
+    else
+        --m_nDigit;
+
+    return *this;
+}
+
+Digit Digit::operator++(int)
+{
+    // Create a temporary variable with our current digit
+    Digit cResult(m_nDigit);
+
+    // Use prefix operator to increment this digit
+    ++(*this);             // apply operator
+
+    // return temporary result
+    return cResult;       // return saved state
+}
+
+Digit Digit::operator--(int)
+{
+    // Create a temporary variable with our current digit
+    Digit cResult(m_nDigit);
+
+    // Use prefix operator to increment this digit
+    --(*this);             // apply operator
+
+    // return temporary result
+    return cResult;       // return saved state
+}
+
+int main()
+{
+    Digit cDigit(5);
+    ++cDigit; // calls Digit::operator++();
+    cDigit++; // calls Digit::operator++(int);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>There are a few interesting things going on here.  First, note that we&#8217;ve distinguished the prefix from the postfix operators by providing an integer dummy parameter on the postfix version.  Second, because the dummy parameter is not used in the function implementation, we have not even given it a name.  This tells the compiler to treat this variable as a placeholder, which means it won&#8217;t warn us that we declared a variable but never used it.</p>
+<p>Third, note that the prefix and postfix operators do the same job &#8212; they both increment or decrement the class.  The difference between the two is in the value they return.  The overloaded prefix operators return the class after it has been incremented or decremented.  Consequently, overloading these is fairly straightforward.  We simply increment or decrement our member variables, and then return *this.</p>
+<p>The postfix operators, on the other hand, need to return the state of the class before it is incremented or decremented.  This leads to a bit of a conundrum &#8212; if we increment or decrement the class, we won&#8217;t be able to return the state of the class before it was incremented or decremented.  On the other hand, if we return the state of the class before we increment or decrement it, the increment or decrement will never be called.</p>
+<p>The typical way this problem is solved is to use a temporary variable that holds the value of the class before it is incremented or decremented.  Then the class itself can be incremented or decremented.  And finally, the temporary variable is returned to the caller.  In this way, the caller receives a copy of the class before it was incremented or decremented, but the class itself is incremented or decremented.  Note that this means the return value of the overloaded operator much be a non-reference, because we can&#8217;t return a reference to a local variable that will be destroyed when the function exits.  Also note that this means the postfix operators are typically less efficient than the prefix operators because of the added overhead of instantiating a temporary variable and returning by value instead of reference.</p>
+<p>Finally, note that we&#8217;ve written the post-increment and post-decrement in such a way that it calls the pre-increment and pre-decrement to do most of the work.  This cuts down on duplicate code, and makes our class easier to modify in the future.</p>

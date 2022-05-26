@@ -1,0 +1,69 @@
+
+<p>A header file is a file with extension <b>.h</b> which  contains C function declarations and macro definitions and to be shared between several source files. There are two types of header files: the files that the programmer writes and the files that come with your compiler.</p>
+<p>You request the use of a header file in your program by including it, with the C preprocessing directive <b>#include</b> like you have seen inclusion of <b>stdio.h</b> header file, which comes along with your compiler.</p>
+<p>Including a header file is equal to copying the content of the header file but we do not do it because it will be very much error-prone and it is not a good idea to copy the content of header file in the source files, specially if we have multiple source file comprising our program.</p>
+<p>A simple practice in C or C++ programs is that we keep all the constants, macros, system wide global variables, and function prototypes in header files and include that header file wherever it is required.</p>
+<h2>Include Syntax</h2>
+<p>Both user and system header files are included using the preprocessing directive <b>#include</b>. It has following two forms:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+#include &lt;file&gt;
+</pre></td></tr></table>
+<p>This form is used for system header files. It searches for a file named file in a standard list of system directories. You can prepend directories to this list with the -I option while compiling your source code.</p>
+<table><tr><td class="source"><pre class="prettyprint">
+#include "file"
+</pre></td></tr></table>
+<p>This form is used for header files of your own program. It searches for a file named file in the directory containing the current file. You can prepend directories to this list with the -I option while compiling your source code.</p>
+<h2>Include Operation</h2>
+<p>The <b>#include</b> directive works by directing the C preprocessor to scan the specified file as input before continuing with the rest of the current source file. The output from the preprocessor contains the output already generated, followed by the output resulting from the included file, followed by the output that comes from the text after the <b>#include</b> directive. For example, if you have a header file header.h as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+char *test (void);
+</pre></td></tr></table>
+<p>and a main program called <i>program.c</i> that uses the header file, like this:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+int x;
+#include "header.h"
+
+int main (void)
+{
+   puts (test ());
+}
+</pre></td></tr></table>
+<p>the compiler will see the same token stream as it would if program.c read</p>
+<table><tr><td class="source"><pre class="prettyprint">
+int x;
+char *test (void);
+
+int main (void)
+{
+   puts (test ());
+}
+</pre></td></tr></table>
+<h2>Once-Only Headers</h2>
+<p>If a header file happens to be included twice, the compiler will process its contents twice and will result an error. The standard way to prevent this is to enclose the entire real contents of the file in a conditional, like this:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+#ifndef HEADER_FILE
+#define HEADER_FILE
+
+the entire header file file
+
+#endif
+</pre></td></tr></table>
+<p>This construct is commonly known as a wrapper <b>#ifndef</b>. When the header is included again, the conditional will be false, because HEADER_FILE is defined. The preprocessor will skip over the entire contents of the file, and the compiler will not see it twice.</p>
+<h2>Computed  Includes</h2>
+<p>Sometimes it is necessary to select one of several different header files to be included into your program. They might specify configuration parameters to be used on different sorts of operating systems, for instance. You could do this with a series of conditionals as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+#if SYSTEM_1
+   # include "system_1.h"
+#elif SYSTEM_2
+   # include "system_2.h"
+#elif SYSTEM_3
+   ...
+#endif
+</pre></td></tr></table>
+<p>But as it grows, it becomes tedious, instead the preprocessor offers the ability to use a macro for the header name. This is called a <b>computed include</b>. Instead of writing a header name as the direct argument of <b>#include</b>, you simply put a macro name there instead:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+ #define SYSTEM_H "system_1.h"
+ ...
+ #include SYSTEM_H
+</pre></td></tr></table>
+<p>SYSTEM_H will be expanded, and the preprocessor will look for system_1.h as if the <b>#include</b> had been written that way originally. SYSTEM_H could be defined by your Makefile with a -D option.</p>

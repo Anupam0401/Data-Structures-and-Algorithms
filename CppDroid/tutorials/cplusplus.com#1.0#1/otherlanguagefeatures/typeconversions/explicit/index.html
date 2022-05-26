@@ -1,0 +1,64 @@
+
+<h3>Type casting</h3>
+C++ is a strong-typed language. Many conversions, specially those that imply a different interpretation of the value, require an explicit conversion, known in C++ as <i>type-casting</i>. There exist two main syntaxes for generic type-casting: <i>functional</i> and <i>c-like</i>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>double</var> x = 10.3;
+<var>int</var> y;
+y = <var>int</var> (x);    <cite>// functional notation</cite>
+y = (<var>int</var>) x;    <cite>// c-like cast notation </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+The functionality of these generic forms of type-casting is enough for most needs with fundamental data types. However, these operators can be applied indiscriminately on classes and pointers to classes, which can lead to code that -while being syntactically correct- can cause runtime errors. For example, the following code compiles without errors: <br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br></code></pre></td>
+<td class="source"><pre><code><cite>// class type-casting</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Dummy {
+    <var>double</var> i,j;
+};
+
+<var>class</var> Addition {
+    <var>int</var> x,y;
+  <var>public</var>:
+    Addition (<var>int</var> a, <var>int</var> b) { x=a; y=b; }
+    <var>int</var> result() { <var>return</var> x+y;}
+};
+
+<var>int</var> main () {
+  Dummy d;
+  Addition * padd;
+  padd = (Addition*) &amp;d;
+  cout &lt;&lt; padd-&gt;result();
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp> </samp></pre></td></tr></table></div>
+<br>
+<br>
+The program declares a pointer to <code>Addition</code>, but then it assigns to it a reference to an object of another unrelated type using explicit type-casting:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>padd = (Addition*) &amp;d;</code></pre></td></tr></table></div>
+<br>
+<br>
+Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member <code>result</code> will produce either a run-time error or some other unexpected results.<br>
+<br>
+In order to control these types of conversions between classes, we have four specific casting operators: <code>dynamic_cast</code>, <code>reinterpret_cast</code>, <code>static_cast</code> and <code>const_cast</code>. Their format is to follow the new type enclosed between angle-brackets (<code>&lt;&gt;</code>) and immediately after, the expression to be converted between parentheses.<br>
+<br>
+<code>
+dynamic_cast &lt;new_type&gt; (expression)<br>
+reinterpret_cast &lt;new_type&gt; (expression)<br>
+static_cast &lt;new_type&gt; (expression)<br>
+const_cast &lt;new_type&gt; (expression)<br>
+</code>
+<br>
+The traditional type-casting equivalents to these expressions would be:<br>
+ <br>
+<code>
+(new_type) expression<br>
+new_type (expression)<br>
+</code>
+<br>
+but each one with its own special characteristics:<br>

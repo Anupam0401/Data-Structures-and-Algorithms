@@ -1,0 +1,141 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>An <strong>Iterator</strong> is an object that can traverse (iterate over) a container class without the user having to know how the container is implemented.  With many classes (particularly lists and the associative classes), iterators are the primary way elements of these classes are accessed.</p>
+<p>An iterator is best visualized as a pointer to a given element in the container, with a set of overloaded operators to provide a set of well-defined functions:</p>
+<ul>
+<li><strong>Operator*</strong> &#8212; Dereferencing the iterator returns the element that the iterator is currently pointing at.
+<li><strong>Operator++</strong> &#8212; Moves the iterator to the next element in the container.  Most iterators also provide Operator&#8211; to move to the previous element.
+<li><strong>Operator== and Operator!=</strong> &#8212; Basic comparison operators to determine if two iterators point to the same element.  To compare the values that two iterators are pointing at, deference the iterators first, and then use a comparison operator.
+<li><strong>Operator=</strong> &#8212; Assign the iterator to a new position (typically the start or end of the container&#8217;s elements).  To assign the value of the element the iterator is point at, deference the iterator first, then use the assign operator.
+</ul>
+<p>Each container includes four basic member functions for use with Operator=:</p>
+<ul>
+<li><strong>begin()</strong> returns an iterator representing the beginning of the elements in the container.
+<li><strong>end()</strong> returns an iterator representing the element just past the end of the elements.
+<li><strong>cbegin()</strong> returns a const (read-only) iterator representing the beginning of the elements in the container.
+<li><strong>cend()</strong> returns a const (read-only) iterator representing the element just past the end of the elements.
+</ul>
+<p>It might seem weird that end() doesn&#8217;t point to the last element in the list, but this is done primarily to make looping easy: iterating over the elements can continue until the iterator reaches end(), and then you know you&#8217;re done.</p>
+<p>Finally, all containers provide (at least) two types of iterators:</p>
+<ul>
+<li><strong>container::iterator</strong> provides a read/write iterator
+<li><strong>container::const_iterator</strong> provides a read-only iterator
+</ul>
+<p>Lets take a look at some examples of using iterators.</p>
+<p><strong>Iterating through a vector</strong></p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main()
+{
+    using namespace std;
+
+    vector&lt;int&gt; vect;
+    for (int nCount=0; nCount &lt; 6; nCount++)
+        vect.push_back(nCount);
+
+    vector&lt;int&gt;::const_iterator it; // declare an read-only iterator
+    it = vect.begin(); // assign it to the start of the vector
+    while (it != vect.end()) // while it hasn't reach the end
+        {
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;; // print the value of the element it points to
+        it++; // and iterate to the next element
+        }
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This prints the following:</p>
+<p>0 1 2 3 4 5</p>
+<p><strong>Iterating through a list</strong></p>
+<p>Now let&#8217;s do the same thing with a list:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;list&gt;
+int main()
+{
+    using namespace std;
+
+    list&lt;int&gt; li;
+    for (int nCount=0; nCount &lt; 6; nCount++)
+        li.push_back(nCount);
+
+    list&lt;int&gt;::const_iterator it; // declare an iterator
+    it = li.begin(); // assign it to the start of the list
+    while (it != li.end()) // while it hasn't reach the end
+    {
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;; // print the value of the element it points to
+        it++; // and iterate to the next element
+    }
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This prints:</p>
+<p>0 1 2 3 4 5</p>
+<p>Note the code is almost identical to the vector case, even though vectors and lists have almost completely different internal implementations!</p>
+<p><strong>Iterating through a set</strong></p>
+<p>In the following example, we&#8217;re going to create a set from 6 numbers and use an iterator to print the values in the set:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;set&gt;
+int main()
+{
+    using namespace std;
+
+    set&lt;int&gt; myset;
+    myset.insert(7);
+    myset.insert(2);
+    myset.insert(-6);
+    myset.insert(8);
+    myset.insert(1);
+    myset.insert(-4);
+
+    set&lt;int&gt;::const_iterator it; // declare an iterator
+    it = myset.begin(); // assign it to the start of the set
+    while (it != myset.end()) // while it hasn't reach the end
+    {
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;; // print the value of the element it points to
+        it++; // and iterate to the next element
+    }
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program produces the following result:</p>
+<p>-6 -4 1 2 7 8</p>
+<p>Note that although populating the set differs from the way we populate the vector and list, the code used to iterate through the elements of the set was essentially identical.</p>
+<p><strong>Iterating through a map</strong></p>
+<p>This one is a little trickier.  Maps and multimaps take pairs of elements (defined as an stl::pair).  We use the make_pair() helper function to easily create pairs.  std::pair allows access to the elements of the pair via the first() and second() member functions.  In our map, we use first() as the key, and second() as the value.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+int main()
+{
+    using namespace std;
+
+    map&lt;int, string&gt; mymap;
+    mymap.insert(make_pair(4, &quot;apple&quot;));
+    mymap.insert(make_pair(2, &quot;orange&quot;));
+    mymap.insert(make_pair(1, &quot;banana&quot;));
+    mymap.insert(make_pair(3, &quot;grapes&quot;));
+    mymap.insert(make_pair(6, &quot;mango&quot;));
+    mymap.insert(make_pair(5, &quot;peach&quot;));
+
+    map&lt;int, string&gt;::const_iterator it; // declare an iterator
+    it = mymap.begin(); // assign it to the start of the vector
+    while (it != mymap.end()) // while it hasn't reach the end
+    {
+        cout &lt;&lt; it-&gt;first &lt;&lt; &quot;=&quot; &lt;&lt; it-&gt;second &lt;&lt; &quot; &quot;; // print the value of the element it points to
+        it++; // and iterate to the next element
+    }
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program produces the result:</p>
+<p>1=banana 2=orange 3=grapes 4=apple 5=peach 6=mango</p>
+<p>Notice here how easy iterators make it to step through each of the elements of the container.  You don&#8217;t have to care at all how map stores its data!</p>
+<p><strong>Conclusion</strong></p>
+<p>Iterators provide an easy way to step through the elements of a container class without having to understand how the container class is implemented.  When combined with STL&#8217;s algorithms and the member functions of the container classes, iterators become even more powerful.  In the next lesson, you&#8217;ll see an example of using an iterator to insert elements into a list (which doesn&#8217;t provide an overloaded operator[] to access it&#8217;s elements directly).</p>
+<p>One point worth noting: Iterators must be implemented on a per-class basis, because the iterator does need to know how a class is implemented.  Thus iterators are always tied to specific container classes.</p>

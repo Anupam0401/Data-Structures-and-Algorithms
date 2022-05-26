@@ -1,0 +1,245 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>There are many instances in programming where we need more than one variable in order to represent something.  For example, to represent yourself, you might want to store your name, your birthday, your height, your weight, or any other number of characteristics about yourself.  You could do so like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char strName[20];
+int nBirthYear;
+int nBirthMonth;
+int nBirthDay;
+int nHeight; // in inches
+int nWeight; // in pounds
+</pre></td></tr></table>
+<p>However, you now have 6 independent variables that are not grouped in any way.  If you wanted to pass information about yourself to a function, you&#8217;d have to pass each variable individually.  Furthermore, if you wanted to store information about more people, you&#8217;d have to declare 6 more variables for each additional person!  As you can see, this can quickly get out of control.</p>
+<p>Fortunately, C++ allows us to create our own user-defined aggregate data types.  An <strong>aggregate data type</strong> is a data type that groups multiple individual variables together.  One of the simplest aggregate data type is the struct.  A <strong>struct</strong> (short for structure) allows us to group variables of mixed data types together into a single unit.</p>
+<p>Because structs are user-defined, we first have to tell the compiler what our struct looks like before we can begin using it.  To do this, we declare our struct using the <em>struct</em> keyword.  Here is an example of a struct declaration:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct Employee
+{
+    int nID;
+    int nAge;
+    float fWage;
+};
+</pre></td></tr></table>
+<p>This tells the compiler that we are defining a struct named Employee.  The Employee struct contains 3 variables inside of it: two ints and a float.  These variables are called <strong>members</strong> (or fields).  Keep in mind that the above is just a declaration &#8212; even though we are telling the compiler that the struct will have variables, no memory is allocated at this time.</p>
+<p>In order to use the Employee struct, we simply declare a variable of type Employee:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Employee sJoe;
+</pre></td></tr></table>
+<p>sJoe is a variable of type Employee.  As with normal variables, declaring a variable allocates memory for that variable.  Typically, the size of a struct is the sum of the size of all it&#8217;s members.  In this case, since each integer is 4 bytes and a float is 4 bytes, Employee would be 12 bytes.  However, some platforms have specific rules about how variables must be laid out in memory &#8212; consequently, the compiler may leave gaps between the variables.  As a result, we can say the struct will be at minimum 12 bytes.</p>
+<p>To find out the exact size of Employee, we can use the sizeof operator:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+cout &lt;&lt; &quot;The size of Employee is &quot; &lt;&lt; sizeof(Employee);
+</pre></td></tr></table>
+<p>On the author&#8217;s Pentium 4, this prints <code>The size of Employee is 12</code>.</p>
+<p>When we declare a variable such as <code>Employee sJoe</code>, sJoe refers to the entire struct (which contains the member variables).  In order to access the individual members, we use the <strong>member selection operator</strong> (which is a period).  As with normal variables, struct member variables are not initialized, and will typically contain junk.  We must initialize them manually.  Here is an example of using the member selection operator to initialize each member variable:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Employee sJoe;
+sJoe.nID= 14; // initialize nID within sJoe
+sJoe.nAge = 32; // initialize nAge within sJoe
+sJoe.fWage = 24.15; // initialize fWage within sJoe
+</pre></td></tr></table>
+<p>It is possible to declare multiple variables of the same struct type:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Employee sJoe; // create an Employee struct for Joe
+sJoe.nID = 14;
+sJoe.nAge = 32;
+sJoe.fWage = 24.15;
+
+Employee sFrank; // create an Employee struct for Frank
+sFrank.nID = 15;
+sFrank.nAge = 28;
+sFrank.fWage = 18.27;
+</pre></td></tr></table>
+<p>In the above example, it is very easy to tell which member variables belong to Joe and which belong to Frank.  This provides a much higher level of organization than individual variables would.  Furthermore, because the members all have the same name, this provides consistency across multiple variables of the same type.</p>
+<p>Struct member variables act just like normal variables, so it is possible to do normal operations on them:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nTotalAge = sJoe.nAge + sFrank.nAge;
+
+if (sJoe.fWage &gt; sFrank.fWage)
+    cout &lt;&lt; &quot;Joe makes more than Frank&quot; &lt;&lt; endl;
+
+// Frank got a promotion
+sFrank.fWage += 2.50;
+
+// Today is Joe's birthday
+sJoe.nAge++;
+</pre></td></tr></table>
+<p>Another big advantage of using structs over individual variables is that we can pass the entire struct to a function that needs to work with the members:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+void PrintInformation(Employee sEmployee)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;ID:   &quot; &lt;&lt; sEmployee.nID &lt;&lt; endl;
+    cout &lt;&lt; &quot;Age:  &quot; &lt;&lt; sEmployee.nAge &lt;&lt; endl;
+    cout &lt;&lt; &quot;Wage: &quot; &lt;&lt; sEmployee.fWage &lt;&lt; endl &lt;&lt; endl;
+}
+
+int main()
+{
+    Employee sJoe; // create an Employee struct for Joe
+    sJoe.nID = 14;
+    sJoe.nAge = 32;
+    sJoe.fWage = 24.15;
+
+    Employee sFrank; // create an Employee struct for Frank
+    sFrank.nID = 15;
+    sFrank.nAge = 28;
+    sFrank.fWage = 18.27;
+
+    // Print Joe's information
+    PrintInformation(sJoe);
+
+    // Print Frank's information
+    PrintInformation(sFrank);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>In the above example, we pass an entire Employee struct to PrintInformation().  This prevents us from having to pass each variable individually.  Furthermore, if we ever decide to add new members to our Employee struct, we will not have to change the function declaration or function call!</p>
+<p>PrintInformation() uses the Employee struct passed to it to print out employee information to the screen.  The above program outputs:</p>
+<pre>
+ID:   14
+Age:  32
+Wage: 24.15
+
+ID:   15
+Age:  28
+Wage: 18.27
+</pre>
+<p>Structs can contain other structs.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct Company
+{
+    Employee sCEO; // Employee is a struct within the Company struct
+    int nNumberOfEmployees;
+};
+
+Company sMyCompany;
+</pre></td></tr></table>
+<p>In this case, if we wanted to know what the CEO&#8217;s salary was, we simply use the member selection operator twice: <code>sMyCompany.sCEO.fWage;</code></p>
+<p>This selects the sCEO member from sMyCompany, and then selects the fWage member from within sCEO.</p>
+<p><strong>Initializer lists</strong></p>
+<p>Initializing structs member by member is a little cumbersome, so C++ supports a faster way to initialize structs using an <strong>initializer list</strong>.  This allows you to initialize some or all the members of a struct at declaration time.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct Employee
+{
+    int nID;
+    int nAge;
+    float fWage;
+};
+
+Employee sJoe = {1, 42, 60000.0f}; // nID=1, nAge=42, fWage=60000.0
+</pre></td></tr></table>
+<p>You can use nested initializer lists for nested structs:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+struct Employee
+{
+    int nID;
+    int nAge;
+    float fWage;
+};
+
+struct Company
+{
+    Employee sCEO; // Employee is a struct within the Company struct
+    int nNumberOfEmployees;
+};
+
+Company sCo1 = {{1, 42, 60000.0f}, 5};
+</pre></td></tr></table>
+<p><strong>A few final notes on structs</strong></p>
+<p>The &#8220;m_&#8221; Hungarian Notation prefix for members is typically not used for structs, even though structs contain members.  This is (in part) because all variables in a struct are members!  Consequently, labeling them with a &#8220;m_&#8221; prefix is somewhat redundant.</p>
+<p>It is common to declare structs in a header file, so they can be accessed by multiple source files.</p>
+<p>The class aggregate data type builds on top of the functionality offered by structs.  Classes are at the heart of C++ object-oriented programming.  Understanding structs is the first step towards object-oriented programming!</p>
+<p><strong>Quiz</strong></p>
+<p>1) You are running a website, and you are trying to keep track of how much money you make per day from advertising.  Declare an advertising struct that keeps track of how many ads you&#8217;ve shown to readers, what percentage of users clicked on ads (as a floating point number between 0 and 1), and how much you earned on average from each ad that was clicked.  Read in values for each of these fields from the user.  Pass the advertising struct to a function that prints each of the values, and then calculates how much you made for that day (multiply all 3 fields together).</p>
+<p>2) Write a struct to hold a fraction.  The struct should have a integer numerator and a integer denominator member.  Declare 2 fraction variables and read them in from the user.  Write a function called multiply that takes both fractions, multiplies them together, and prints the result out as a decimal number.</p>
+<p><strong>Quiz Answers</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1491499992'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1491499992" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+// First we need to define our Advertising struct
+struct Advertising
+{
+    int nAdsShown;
+    float fClickThroughRate; // as a %
+    float fAverageEarningsPerClick;
+};
+
+void PrintAdvertising(Advertising sAd)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Number of ads shown: &quot; &lt;&lt; sAd.nAdsShown &lt;&lt; endl;
+    cout &lt;&lt; &quot;Click through rate: &quot; &lt;&lt; sAd.fClickThroughRate &lt;&lt; endl;
+    cout &lt;&lt; &quot;Average earnings per click: $&quot; &lt;&lt; sAd.fAverageEarningsPerClick &lt;&lt; endl;
+
+    // The following line is split up to reduce the length
+    cout &lt;&lt; &quot;Total Earnings: $&quot; &lt;&lt;
+        (sAd.nAdsShown * sAd.fClickThroughRate * sAd.fAverageEarningsPerClick) &lt;&lt; endl;
+}
+
+int main()
+{
+    using namespace std;
+    // Declare an Advertising struct variable
+    Advertising sAd;
+
+    cout &lt;&lt; &quot;How many ads were shown today? &quot;;
+    cin &gt;&gt; sAd.nAdsShown;
+    cout &lt;&lt; &quot;What was the click through rate? &quot;;
+    cin &gt;&gt; sAd.fClickThroughRate;
+    cout &lt;&lt; &quot;What was the average earnings per click? &quot;;
+    cin &gt;&gt; sAd.fAverageEarningsPerClick;
+
+    PrintAdvertising(sAd);
+    return 0;
+}
+</pre></td></tr></table>
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1785066301'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1785066301" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+struct Fraction
+{
+    int nNumerator;
+    int nDenominator;
+};
+
+void Multiply(Fraction sF1, Fraction sF2)
+{
+    using namespace std;
+
+    // Don't forget the static cast, otherwise the compiler will do integer division!
+    cout &lt;&lt; static_cast&lt;float&gt;(sF1.nNumerator * sF2.nNumerator) /
+        (sF1.nDenominator * sF2.nDenominator);
+}
+
+int main()
+{
+    using namespace std;
+
+    // Allocate our first fraction
+    Fraction sF1;
+    cout &lt;&lt; &quot;Input the first numerator: &quot;;
+    cin &gt;&gt; sF1.nNumerator;
+    cout &lt;&lt; &quot;Input the first denominator: &quot;;
+    cin &gt;&gt; sF1.nDenominator;
+
+    // Allocate our second fraction
+    Fraction sF2;
+    cout &lt;&lt; &quot;Input the second numerator: &quot;;
+    cin &gt;&gt; sF2.nNumerator;
+    cout &lt;&lt; &quot;Input the second denominator: &quot;;
+    cin &gt;&gt; sF2.nDenominator;
+
+    Multiply(sF1, sF2);
+
+    return 0;
+}
+</pre></td></tr></table>
+</div>

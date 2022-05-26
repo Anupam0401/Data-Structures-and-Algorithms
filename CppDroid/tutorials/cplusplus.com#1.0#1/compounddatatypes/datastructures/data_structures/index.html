@@ -1,0 +1,163 @@
+
+<h3>Data structures</h3>
+A <dfn>data structure</dfn> is a group of data elements grouped together under one name. These data elements, known as <i>members</i>, can have different types and different lengths. Data structures can be declared in C++ using the following syntax:<br>
+<br>
+<code>
+struct type_name {<br>
+member_type1 member_name1;<br>
+member_type2 member_name2;<br>
+member_type3 member_name3;<br>
+.<br>
+.<br>
+} object_names;<br>
+</code>
+<br>
+Where <code>type_name</code> is a name for the structure type, <code>object_name</code> can be a set of valid identifiers for objects that have the type of this structure. Within braces <code>{}</code>, there is a list with the data members, each one is specified with a type and a valid identifier as its name.<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br></code></pre></td>
+<td class="source"><pre><code><var>struct</var> product {
+  <var>int</var> weight;
+  <var>double</var> price;
+} ;
+
+product apple;
+product banana, melon;</code></pre></td></tr></table></div>
+<br>
+<br>
+This declares a structure type, called <code>product</code>, and defines it having two members: <code>weight</code> and <code>price</code>, each of a different fundamental type. This declaration creates a new type (<code>product</code>), which is then used to declare three objects (variables) of this type: <code>apple</code>, <code>banana</code>, and <code>melon</code>. Note how once <code>product</code> is declared, it is used just like any other type.<br>
+<br>
+Right at the end of the <code>struct</code> definition, and before the ending semicolon (<code>;</code>), the optional field <code>object_names</code> can be used to directly declare objects of the structure type. For example, the structure objects <code>apple</code>, <code>banana</code>, and <code>melon</code> can be declared at the moment the data structure type is defined: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>struct</var> product {
+  <var>int</var> weight;
+  <var>double</var> price;
+} apple, banana, melon;</code></pre></td></tr></table></div>
+<br>
+<br>
+In this case, where <code>object_names</code> are specified, the type name (<code>product</code>) becomes optional: <code>struct</code> requires either a <code>type_name</Code> or at least one name in <code>object_names</code>, but not necessarily both.<br>
+<br>
+It is important to clearly differentiate between what is the structure type name (<code>product</code>), and what is an object of this type (<code>apple</code>, <code>banana</code>, and <code>melon</code>). Many objects (such as <code>apple</code>, <code>banana</code>, and <code>melon</code>) can be declared from a single structure type (<code>product</code>).<br>
+<br>
+Once the three objects of a determined structure type are declared (<code>apple</code>, <code>banana</code>, and <code>melon</code>) its members can be accessed directly. The syntax for that is simply to insert a dot (<code>.</code>) between the object name and the member name. For example, we could operate with any of these elements as if they were standard variables of their respective types: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code>apple.weight
+apple.price
+banana.weight
+banana.price
+melon.weight
+melon.price</code></pre></td></tr></table></div>
+<br>
+<br>
+Each one of these has the data type corresponding to the member they refer to: <code>apple.weight</code>, <code>banana.weight</code>, and <code>melon.weight</code> are of type <code>int</code>, while <code>apple.price</code>, <code>banana.price</code>, and <code>melon.price</code> are of type <code>double</code>.<br>
+<br>
+Here is a real example with structure types in action:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br></code></pre></td>
+<td class="source"><pre><code><cite>// example about structures</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<dfn>#include &lt;sstream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>struct</var> movies_t {
+  string title;
+  <var>int</var> year;
+} mine, yours;
+
+<var>void</var> printmovie (movies_t movie);
+
+<var>int</var> main ()
+{
+  string mystr;
+
+  mine.title = <kbd>"2001 A Space Odyssey"</kbd>;
+  mine.year = 1968;
+
+  cout &lt;&lt; <kbd>"Enter title: "</kbd>;
+  getline (cin,yours.title);
+  cout &lt;&lt; <kbd>"Enter year: "</kbd>;
+  getline (cin,mystr);
+  stringstream(mystr) &gt;&gt; yours.year;
+
+  cout &lt;&lt; <kbd>"My favorite movie is:\n "</kbd>;
+  printmovie (mine);
+  cout &lt;&lt; <kbd>"And yours is:\n "</kbd>;
+  printmovie (yours);
+  <var>return</var> 0;
+}
+
+<var>void</var> printmovie (movies_t movie)
+{
+  cout &lt;&lt; movie.title;
+  cout &lt;&lt; <kbd>" ("</kbd> &lt;&lt; movie.year &lt;&lt; <kbd>")\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>Enter title: Alien
+Enter year: 1979
+
+My favorite movie is:
+ 2001 A Space Odyssey (1968)
+And yours is:
+ Alien (1979)</samp></pre></td></tr></table></div>
+<br>
+<br>
+The example shows how the members of an object act just as regular variables. For example, the member <code>yours.year</code> is a valid variable of type <code>int</code>, and <code>mine.title</code> is a valid variable of type <code>string</code>.<br>
+<br>
+But the objects <code>mine</code> and <code>yours</code> are also variables with a type (of type <code>movies_t</code>). For example, both have been passed to function <code>printmovie</code> just as if they were simple variables. Therefore, one of the features of data structures is the ability to refer to both their members individually or to the entire structure as a whole. In both cases using the same identifier: the name of the structure.<br>
+<br>
+Because structures are types, they can also be used as the type of arrays to construct tables or databases of them:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br></code></pre></td>
+<td class="source"><pre><code><cite>// array of structures</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<dfn>#include &lt;sstream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>struct</var> movies_t {
+  string title;
+  <var>int</var> year;
+} films [3];
+
+<var>void</var> printmovie (movies_t movie);
+
+<var>int</var> main ()
+{
+  string mystr;
+  <var>int</var> n;
+
+  <var>for</var> (n=0; n&lt;3; n++)
+  {
+    cout &lt;&lt; <kbd>"Enter title: "</kbd>;
+    getline (cin,films[n].title);
+    cout &lt;&lt; <kbd>"Enter year: "</kbd>;
+    getline (cin,mystr);
+    stringstream(mystr) &gt;&gt; films[n].year;
+  }
+
+  cout &lt;&lt; <kbd>"\nYou have entered these movies:\n"</kbd>;
+  <var>for</var> (n=0; n&lt;3; n++)
+    printmovie (films[n]);
+  <var>return</var> 0;
+}
+
+<var>void</var> printmovie (movies_t movie)
+{
+  cout &lt;&lt; movie.title;
+  cout &lt;&lt; <kbd>" ("</kbd> &lt;&lt; movie.year &lt;&lt; <kbd>")\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>Enter title: Blade Runner
+Enter year: 1982
+Enter title: The Matrix
+Enter year: 1999
+Enter title: Taxi Driver
+Enter year: 1976
+ 
+You have entered these movies:
+Blade Runner (1982)
+The Matrix (1999)
+Taxi Driver (1976)</samp></pre></td></tr></table></div>
+<br>

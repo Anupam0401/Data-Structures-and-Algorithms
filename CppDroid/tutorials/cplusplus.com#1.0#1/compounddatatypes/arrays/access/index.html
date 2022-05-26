@@ -1,0 +1,67 @@
+
+<h3>Accessing the values of an array</h3>
+The values of any of the elements in an array can be accessed just like the value of a regular value of the same type. The syntax is:<br>
+<br>
+<code>name[index]</code>
+<br>
+Following the previous examples in which <code>foo</code> had 5 elements and each of those elements was of type <code>int</code>, the name which can be used to refer to each element is the following:<br>
+<br>
+<img src="arrays5.png" alt="">
+<br>
+For example, the following statement stores the value 75 in the third element of <code>foo</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>foo [2] = 75;</code></pre></td></tr></table></div>
+<br>
+<br>
+and, for example, the following copies the value of the third element of <code>foo</code> to a variable called <code>x</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>x = foo[2];</code></pre></td></tr></table></div>
+<br>
+<br>
+Therefore, the expression <code>foo[2]</code> is itself a variable of type <code>int</code>.<br>
+<br>
+Notice that the third element of <code>foo</code> is specified <code>foo[2]</code>, since the first one is <code>foo[0]</code>, the second one is <code>foo[1]</code>, and therefore, the third one is <code>foo[2]</code>. By this same reason, its last element is <code>foo[4]</code>. Therefore, if we write <code>foo[5]</Code>, we would be accessing the sixth element of <code>foo</code>, and therefore actually exceeding the size of the array.<br>
+<br>
+In C++, it is syntactically correct to exceed the valid range of indices for an array. This can create problems, since accessing out-of-range elements do not cause errors on compilation, but can cause errors on runtime. The reason for this being allowed will be seen in a later chapter when pointers are introduced.<br>
+<br>
+At this point, it is important to be able to clearly distinguish between the two uses that brackets <code>[]</code> have related to arrays. They perform two different tasks: one is to specify the size of arrays when they are declared; and the second one is to specify indices for concrete array elements when they are accessed. Do not confuse these two possible uses of brackets <code>[]</code> with arrays.<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> foo[5];         <cite>// declaration of a new array</cite>
+foo[2] = 75;        <cite>// access to an element of the array.  </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+The main difference is that the declaration is preceded by the type of the elements, while the access is not.<br>
+<br>
+Some other valid operations with arrays:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>foo[0] = a;
+foo[a] = 75;
+b = foo [a+2];
+foo[foo[a]] = foo[2] + 5;</code></pre></td></tr></table></div>
+<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></code></pre></td>
+<td class="source"><pre><code><cite>// arrays example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> foo [] = {16, 2, 77, 40, 12071};
+<var>int</var> n, result=0;
+
+<var>int</var> main ()
+{
+  <var>for</var> ( n=0 ; n&lt;5 ; ++n )
+  {
+    result += foo[n];
+  }
+  cout &lt;&lt; result;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>12206</samp></pre></td></tr></table></div>
+<br>

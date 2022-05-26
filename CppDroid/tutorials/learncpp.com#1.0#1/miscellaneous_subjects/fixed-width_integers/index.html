@@ -1,0 +1,47 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Fixed width integers</strong></p>
+<p>The C99 standard defines a set of integer types that have predetermined sizes, so you don&#8217;t have to worry about the size of an integer changing if you move to another platform.</p>
+<p>The fixed width integer types defined in C99 are named as follows:</p>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+<tr>
+<td>int8_t</td>
+<td>1 byte signed</td>
+</tr>
+<tr>
+<td>uint8_t</td>
+<td>1 byte unsigned</td>
+</tr>
+<tr>
+<td>int16_t</td>
+<td>2 byte signed</td>
+</tr>
+<tr>
+<td>uint16_t</td>
+<td>2 byte unsigned</td>
+</tr>
+<tr>
+<td>int32_t</td>
+<td>4 byte signed</td>
+</tr>
+<tr>
+<td>uint32_t</td>
+<td>4 byte unsigned</td>
+</tr>
+<tr>
+<td>int64_t</td>
+<td>8 byte signed</td>
+</tr>
+<tr>
+<td>uint64_t</td>
+<td>8 byte unsigned</td>
+</tr>
+</table>
+<p>Unfortunately, C++ does not define or provide a standardized way to access these!</p>
+<p>However, many modern C++ compilers do provide access to these, typically by including stdint.h.  Visual Studio 2005 and 2008 do not include stdint.h, but 2010 does.  If you are using the boost library, boost provides these as part of &lt;boost/cstdint.hpp&gt;.</p>
+<p>If your compiler does not support these types, the good news is that you can download Paul Hsieh&#8217;s <a href="http://www.azillionmonkeys.com/qed/pstdint.h">pstdint.h cross-platform compatible version of the stdint.h header</a>.  Simply include the pstdint.h file in your project and it will define the fixed width integer types with the proper sizes for your platform.</p>
+<p>We don&#8217;t use the fixed width integers in this tutorial series because they aren&#8217;t officially part of C++, but I do recommend using them on your own, especially if you are developing a cross-platform compatible application.  There&#8217;s simply no reason not to, especially when pstdint.h can easily be dropped in or distributed with your code!</p>
+<p>As a side note: some compilers define their own version of fixed width integers &#8212; for example, Visual Studio defines __int8, __int16, etc&#8230;  You should avoid these like the plague.</p>

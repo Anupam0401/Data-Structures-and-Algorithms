@@ -1,0 +1,11 @@
+
+<h3>Closing a file</h3>
+When we are finished with our input and output operations on a file we shall close it so that the operating system is notified and its resources become available again. For that, we call the stream's member function <code>close</code>. This member function takes flushes the associated buffers and closes the file:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>myfile.close();</code></pre></td></tr></table></div>
+<br>
+<br>
+Once this member function is called, the stream object can be re-used to open another file, and the file is available again to be opened by other processes.<br>
+<br>
+In case that an object is destroyed while still associated with an open file, the destructor automatically calls the member function <code>close</code>.<br>

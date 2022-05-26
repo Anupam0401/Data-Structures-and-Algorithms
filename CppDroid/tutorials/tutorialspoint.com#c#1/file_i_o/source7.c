@@ -1,0 +1,1 @@
+int fgetc( FILE * fp );

@@ -1,0 +1,1 @@
+Animal eAnimal = 5; // will cause compiler error

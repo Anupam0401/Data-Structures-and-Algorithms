@@ -1,0 +1,58 @@
+
+<h3>Text files</h3>
+Text file streams are those where the <code>ios::binary</code> flag is not included in their opening mode. These files are designed to store text and thus all values that are input or output from/to them can suffer some formatting transformations, which do not necessarily correspond to their literal binary value.<br>
+<br>
+Writing operations on text files are performed in the same way we operated with <code>cout</code>:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></code></pre></td>
+<td class="source"><pre><code><cite>// writing on a text file</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;fstream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main () {
+  ofstream myfile (<kbd>"example.txt"</kbd>);
+  <var>if</var> (myfile.is_open())
+  {
+    myfile &lt;&lt; <kbd>"This is a line.\n"</kbd>;
+    myfile &lt;&lt; <kbd>"This is another line.\n"</kbd>;
+    myfile.close();
+  }
+  <var>else</var> cout &lt;&lt; <kbd>"Unable to open file"</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>[file example.txt]
+This is a line.
+This is another line.</samp></pre></td></tr></table></div>
+<br>
+<br>
+Reading from a file can also be performed in the same way that we did with <code>cin</code>:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br></code></pre></td>
+<td class="source"><pre><code><cite>// reading a text file</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;fstream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main () {
+  string line;
+  ifstream myfile (<kbd>"example.txt"</kbd>);
+  <var>if</var> (myfile.is_open())
+  {
+    <var>while</var> ( getline (myfile,line) )
+    {
+      cout &lt;&lt; line &lt;&lt; <kbd>'\n'</kbd>;
+    }
+    myfile.close();
+  }
+
+  <var>else</var> cout &lt;&lt; <kbd>"Unable to open file"</kbd>; 
+
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>This is a line.
+This is another line.  </samp></pre></td></tr></table></div>
+<br>
+<br>
+This last example reads a text file and prints out its content on the screen. We have created a while loop that reads the file line by line, using <samp><a href="/getline">getline</a></samp>. The value returned by <samp><a href="/getline">getline</a></samp> is a reference to the stream object itself, which when evaluated as a boolean expression (as in this while-loop) is <code>true</code> if the stream is ready for more operations, and <code>false</code> if either the end of the file has been reached or if some other error occurred.<br>

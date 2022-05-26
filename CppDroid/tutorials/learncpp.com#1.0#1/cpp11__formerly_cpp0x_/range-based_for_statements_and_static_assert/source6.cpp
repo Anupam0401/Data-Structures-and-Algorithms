@@ -1,0 +1,1 @@
+static_assert(__cplusplus > 199711L, "Program requires C++11 capable compiler");

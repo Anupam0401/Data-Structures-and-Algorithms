@@ -1,0 +1,168 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Defining member functions outside the class definition</strong></p>
+<p>All of the classes that we have written so far have been simple enough that we have been able to implement the functions directly inside the class definition itself.  For example, here&#8217;s our ubiquitous Date class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Date
+{
+private:
+    int m_nMonth;
+    int m_nDay;
+    int m_nYear;
+
+    Date() { } // private default constructor
+
+public:
+    Date(int nMonth, int nDay, int nYear)
+    {
+        SetDate(nMonth, nDay, nYear);
+    }
+
+    void SetDate(int nMonth, int nDay, int nYear)
+    {
+        m_nMonth = nMonth;
+        m_nDay = nDay;
+        m_nYear = nYear;
+    }
+
+    int GetMonth() { return m_nMonth; }
+    int GetDay()  { return m_nDay; }
+    int GetYear() { return m_nYear; }
+};
+</pre></td></tr></table>
+<p>However, as classes get longer and more complicated, mixing the definition and the implementation details makes the class harder to manage and work with.  Typically, when looking at a class definition (for an already written class), you don&#8217;t care how things are implemented &#8212; you want to know how to use the class, which involves only it&#8217;s definition.  In this case, all of the implementation details just get in the way.</p>
+<p>Fortunately, C++ provides a way to separate the definition portion of the class from the implementation portion.  This is done by defining the class member functions outside of the class definition.  To do so, simply define the member functions of the class as if they were normal functions, but prefix the class name to the function using the scope operator (::) (same as for a namespace).</p>
+<p>Here is our Date class with the Date constructor and SetDate() function defined outside of the class definition.  Note that the prototypes for these functions still exist inside the class definition, but the actual implementation has been moved outside:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Date
+{
+private:
+    int m_nMonth;
+    int m_nDay;
+    int m_nYear;
+
+    Date() { } // private default constructor
+
+public:
+    Date(int nMonth, int nDay, int nYear);
+
+    void SetDate(int nMonth, int nDay, int nYear);
+
+    int GetMonth() { return m_nMonth; }
+    int GetDay()  { return m_nDay; }
+    int GetYear() { return m_nYear; }
+};
+
+// Date constructor
+Date::Date(int nMonth, int nDay, int nYear)
+{
+    SetDate(nMonth, nDay, nYear);
+}
+
+// Date member function
+void Date::SetDate(int nMonth, int nDay, int nYear)
+{
+    m_nMonth = nMonth;
+    m_nDay = nDay;
+    m_nYear = nYear;
+}
+</pre></td></tr></table>
+<p>This is pretty straightforward.  Because access functions are often only one line, they are typically left in the class definition, even though they could be moved outside.</p>
+<p>Here is another example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Calc
+{
+private:
+    int m_nValue;
+
+public:
+    Calc() { m_nValue = 0; }
+
+    void Add(int nValue) { m_nValue += nValue; }
+    void Sub(int nValue) { m_nValue -= nValue; }
+    void Mult(int nValue) { m_nValue *= nValue; }
+
+    int GetValue() { return m_nValue; }
+};
+</pre></td></tr></table>
+<p>becomes:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Calc
+{
+private:
+    int m_nValue;
+
+public:
+    Calc() { m_nValue = 0; }
+
+    void Add(int nValue);
+    void Sub(int nValue);
+    void Mult(int nValue);
+
+    int GetValue() { return m_nValue; }
+};
+
+void Calc::Add(int nValue)
+{
+    m_nValue += nValue;
+}
+
+void Calc::Sub(int nValue)
+{
+    m_nValue -= nValue;
+}
+
+void Calc::Mult(int nValue)
+{
+    m_nValue *= nValue;
+}
+</pre></td></tr></table>
+<p>In this case, we left the default constructor in the class definition because it was so short.</p>
+<p><strong>Putting class definitions in a header file</strong></p>
+<p>In the lesson on <a href="http://www.learncpp.com/cpp-tutorial/19-header-files/">header files</a>, you learned that you can put functions inside header files in order to reuse them in multiple files or even multiple projects.  Classes are no different.  Class definitions can be put in header files in order to facilitate reuse in multiple files or multiple projects.  Traditionally, the class definition is put in a header file of the same name as the class, and the member functions defined outside of the class are put in a .cpp file of the same name as the class.  You may sometimes hear the term &#8220;one file, one class&#8221;, which alludes to the principle of putting classes in their own separate header/code files.</p>
+<p>Here&#8217;s our Date class again, broken into a .cpp and .h file:</p>
+<p>Date.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef DATE_H
+#define DATE_H
+
+class Date
+{
+private:
+    int m_nMonth;
+    int m_nDay;
+    int m_nYear;
+
+    Date() { } // private default constructor
+
+public:
+    Date(int nMonth, int nDay, int nYear);
+
+    void SetDate(int nMonth, int nDay, int nYear);
+
+    int GetMonth() { return m_nMonth; }
+    int GetDay()  { return m_nDay; }
+    int GetYear() { return m_nYear; }
+};
+
+#endif
+</pre></td></tr></table>
+<p>Date.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;Date.h&quot;
+
+// Date constructor
+Date::Date(int nMonth, int nDay, int nYear)
+{
+    SetDate(nMonth, nDay, nYear);
+}
+
+// Date member function
+void Date::SetDate(int nMonth, int nDay, int nYear)
+{
+    m_nMonth = nMonth;
+    m_nDay = nDay;
+    m_nYear = nYear;
+}
+</pre></td></tr></table>
+<p>Now any other header or code file that wants to use the date class can simply <code>#include "Date.h"</code>.  Note that Date.cpp also needs to be compiled into any project that uses Date.h so the linker knows how Date is implemented.  Don&#8217;t forget the header guards on the .h file!</p>
+<p>In future lessons, most of our classes will be defined in the .cpp file, with all the functions implemented directly in the class definition.  This is just for convenience and to keep the examples short.  In real projects, it is much more common for classes to be put in their own code and header files.</p>

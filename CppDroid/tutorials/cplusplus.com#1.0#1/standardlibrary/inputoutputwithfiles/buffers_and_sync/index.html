@@ -1,0 +1,14 @@
+
+<h3>Buffers and Synchronization</h3>
+When we operate with file streams, these are associated to an internal buffer object of type <code>streambuf</code>. This buffer object may represent a memory block that acts as an intermediary between the stream and the physical file. For example, with an <code>ofstream</code>, each time the member function <code>put</code> (which writes a single character) is called, the character may be inserted in this intermediate buffer instead of being written directly to the physical file with which the stream is associated.<br>
+<br>
+The operating system may also define other layers of buffering for reading and writing to files.<br>
+<br>
+When the buffer is flushed, all the data contained in it is written to the physical medium (if it is an output stream). This process is called <i>synchronization</i> and takes place under any of the following circumstances: <br>
+<br>
+<ul>
+<li><b>When the file is closed:</b> before closing a file, all buffers that have not yet been flushed are synchronized and all pending data is written or read to the physical medium.</li>
+<li><b>When the buffer is full:</b> Buffers have a certain size. When the buffer is full it is automatically synchronized.</li>
+<li><b>Explicitly, with manipulators:</b> When certain manipulators are used on streams, an explicit synchronization takes place. These manipulators are: <code><a href="/flush">flush</a></code> and <code><a href="/endl">endl</a></code>.</li>
+<li><b>Explicitly, with member function sync():</b> Calling the stream's member function <code>sync()</code> causes an immediate synchronization. This function returns an <code>int</code> value equal to <tt>-1</tt> if the stream has no associated buffer or in case of failure. Otherwise (if the stream buffer was successfully synchronized) it returns <code>0</code>.</li>
+</ul>

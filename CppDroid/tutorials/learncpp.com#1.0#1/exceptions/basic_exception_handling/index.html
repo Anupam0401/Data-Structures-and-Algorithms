@@ -1,0 +1,169 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous lesson on <a href="">introduction to exceptions</a>, we talked about how using return codes causes you control flow and error flow to be intermingled, constraining both.  Exceptions in C++ are implemented using three keywords that work in conjunction with each other: <strong>throw</strong>, <strong>try</strong>, and <strong>catch</strong>.</p>
+<p><strong>Throwing exceptions</strong></p>
+<p>We use signals all the time in real life to note that particular events have occurred.  For example, during American football, if a player has committed a foul, the referee will throw a flag on the ground and whistle the play dead.  A penalty is then assessed and executed.  Once the penalty has been taken care of, play generally resumes as normal.</p>
+<p>In C++, a <strong>throw statement</strong> is used to signal that an exception or error case has occurred (think of throwing a penalty flag).  Signaling that an exception has occurred is also commonly called <strong>raising</strong> an exception.</p>
+<p>To use a throw statement, simply use the throw keyword, followed by a value of any data type you wish to use to signal that an error has occurred.  Typically, this value will be an error code, a description of the problem, or a custom exception class.</p>
+<p>Here are some examples:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+throw -1; // throw a literal integer value
+throw ENUM_INVALID_INDEX; // throw an enum value
+throw &quot;Can not take square root of negative number&quot;; // throw a literal char* string
+throw dX; // throw a double variable that was previously defined
+throw MyException(&quot;Fatal Error&quot;); // Throw an object of class MyException
+</pre></td></tr></table>
+<p>Each of these statements acts a signal that some kind of problem that needs to be handled has occurred.</p>
+<p><strong>Looking for exceptions</strong></p>
+<p>Throwing exceptions is only one part of the exception handling process.  Let&#8217;s go back to our American football analogy: once a referee has thrown a penalty flag, what happens next?  The players notice that a penalty has occurred and stop play.  The normal flow of the football game is disrupted.</p>
+<p>In C++, we use the <strong>try</strong> keyword to define a block of statements (called a <strong>try block</strong>).  The try block acts as an observer, looking for any exceptions that are thrown by statements within the try block.</p>
+<p>Here&#8217;s an example of an try block:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+try
+{
+    // Statements that may throw exceptions you want to handle now go here
+    throw -1;
+}
+</pre></td></tr></table>
+<p>Note that the try block doesn&#8217;t define HOW we&#8217;re going to handle the exception.  It merely tells the program, &#8220;Hey, if you see an exception in the following code, grab it!&#8221;.</p>
+<p><strong>Handling exceptions</strong></p>
+<p>Finally, the end of our American football analogy: After the penalty has been called and play has stopped, the referee assesses the penalty and executes it.  In other words, the penalty must be handled before normal play can resume.</p>
+<p>Actually handling exceptions is the job of the catch block(s).  The <strong>catch</strong> keyword is used to define a block of code (called a <strong>catch block</strong>) that handles exceptions for a single data type.</p>
+<p>Here&#8217;s an example of a catch block:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+catch (int)
+{
+    // Handle an exception of type int here
+    cerr &lt;&lt; &quot;We caught an exception of type int&quot; &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Try blocks and catch blocks work together &#8212; A try block detects any exceptions that are thrown by statements within the try block, and routes them to the appropriate catch block for handling.  A try block must have at least one catch block attached to it, but may have multiple catch blocks listed in sequence:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    try
+    {
+        // Statements that may throw exceptions you want to handle now go here
+        throw -1;
+    }
+    catch (int)
+    {
+        // Any exceptions of type int thrown within the above try block get sent here
+        cerr &lt;&lt; &quot;We caught an exception of type int&quot; &lt;&lt; endl;
+    }
+    catch (double)
+    {
+        // Any exceptions of type double thrown within the above try block get sent here
+        cerr &lt;&lt; &quot;We caught an exception of type double&quot; &lt;&lt; endl;
+    }
+
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>Putting throw, try, and catch together</strong></p>
+<p>Running the above try/catch block would produce the following result:</p>
+<pre>
+We caught an exception of type int
+</pre>
+<p>A throw statement was used to raise an exception with the value -1, which is of type int.  The try block routed the int exception to the catch block that handles exceptions of type int, which then printed the error message.</p>
+<p><strong>Exception handling behind the scenes</strong></p>
+<p>Let&#8217;s talk about what happens behind the scenes in a little more detail.  Exception handling is actually quite simple, and the following two paragraphs are all you really need to know about it:</p>
+<p>When an exception is raised (using <strong>throw</strong>), execution of the program immediately jumps to the nearest enclosing <strong>try</strong> block (propagating up the stack if necessary).  If any of the <strong>catch</strong> handlers attached to the try block handle that type of exception, that handler is executed and the exception is considered handled.</p>
+<p>If no appropriate catch handlers exist, execution of the program propagates to the next enclosing try block.  If no appropriate catch handlers can be found before the end of the program, the program will fail with an exception error.</p>
+<p>That&#8217;s really all there is to it.  The rest of this chapter will be dedicated to showing examples of these principles at work.</p>
+<p><strong>Exceptions are handled immediately</strong></p>
+<p>Here&#8217;s a short program that demonstrates how exceptions are handled immediately:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    try
+    {
+        throw 4.5; // throw exception of type double
+        cout &lt;&lt; &quot;This never prints&quot; &lt;&lt; endl;
+    }
+    catch(double dX) // handle exception of type double
+    {
+        cerr &lt;&lt; &quot;We caught a double of value: &quot; &lt;&lt; dX &lt;&lt; endl;
+    }
+}
+</pre></td></tr></table>
+<p>This program is about as simple as it gets.  Here&#8217;s what happens: the throw statement is the first statement that gets executed &#8212; this causes an exception of type double to be raised.  Execution immediately moves to the nearest enclosing try block, which is the only try block in this program.  The catch handlers are then checked to see if any handlers matche.  Our exception is of type double, so we&#8217;re looking for a catch handler of type double.  We have one, so it executes.</p>
+<p>Consequently, the result of this program is as follows:</p>
+<pre>
+We caught a double of value: 4.5
+</pre>
+<p>Note that the cout statement never executed, because the exception caused the execution path to change to the exception handler for doubles.</p>
+<p><strong>A more realistic example</strong></p>
+<p>Let&#8217;s take a look at an example that&#8217;s not quite so academic:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;math.h&quot; // for sqrt() function
+using namespace std;
+
+int main()
+{
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    double dX;
+    cin &gt;&gt; dX;
+
+    try // Look for exceptions that occur within try block and route to attached catch block(s)
+    {
+        // If the user entered a negative number, this is an error condition
+        if (dX &lt; 0.0)
+            throw &quot;Can not take sqrt of negative number&quot;; // throw exception of type char*
+
+        // Otherwise, print the answer
+        cout &lt;&lt; &quot;The sqrt of &quot; &lt;&lt; dX &lt;&lt; &quot; is &quot; &lt;&lt; sqrt(dX) &lt;&lt; endl;
+    }
+    catch (char* strException) // catch exceptions of type char*
+    {
+        cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; strException &lt;&lt; endl;
+    }
+}
+</pre></td></tr></table>
+<p>In this code, the user is asked to enter a number.  If they enter a positive number, the if statement does not execute, no exception is thrown, and the square root of the number is printed.  Because no exception is thrown in this case, the code inside the catch block never executes.  The result is something like this:</p>
+<pre>
+Enter a number: 9
+The sqrt of 9 is 3
+</pre>
+<p>If the user enters a negative number, we throw an exception of type char*.  Because we&#8217;re within a try block and a matching exception handler is found, control immediately transfers to the char* exception handler.  The result is:</p>
+<pre>
+Enter a number: -4
+Error: Can not take sqrt of negative number
+</pre>
+<p>By now, you should be getting the basic idea behind exceptions.  In the next lesson, we&#8217;ll do quite a few more examples to show how flexible exceptions are.</p>
+<p><strong>Multiple statements within a try block</strong></p>
+<p>In the lesson on <a href="http://www.learncpp.com/cpp-tutorial/151-the-need-for-exceptions/">the need for exceptions</a>, we showed an example of one case where return codes don&#8217;t work very well:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    std::ifstream fSetupIni(&quot;setup.ini&quot;); // open setup.ini for reading
+    if (!fSetupIni)
+        return ERROR_OPENING_FILE; // Some enum value indicating error
+
+    // Note that error handling and actual code logic are intermingled
+
+    if (!ReadParameter(fSetupIni, m_nFirstParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+    if (!ReadParameter(fSetupIni, m_nSecondParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+    if (!ReadParameter(fSetupIni, m_nThirdParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+</pre></td></tr></table>
+<p>In this code, ReadParameter() is returning a boolean value indicating success or failure.  We end up having to check the return code from each call to ReadParameter() to ensure that it succeeded before proceeding.  This leads to code that is messy and redundant.</p>
+<p>Let&#8217;s rewrite this snippet of code using a new version of ReadParameter() throws an int exception on failure instead of returning a boolean value:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    std::ifstream fSetupIni(&quot;setup.ini&quot;); // open setup.ini for reading
+    if (!fSetupIni)
+        return ERROR_OPENING_FILE; // Some enum value indicating error
+
+    // Read parameters and return an error if the parameter is missing
+    try
+    {
+        // Here's all the normal code logic
+        m_nFirstParameter = ReadParameter(fSetupIni);
+        m_nSecondParameter = ReadParameter(fSetupIni);
+        m_nThirdParameter = ReadParameter(fSetupIni);
+    }
+    catch (int) // Here's the error handling, nicely separated
+    {
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+    }
+</pre></td></tr></table>
+<p>Note how much easier this is to read!  If any of the calls to ReadParameter() throws an exception, that exception will be caught and routed to the int exception handler, which returns an error enum to the caller.</p>

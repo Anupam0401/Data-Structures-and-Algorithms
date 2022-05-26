@@ -1,0 +1,181 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Unary arithmetic operators</strong></p>
+<p>There are two unary arithmetic operators, plus (+), and minus (-).  If you remember, unary operators are operators that only take one operand.</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>Unary plus</td>
+<td>+</td>
+<td>+x</td>
+<td>Value of x</td>
+</tr>
+<tr>
+<td>Unary minus</td>
+<td>-</td>
+<td>-x</td>
+<td>Negation of x</td>
+</tr>
+</table>
+<p>The unary plus operator returns the value of the operand.  In other words, +5 = 5, and +x = x.</p>
+<p>The unary minus operator returns the operand multiplied by -1.  In other words, if x = 5, -x = -5.</p>
+<p>For best effect, both of these operators should be placed immediately preceding the operand (eg. <code>-x</code>, not <code>- x</code>).</p>
+<p>Do not confuse the unary minus operator with the binary subtraction operator, which uses the same symbol.  For example, in the expression <code>x = 5 - -3;</code>, the first minus is the subtraction operator, and the second is the unary minus operator.</p>
+<p><strong>Binary arithmetic operators</strong></p>
+<p>There are 5 binary arithmetic operators.  Binary operators are operators that take a left and right operand.</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>Addition</td>
+<td>+</td>
+<td>x + y</td>
+<td>x plus y</td>
+</tr>
+<tr>
+<td>Subtraction</td>
+<td>-</td>
+<td>x &#8211; y</td>
+<td>x minus y</td>
+</tr>
+<tr>
+<td>Multiplication</td>
+<td>*</td>
+<td>x * y</td>
+<td>x multiplied by y</td>
+</tr>
+<tr>
+<td>Division</td>
+<td>/</td>
+<td>x / y</td>
+<td>x divided by y</td>
+</tr>
+<tr>
+<td>Modulus (Remainder)</td>
+<td>%</td>
+<td>x % y</td>
+<td>The remainder of x divided by y</td>
+</tr>
+</table>
+<p>Of these operators, the only ones that really need further explanation are division and modulus (remainder).</p>
+<p><strong>Integer and floating point division</strong></p>
+<p>It is easiest to think of the division operator as having two different &#8220;modes&#8221;.  If both of the operands are integers, the division operator performs integer division.  Integer division drops any fractions and returns an integer value.  For example, 7 / 3 = 2 because the fraction is dropped.  Note that integer division does not round.  For example, 3 / 4 = 0, not 1.</p>
+<p>If either or both of the operands are floating point values, the division operator performs floating point division.  Floating point division returns a floating point value, and the fraction is kept.  For example, 7.0 / 3 = 2.333,  7 / 3.0 = 2.333, and 7.0 / 3.0 = 2.333.</p>
+<p>Note that trying to divide by 0 (or 0.0) will generally cause your program to crash, as the result are undefined!</p>
+<p><strong>Modulus (remainer)</strong></p>
+<p>The modulus operator is also informally known as the remainder operator.  The modulus operator only works on integer operands, and it returns the remainder after doing integer division.  For example, 7 / 3 = 2 remainder 1, thus  7 % 3 = 1.  As another example, 25 / 7 = 3 remainder 4, thus 25 % 7 = 4.</p>
+<p>Modulus is very useful for testing whether a number is evenly divisible by another number: if x % y == 0, then we know that y divides evenly into x.  This can be useful when trying to do something every nth iteration.</p>
+<p>For example, say we wanted to write a program that printed every number from 1 to 100 with 20 numbers per line.  We could use the modulus operator to determine where to do the line breaks.  Even though you haven&#8217;t seen a while statement yet, the following program should be pretty comprehensible:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+
+    // nCount holds the current number to print
+    int nCount = 1; // start at 1
+
+    // Loop continually until we pass number 100
+    while (nCount &lt;= 100)
+    {
+        cout &lt;&lt; nCount &lt;&lt; &quot; &quot;; // print the current number
+
+        // if nCount is divisible by 20, print a new line
+        if (nCount % 20 == 0)
+            cout &lt;&lt; endl;
+
+        nCount = nCount + 1; // go to next number
+    } // end of while
+} // end of main()
+</pre></td></tr></table>
+<p><strong>A warning about integer division and modulus with negative numbers</strong></p>
+<p>If either or both operands of integer division are negative, the compiler is free to truncate up or down!  Most modern compilers round towards 0.  For example, -5 / 2 can evaluate to either -3 or -2, depending on whether the compiler rounds down or rounds toward 0.</p>
+<p>If either operand of the modulus operator is negative, the results of the modulus can be either negative or positive!  For example, -5 % 2 can evaluate to either 1 or -1.</p>
+<p><strong>Arithmetic assignment operators</strong></p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>Assignment</td>
+<td>=</td>
+<td>x = y</td>
+<td>Assign value y to x</td>
+</tr>
+<tr>
+<td>Addition assignment</td>
+<td>+=</td>
+<td>x += y</td>
+<td>Add y to x</td>
+</tr>
+<tr>
+<td>Subtraction assignment</td>
+<td>-=</td>
+<td>x -= y</td>
+<td>Subtract y from x</td>
+</tr>
+<tr>
+<td>Multiplication assignment</td>
+<td>*=</td>
+<td>x *= y</td>
+<td>Multiply x by y</td>
+</tr>
+<tr>
+<td>Division assignment</td>
+<td>/=</td>
+<td>x /= y</td>
+<td>Divide x by y</td>
+</tr>
+<tr>
+<td>Modulus assignment</td>
+<td>%=</td>
+<td>x %= y</td>
+<td>Put the remainder of x / y in x</td>
+</tr>
+</table>
+<p>By now, you should already be well acquainted with the assignment operator, so no need to discuss it here.  Because writing statements such as x = x + y is so common, C++ provides 5 arithmetic assignment operators for convenience.  For example, instead of writing x = x + y, you can write x += y.  Instead of x = x * 5, you can write x *= 5.</p>
+<p><strong>Quiz</strong><br />
+1) What does the following expression evaluate to?  <code>6 + 5 * 4 % 3</code></p>
+<p>2) Write a function called IsEven() that returns true if an integer passed to it is even.  Use the modulus operator to test whether the integer parameter is even.</p>
+<p>3) Name two things to watch out for when using integer division.</p>
+<p><strong>Answers</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id758676155'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id758676155" style="display:none"> Because * and % have higher precedence than +, the + will evaluate last.  We can rewrite our expression as 6 + (5 * 4 % 3).  * and % have the same precedence, so we have to look at the associativity to resolve them.  The associativity for * and % is left to right, so we resolve the left operator first.  We can rewrite our expression like this: 6 + ((5 * 4) % 3).</p>
+<p>6 + ((5 * 4) % 3) = 6 + (20 % 3) = 6 + 2 = 8</p></div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id924489837'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id924489837" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool IsEven(int x)
+{
+    // if x % 2 == 0, 2 divides evenly into our number
+    // which means it must be an even number
+    if (x % 2 == 0)
+        return true;
+    else
+        return false;
+}
+</pre></td></tr></table>
+<p>The following also works:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool IsEven(int x)
+{
+    // if x % 2 == 0, 2 divides evenly into our number
+    // which means it must be an even number
+    return (x % 2) == 0;
+}
+</pre></td></tr></table>
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id2087133725'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id2087133725" style="display:none"> When using integer division, a right operand of 0 will have undefined results and probably crash your program.  Also, if either of the operands are negative, the direction of truncation is undefined.</div>

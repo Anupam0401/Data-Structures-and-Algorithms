@@ -1,0 +1,1 @@
+are_equal<int,double>(10,10.0)

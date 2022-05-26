@@ -1,0 +1,21 @@
+
+The usefulness of the "Hello World" programs shown in the previous chapter is rather questionable. We had to write several lines of code, compile them, and then execute the resulting program, just to obtain the result of a simple sentence written on the screen. It certainly would have been much faster to type the output sentence ourselves.<br>
+<br>
+However, programming is not limited only to printing simple texts on the screen. In order to go a little further on and to become able to write programs that perform useful tasks that really save us work, we need to introduce the concept of <i>variable</i>.<br>
+<br>
+Let's imagine that I ask you to remember the number 5, and then I ask you to also memorize the number 2 at the same time. You have just stored two different values in your memory (5 and 2). Now, if I ask you to add 1 to the first number I said, you should be retaining the numbers 6 (that is 5+1) and 2 in your memory. Then we could, for example, subtract these values and obtain 4 as result.<br>
+<br>
+The whole process described above is a simile of what a computer can do with two variables. The same process can be expressed in C++ with the following set of statements:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>a = 5;
+b = 2;
+a = a + 1;
+result = a - b;</code></pre></td></tr></table></div>
+<br>
+<br>
+Obviously, this is a very simple example, since we have only used two small integer values, but consider that your computer can store millions of numbers like these at the same time and conduct sophisticated mathematical operations with them.<br>
+<br>
+We can now define <dfn>variable</dfn> as a portion of memory to store a value.<br>
+<br>
+Each variable needs a name that identifies it and distinguishes it from the others. For example, in the previous code the variable names were <code>a</code>, <code>b</code>, and <code>result</code>, but we could have called the variables any names we could have come up with, as long as they were valid C++ identifiers.<br>

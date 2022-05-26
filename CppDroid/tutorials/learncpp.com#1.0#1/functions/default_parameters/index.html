@@ -1,0 +1,72 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>A <strong>default parameter</strong> is a function parameter that has a default value provided to it.  If the user does not supply a value for this parameter, the default value will be used.  If the user does supply a value for the default parameter, the user-supplied value is used.</p>
+<p>Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintValues(int nValue1, int nValue2=10)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;1st value: &quot; &lt;&lt; nValue1 &lt;&lt; endl;
+    cout &lt;&lt; &quot;2nd value: &quot; &lt;&lt; nValue2 &lt;&lt; endl;
+}
+
+int main()
+{
+    PrintValues(1); // nValue2 will use default parameter of 10
+    PrintValues(3, 4); // override default value for nValue2
+}
+</pre></td></tr></table>
+<p>This program produces the following output:</p>
+<pre>
+1st value: 1
+2nd value: 10
+1st value: 3
+2nd value: 4
+</pre>
+<p>In the first function call, the caller did not supply an argument for nValue2, so the function used the default value of 10.  In the second call, the caller did supply a value for nValue2, so the user-supplied value was used.</p>
+<p>Default parameters are an excellent option when the function needs a value that the user may or may not want to override.  For example, here are a few function prototypes for which default parameters might be commonly used:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void OpenLogFile(char *strFilename=&quot;default.log&quot;);
+int RollDie(int nSides=6);
+void PrintString(char *strValue, Color eColor=COLOR_BLACK); // Color is an enum
+</pre></td></tr></table>
+<p>A function can have multiple default parameters:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintValues(int nValue1=10, int nValue2=20, int nValue3=30)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Values: &quot; &lt;&lt; nValue1 &lt;&lt; &quot; &quot; &lt;&lt; nValue2 &lt;&lt; &quot; &quot; &lt;&lt; nValue3 &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Given the following function calls:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+PrintValues(1, 2, 3);
+PrintValues(1, 2);
+PrintValues(1);
+PrintValues();
+</pre></td></tr></table>
+<p>The following output is produced:</p>
+<pre>
+Values: 1 2 3
+Values: 1 2 30
+Values: 1 20 30
+Values: 10 20 30
+</pre>
+<p>Note that it is impossible to supply a user-defined value for nValue3 without also supplying a value for nValue1 and nValue2.  This is because C++ does not support a function call such as <code>PrintValues(,,3)</code>.  This has two major consequences:</p>
+<p>1) All default parameters must be the rightmost parameters.  The following is not allowed:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintValue(int nValue1=10, int nValue2); // not allowed
+</pre></td></tr></table>
+<p>2) The leftmost default parameter should be the one most likely to be changed by the user.</p>
+<p><strong>Default parameters and function overloading</strong></p>
+<p>Functions with default parameters may be overloaded.  For example, the following is allowed:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void Print(char *strString);
+void Print(char ch=' ');
+</pre></td></tr></table>
+<p>If there user were to call <code>Print()</code>, it would resolve to <code>Print(' ')</code>, which would print a space.</p>
+<p>However, it is important to note that default parameters do NOT count towards the parameters that make the function unique.  Consequently, the following is not allowed:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintValues(int nValue);
+void PrintValues(int nValue1, int nValue2=20);
+</pre></td></tr></table>
+<p>If the caller were to call <code>PrintValues(10)</code>, the compiler would not be able to disambiguate whether the user wanted PrintValues(int) or PrintValues(int, 20) with the default value.</p>

@@ -1,0 +1,38 @@
+
+<h3>Anonymous unions</h3>
+Unions can also be declared with no type name or object name. In this case, they become anonymous unions, and its members are directly accessible by their member names. For example, look at the differences between these two structure declarations: <br>
+<br>
+<table class="boxed"><tr><th>structure with regular union</th><th>structure with anonymous union</th></tr>
+<tr><td><code><pre >struct {
+  char title[50];
+  char author[50];
+  union {
+    float dollars;
+    int yen;
+  } price;
+} book;</pre></code></td>
+<td><code><pre >struct {
+  char title[50];
+  char author[50];
+  union {
+    float dollars;
+    int yen;
+  };
+} book;</pre></code></td></tr>
+</table>
+<br>
+The only difference between the two pieces of code is that in the first one, the union has a name (<code>price</code>), while in the second it has not. This affects the way to access members <code>dollars</code> and <code>yen</code> of an object of this type. For an object of the first type (a regular union), it would be:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>book.price.dollars
+book.price.yen</code></pre></td></tr></table></div>
+<br>
+<br>
+whereas for an object of the second type (an anonymous union), it would be: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>book.dollars
+book.yen</code></pre></td></tr></table></div>
+<br>
+<br>
+Again, remember that because it is a union (not a structure), the members <code>dollars</code> and <code>yen</code> actually share the same memory location, so they cannot be used to store two different values simultaneously. The <code>price</code> can be set in <code>dollars</code> or in <code>yens</code>, but not in both simultaneously.<br>

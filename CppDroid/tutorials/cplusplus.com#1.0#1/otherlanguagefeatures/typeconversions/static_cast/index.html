@@ -1,0 +1,28 @@
+
+<h3>static_cast</h3>
+<code>static_cast</code> can perform conversions between pointers to related classes, not only <i>upcasts</i> (from pointer-to-derived to pointer-to-base), but also <i>downcasts</i> (from pointer-to-base to pointer-to-derived). No checks are performed during runtime to guarantee that the object being converted is in fact a full object of the destination type. Therefore, it is up to the programmer to ensure that the conversion is safe. On the other side, it does not incur the overhead of the type-safety checks of <code>dynamic_cast</code>.<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>class</var> Base {};
+<var>class</var> Derived: <var>public</var> Base {};
+Base * a = <var>new</var> Base;
+Derived * b = <var>static_cast</var>&lt;Derived*&gt;(a);</code></pre></td></tr></table></div>
+<br>
+<br>
+This would be valid code, although <code>b</code> would point to an incomplete object of the class and could lead to runtime errors if dereferenced.<br>
+<br>
+Therefore, <code>static_cast</code> is able to perform with pointers to classes not only the conversions allowed implicitly, but also their opposite conversions.<br>
+<br>
+<code>static_cast</code> is also able to perform all conversions allowed implicitly (not only those with pointers to classes), and is also able to perform the opposite of these. It can:<br>
+<ul>
+<li>Convert from <code>void*</code> to any pointer type. In this case, it guarantees that if the <code>void*</code> value was obtained by converting from that same pointer type, the resulting pointer value is the same.</li>
+<li>Convert integers, floating-point values and enum types to enum types.&lt;/i&gt;<br>
+</ul>
+<br>
+Additionally, <code>static_cast</code> can also perform the following:<br>
+<ul>
+<li>Explicitly call a single-argument constructor or a conversion operator.</li>
+<li>Convert to <i>rvalue references</i>.</li>
+<li>Convert <code>enum class</code> values into integers or floating-point values.</li>
+<li>Convert any type to <code>void</code>, evaluating and discarding the value.</li>
+</ul>

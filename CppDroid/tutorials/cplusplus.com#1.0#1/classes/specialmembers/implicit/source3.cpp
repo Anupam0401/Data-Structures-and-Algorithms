@@ -1,0 +1,1 @@
+Rectangle::Rectangle (const Rectangle& other) = default;

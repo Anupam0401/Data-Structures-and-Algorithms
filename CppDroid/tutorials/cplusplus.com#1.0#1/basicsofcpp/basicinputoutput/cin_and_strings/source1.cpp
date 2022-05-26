@@ -1,0 +1,2 @@
+string mystring;
+cin >> mystring;

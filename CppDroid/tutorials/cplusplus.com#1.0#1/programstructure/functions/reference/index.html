@@ -1,0 +1,58 @@
+
+<h3>Arguments passed by value and by reference</h3>
+In the functions seen earlier, arguments have always been passed <i>by value</i>. This means that, when calling a function, what is passed to the function are the values of these arguments on the moment of the call, which are copied into the variables represented by the function parameters. For example, take:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> x=5, y=3, z;
+z = addition ( x, y );</code></pre></td></tr></table></div>
+<br>
+<br>
+In this case, function addition is passed 5 and 3, which are copies of the values of <code>x</code> and <code>y</code>, respectively. These values (5 and 3) are used to initialize the variables set as parameters in the function's definition, but any modification of these variables within the function has no effect on the values of the variables x and y outside it, because x and y were themselves not passed to the function on the call, but only copies of their values at that moment.<br>
+<br>
+<img src="function_arguments.png" alt="">
+<br>
+In certain cases, though, it may be useful to access an external variable from within a function. To do that, arguments can be passed <i>by reference</i>, instead of <i>by value</i>. For example, the function <code>duplicate</code> in this code duplicates the value of its three arguments, causing the variables used as arguments to actually be modified by the call:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br></code></pre></td>
+<td class="source"><pre><code><cite>// passing parameters by reference</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>void</var> duplicate (<var>int</var>&amp; a, <var>int</var>&amp; b, <var>int</var>&amp; c)
+{
+  a*=2;
+  b*=2;
+  c*=2;
+}
+
+<var>int</var> main ()
+{
+  <var>int</var> x=1, y=3, z=7;
+  duplicate (x, y, z);
+  cout &lt;&lt; <kbd>"x="</kbd> &lt;&lt; x &lt;&lt; <kbd>", y="</kbd> &lt;&lt; y &lt;&lt; <kbd>", z="</kbd> &lt;&lt; z;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>x=2, y=6, z=14</samp></pre></td></tr></table></div>
+<br>
+<br>
+To gain access to its arguments, the function declares its parameters as <i>references</i>. In C++, references are indicated with an ampersand (<code>&</code>) following the parameter type, as in the parameters taken by <code>duplicate</code> in the example above.<br>
+<br>
+When a variable is passed <i>by reference</i>, what is passed is no longer a copy, but the variable itself, the variable identified by the function parameter, becomes somehow associated with the argument passed to the function, and any modification on their corresponding local variables within the function are reflected in the variables passed as arguments in the call.<br>
+<br>
+<img src="function_by_reference.png" alt=""> <br>
+<br>
+In fact, <code>a</code>, <code>b</code>, and <code>c</code> become aliases of the arguments passed on the function call (<code>x</code>, <code>y</code>, and <code>z</code>) and any change on <code>a</code> within the function is actually modifying variable <code>x</code> outside the function. Any change on <code>b</code> modifies <code>y</code>, and any change on <code>c</code> modifies <code>z</code>. That is why when, in the example, function <code>duplicate</code> modifies the values of variables <code>a</code>, <code>b</code>, and <code>c</code>, the values of <code>x</code>, <code>y</code>, and <code>z</code> are affected.<br>
+<br>
+If instead of defining duplicate as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>void</var> duplicate (<var>int</var>&amp; a, <var>int</var>&amp; b, <var>int</var>&amp; c) </code></pre></td></tr></table></div>
+<br>
+<br>
+Was it to be defined without the ampersand signs as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>void</var> duplicate (<var>int</var> a, <var>int</var> b, <var>int</var> c)</code></pre></td></tr></table></div>
+<br>
+<br>
+The variables would not be passed <i>by reference</i>, but <i>by value</i>, creating instead copies of their values. In this case, the output of the program would have been the values of <code>x</code>, <code>y</code>, and <code>z</code> without being modified (i.e., 1, 3, and 7).<br>

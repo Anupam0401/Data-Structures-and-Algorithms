@@ -1,0 +1,97 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>The next data type we&#8217;re going to look at is the boolean data type.  Boolean variables only have two possible values: true (1) and false (0).</p>
+<p>To declare a boolean variable, we use the keyword <em>bool</em>.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue;
+</pre></td></tr></table>
+<p>When assigning values to boolean variables, we use the keywords <em>true</em> and <em>false</em>.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue1 = true; // explicit assignment
+bool bValue2(false); // implicit assignment
+</pre></td></tr></table>
+<p>Just as the unary minus operator (-) can be used to make an integer negative, the logical NOT operator (!) can be used to flip a boolean value from true to false, or false to true:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue1 = !true; // bValue1 will have the value false
+bool bValue2(!false); // bValue2 will have the value true
+</pre></td></tr></table>
+<p>When boolean values are evaluated, they actually don&#8217;t evaluate to true or false.  They evaluate to the numbers 0 (false) or 1 (true).  Consequently, when we print their values with cout, it prints 0 for false, and 1 for true:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue = true;
+cout &lt;&lt; bValue &lt;&lt; endl;
+cout &lt;&lt; !bValue &lt;&lt; endl;
+
+bool bValue2 = false;
+cout &lt;&lt; bValue2 &lt;&lt; endl;
+cout &lt;&lt; !bValue2 &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Outputs:</p>
+<pre>
+1
+0
+0
+1
+</pre>
+<p>One of the most common uses for boolean variables is inside <em>if</em> statements:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue = true;
+if (bValue)
+    cout &lt;&lt; &quot;bValue was true&quot; &lt;&lt; endl;
+else
+    cout &lt;&lt; &quot;bValue was false&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+bValue was true
+</pre>
+<p>Don&#8217;t forget that you can use the logical not operator to reverse a boolean value:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue = true;
+if (!bValue)
+    cout &lt;&lt; &quot;The if statement was true&quot; &lt;&lt; endl;
+else
+    cout &lt;&lt; &quot;The if statement was false&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+The if statement was false
+</pre>
+<p>Boolean values are also useful as the return values for functions that check whether something is true or not.  Such functions are typically named starting with the word <em>Is</em>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+using namespace std;
+
+// returns true if x and y are equal
+bool IsEqual(int x, int y)
+{
+    return (x == y); // use equality operator to test if equal
+}
+
+int main()
+{
+    cout &lt;&lt; &quot;Enter a value: &quot;;
+    int x;
+    cin &gt;&gt; x;
+
+    cout &lt;&lt; &quot;Enter another value: &quot;;
+    int y;
+    cin &gt;&gt; y;
+
+    bool bEqual = IsEqual(x, y);
+    if (bEqual)
+        cout &lt;&lt; x &lt;&lt; &quot; and &quot; &lt;&lt; y &lt;&lt; &quot; are equal&quot;&lt;&lt;endl;
+    else
+        cout &lt;&lt; x &lt;&lt; &quot; and &quot; &lt;&lt; y &lt;&lt; &quot; are not equal&quot;&lt;&lt;endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>In this case, because we only use bEqual in one place, there&#8217;s really no need to assign it to a variable.  We could do this instead:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    if (IsEqual(x, y))
+        cout &lt;&lt; x &lt;&lt; &quot; and &quot; &lt;&lt; y &lt;&lt; &quot; are equal&quot;&lt;&lt;endl;
+    else
+        cout &lt;&lt; x &lt;&lt; &quot; and &quot; &lt;&lt; y &lt;&lt; &quot; are not equal&quot;&lt;&lt;endl;
+</pre></td></tr></table>
+<p>IsEqual() evaluates to true or false, and the if statement then branches based on this value.</p>
+<p>Boolean variables are quite refreshing in their simplicity!</p>
+<p>One additional note: when converting integers to booleans, the integer zero resolves to boolean false, whereas non-zero integers all resolve to true.</p>

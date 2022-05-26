@@ -1,0 +1,58 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>When a program is run, the CPU begins execution at the top of main(), executes some number of statements, and then terminates at the end of main().  The sequence of statements that the CPU executes is called the program&#8217;s <strong>path</strong>.  Most of the programs you have seen so far have been <strong>straight-line programs</strong>.  Straight-line programs have <strong>sequential flow</strong> &#8212; that is, they take the same path (execute the same statements) every time they are run (even if the user input changes).</p>
+<p>However, often this is not what we desire.  For example, if we ask the user to make a selection, and the user enters an invalid choice, ideally we&#8217;d like to ask the user to make another choice.  This is not possible in a straight-line program.</p>
+<p>Fortunately, C++ provides <strong>control flow statements</strong> (also called <em>flow control statements</em>), which allow the programmer to change the CPU&#8217;s path through the program.  There are quite a few different types of control flow statements, so we will cover them briefly here, and then in more detail throughout the rest of the section.</p>
+<p><strong>Halt</strong></p>
+<p>The most basic control flow statement is the <strong>halt</strong>, which tells the program to quit running immediately.  In C++, a halt can be accomplished through use of the exit() function that is defined in the cstdlib header.  The exit function takes an integer parameter that is returned to the operating system as an exit code, much like the return value of main().</p>
+<p>Here is an example of using exit():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cstdlib&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; 1;
+    exit(0); // terminate and return 0 to operating system
+
+    // The following statements never execute
+    cout &lt;&lt; 2;
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>Jumps</strong></p>
+<p>The next most basic flow control statement is the jump.  A <strong>jump</strong> unconditionally causes the CPU to jump to another statement.  The <em>goto</em>, <em>break</em>, and <em>continue</em> keywords all cause different types of jumps &#8212; we will discuss the difference between these in upcoming sections.</p>
+<p>Function calls also cause jump-like behavior.  When a function call is executed, the CPU jumps to the top of the function being called.  When the called function ends, execution returns to the statement after the function call.</p>
+<p><strong>Conditional branches</strong></p>
+<p>A <strong>conditional branch</strong> is a statement that causes the program to change the path of execution based on the value of an expression.  The most basic conditional branch is an <em>if statement</em>, which you have seen in previous examples.  Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // do A
+    if (bCondition)
+        // do B
+    else
+        // do C
+
+    // do D
+}
+</pre></td></tr></table>
+<p>This program has two possible paths.  If bCondition is true, the program will execute A, B, and D.  If bCondition is false, the program will execute A, C, and D.  As you can see, this program is no longer a straight-line program &#8212; it&#8217;s path of execution depends on the value of bCondition.</p>
+<p>The <em>switch</em> keyword also provides a mechanism for doing conditional branching.  We will cover if statements and switch statements in more detail shortly.</p>
+<p><strong>Loops</strong></p>
+<p>A <strong>loop</strong> causes the program to repeatedly execute a series of statements until a given condition is false.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // do A
+    // loop on B
+    // do C
+}
+</pre></td></tr></table>
+<p>This program might execute as ABC, ABBC, ABBBC, ABBBBC, or even AC.  Again, you can see that this program is no longer a straight-line program &#8212; it&#8217;s path of execution depends on how many times (if any) the looped portion executes.</p>
+<p>C++ provides 3 types of loops: <em>while</em>, <em>do while</em>, and <em>for</em> loops.  Unlike more modern programming languages, such as C# or D, C++ does not provide a foreach keyword.  We will discuss loops at length toward the end of this section.</p>
+<p><strong>Exceptions</strong></p>
+<p>Finally, <strong>exceptions</strong> offer a mechanism for handling errors that occur in functions.  If an error occurs that the function can not handle, it can raise an exception, and control jumps to the nearest block of code that has declared it is willing to catch exceptions of that type.  Exception handling is a fairly advanced feature of C++, and is the only type of control flow statement that we won&#8217;t be discussing in this section.</p>
+<p><strong>Conclusion</strong></p>
+<p>Using program flow statements, you can affect the path the CPU takes through the program and control under what conditions it will terminate.  This makes any number of interesting things possible, such as displaying a menu repeatedly until the user makes a valid choice, printing every number between x and y, or determining the factors of a number.</p>
+<p>Once you understand program flow, the things you can do with a C++ program really open up.  No longer will you be restricted to toy programs and academic exercises &#8212; you will be able to write programs that have real applications.  So let&#8217;s get to it!</p>

@@ -1,0 +1,89 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>The <strong>void pointer</strong>, also known as the generic pointer, is a special type of pointer that can be pointed at objects of any data type!  A void pointer is declared like a normal pointer, using the void keyword as the pointer&#8217;s type:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void *pVoid; // pVoid is a void pointer
+</pre></td></tr></table>
+<p>A void pointer can point to objects of any data type:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue;
+float fValue;
+
+struct Something
+{
+    int nValue;
+    float fValue;
+};
+
+Something sValue;
+
+void *pVoid;
+pVoid = &amp;nValue; // valid
+pVoid = &amp;fValue; // valid
+pVoid = &amp;sValue; // valid
+</pre></td></tr></table>
+<p>However, because the void pointer does not know what type of object it is pointing to, it can not be dereferenced!  Rather, the void pointer must first be explicitly cast to another pointer type before it is dereferenced.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+void *pVoid = &amp;nValue;
+
+// can not dereference pVoid because it is a void pointer
+
+int *pInt = static_cast&lt;int*&gt;(pVoid); // cast from void* to int*
+
+cout &lt;&lt; *pInt &lt;&lt; endl; // can dereference pInt
+</pre></td></tr></table>
+<p>Similarly, it is not possible to do pointer arithmetic on a void pointer.  Note that since void pointers can&#8217;t be dereferenced, there is no such thing as a void reference.</p>
+<p>The next obvious questions is: If a void pointer doesn&#8217;t know what it&#8217;s pointing to, how do we know what to cast it to?  Ultimately, that is up to you to keep track of.</p>
+<p>Here&#8217;s an example of a void pointer in use:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+enum Type
+{
+    INT,
+    FLOAT,
+    STRING,
+};
+
+void Print(void *pValue, Type eType)
+{
+    using namespace std;
+    switch (eType)
+    {
+        case INT:
+            cout &lt;&lt; *static_cast&lt;int*&gt;(pValue) &lt;&lt; endl;
+            break;
+        case FLOAT:
+            cout &lt;&lt; *static_cast&lt;float*&gt;(pValue) &lt;&lt; endl;
+            break;
+        case STRING:
+            cout &lt;&lt; static_cast&lt;char*&gt;(pValue) &lt;&lt; endl;
+            break;
+    }
+}
+
+int main()
+{
+    int nValue = 5;
+    float fValue = 7.5;
+    char *szValue = &quot;Mollie&quot;;
+
+    Print(&amp;nValue, INT);
+    Print(&amp;fValue, FLOAT);
+    Print(szValue, STRING);
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program prints:</p>
+<pre>
+5
+7.5
+Mollie
+</pre>
+<p>In general, it is a good idea to avoid using void pointers unless absolutely necessary, as they effectively allow you to avoid type checking.  This allows you to inadvertently do things that make no sense, and the compiler won&#8217;t complain about it.  For example, the following would be valid:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    Print(&amp;nValue, STRING);
+</pre></td></tr></table>
+<p>But who knows what the result would actually be!</p>
+<p>Although the above function seems like a neat way to make a single function handle multiple data types, C++ actually offers a much better way to do the same thing (via function overloading) that retains type checking to help prevent misuse.  Many other places where void pointers would once be used to handle multiple data types are now better done using templates, which also offer strong type checking.</p>
+<p>However, very occasionally, you may still find a reasonable use for the void pointer.  Just make sure there isn&#8217;t a better (safer) way to do the same thing using other language mechanisms first!</p>

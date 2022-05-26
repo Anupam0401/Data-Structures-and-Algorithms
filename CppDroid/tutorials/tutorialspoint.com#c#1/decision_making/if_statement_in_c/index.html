@@ -1,0 +1,39 @@
+
+<p>An <b>if</b> statement consists of a boolean expression followed by one or more statements.</p>
+<h2>Syntax:</h2>
+<p>The syntax of an if statement in C programming language is:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+if(boolean_expression)
+{
+   /* statement(s) will execute if the boolean expression is true */
+}
+</pre></td></tr></table>
+<p>If the boolean expression evaluates to <b>true</b>, then the block of code inside the if statement will be executed. If  boolean expression evaluates to <b>false</b>, then the first set of code after the end of the if statement(after the closing curly brace) will be executed.</p>
+<p>C programming language assumes any <b>non-zero</b> and <b>non-null</b> values as <b>true</b> and if it is either <b>zero</b> or <b>null</b>, then it is assumed as <b>false</b> value.</p>
+<h2>Flow Diagram:</h2>
+<img src="{path}/if_statement.jpg" alt="C if statement" />
+<h2>Example:</h2>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+ 
+int main ()
+{
+   /* local variable definition */
+   int a = 10;
+ 
+   /* check the boolean condition using if statement */
+   if( a &lt; 20 )
+   {
+       /* if condition is true then print the following */
+       printf("a is less than 20\n" );
+   }
+   printf("value of a is : %d\n", a);
+ 
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+a is less than 20;
+value of a is : 10
+</pre></td></tr></table>

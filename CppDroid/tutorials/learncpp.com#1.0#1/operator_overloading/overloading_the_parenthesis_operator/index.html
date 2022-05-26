@@ -1,0 +1,107 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>All of the overloaded operators you have seen so far let you define the type of the operator&#8217;s parameters, but the number of parameters is fixed based on the type of the operator.  For example, the == operator always takes two parameters, whereas the logical NOT operator always takes one.  The parenthesis operator (()) is a particularly interesting operator in that it allows you to vary both the type AND number of parameters it takes!</p>
+<p>There are two things to keep in mind: first, the parenthesis operator must be implemented as a member function.  Second, in non-class C++, the () operator is used to call functions or write subexpressions that evaluate with higher precedence.  In the case of operator overloading, the () operator does neither &#8212; rather, it is just a normal operator that calls a function (named operator()) like any other overloaded operator.</p>
+<p>Let&#8217;s take a look at a common example that lends itself to overloading this operator:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Matrix
+{
+private:
+    double adData[4][4];
+public:
+    Matrix()
+    {
+        // Set all elements of the matrix to 0.0
+        for (int nCol=0; nCol&lt;4; nCol++)
+            for (int nRow=0; nRow&lt;4; nRow++)
+                adData[nRow][nCol] = 0.0;
+    }
+};
+</pre></td></tr></table>
+<p>Matrices are a key component of linear algebra, and are often used to do geometric modeling and 3d computer graphics work.  In this case, all you need to recognize is that the Matrix class is a 4 by 4 two-dimensional array of doubles.</p>
+<p>In the lesson on <a href="http://www.learncpp.com/cpp-tutorial/98-overloading-the-subscript-operator/">overloading the subscript operator</a>, you learned that we could overload operator[] to provide direct access to a private one-dimensional array.  However, in this case, we want access to a private two-dimensional array.  Because operator[] only has one parameter, it is not sufficient to let us index a two-dimensional array.</p>
+<p>However, because the () operator can take as many parameters as we want it to have, we can declare a version of operator() that takes two integers and use it to access our two-dimensional array.  Here is an example of this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cassert&gt; // for assert()
+class Matrix
+{
+private:
+    double adData[4][4];
+public:
+    Matrix()
+    {
+        // Set all elements of the matrix to 0.0
+        for (int nCol=0; nCol&lt;4; nCol++)
+            for (int nRow=0; nRow&lt;4; nRow++)
+                adData[nRow][nCol] = 0.0;
+    }
+
+    double&amp; operator()(const int nCol, const int nRow);
+};
+
+double&amp; Matrix::operator()(const int nCol, const int nRow)
+{
+    assert(nCol &gt;= 0 &amp;&amp; nCol &lt; 4);
+    assert(nRow &gt;= 0 &amp;&amp; nRow &lt; 4);
+
+    return adData[nRow][nCol];
+}
+</pre></td></tr></table>
+<p>Now we can declare a Matrix and access it&#8217;s elements like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Matrix cMatrix;
+cMatrix(1, 2) = 4.5;
+std::cout &lt;&lt; cMatrix(1, 2);
+</pre></td></tr></table>
+<p>which produces the result:</p>
+<pre>
+4.5
+</pre>
+<p>Now, let&#8217;s overload the () operator again, this time in a way that takes no parameters at all:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cassert&gt; // for assert()
+class Matrix
+{
+private:
+    double adData[4][4];
+public:
+    Matrix()
+    {
+        // Set all elements of the matrix to 0.0
+        for (int nCol=0; nCol&lt;4; nCol++)
+            for (int nRow=0; nRow&lt;4; nRow++)
+                adData[nRow][nCol] = 0.0;
+    }
+
+    double&amp; operator()(const int nCol, const int nRow);
+    void operator()();
+};
+
+double&amp; Matrix::operator()(const int nCol, const int nRow)
+{
+    assert(nCol &gt;= 0 &amp;&amp; nCol &lt; 4);
+    assert(nRow &gt;= 0 &amp;&amp; nRow &lt; 4);
+
+    return adData[nRow][nCol];
+}
+
+void Matrix::operator()()
+{
+    // reset all elements of the matrix to 0.0
+    for (int nCol=0; nCol&lt;4; nCol++)
+        for (int nRow=0; nRow&lt;4; nRow++)
+            adData[nRow][nCol] = 0.0;
+}
+</pre></td></tr></table>
+<p>And here&#8217;s our new example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Matrix cMatrix;
+cMatrix(1, 2) = 4.5;
+cMatrix(); // erase cMatrix
+std::cout &lt;&lt; cMatrix(1, 2);
+</pre></td></tr></table>
+<p>which produces the result:</p>
+<pre>
+0
+</pre>
+<p>Because the () operator is so flexible, it can be tempting to use it for many different purposes.  However, this is strongly discouraged, since the () symbol does not really give any indication of what the operator is doing.  In our example above, it would be better to have written the erase functionality as a function called Clear() or Erase(), as <code>cMatrix.Erase()</code> is easier to understand than <code>cMatrix()</code> (which could do anything!).</p>
+<p>Operator () is commonly overloaded with two parameters to index multidimensional arrays, or to retrieve a subset of a one dimensional array (returning all the elements from parameter 1 to parameter 2).  Anything else is probably better written as a member function with a more descriptive name.</p>

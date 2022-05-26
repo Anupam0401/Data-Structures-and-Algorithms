@@ -1,0 +1,1 @@
+mypointer = myarray;

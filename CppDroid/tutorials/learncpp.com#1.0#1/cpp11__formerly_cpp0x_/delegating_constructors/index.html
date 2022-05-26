@@ -1,0 +1,60 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Delegating constructors</strong></p>
+<p>In C++03, there are often cases where it would be useful for one constructor to call another constructor in the same class.  Unfortunately, this is disallowed by C++03.  Commonly this ends up resulting in either duplicated code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        // code to do A
+    }
+
+    Foo(int nValue)
+    {
+        // code to do A
+        // code to do B
+    }
+};
+</pre></td></tr></table>
+<p>(where the code to do A is defined twice)</p>
+<p>or use of an init() non-constructor function to keep the common code accessible to both constructors that need it:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        InitA();
+    }
+
+    Foo(int nValue)
+    {
+        InitA();
+        // code to do B
+    }
+
+    void InitA()
+    {
+        // code to do A
+    }
+};</pre></td></tr></table>
+<p>While using the init() method is considered better practice than duplicating code, it has a couple of downsides.  First, it&#8217;s not quite as readable, as it adds a new function and several new function calls.  Second, because InitA() is not a constructor, it can be called during the normal program flow, where member variables may already be set and dynamically allocated memory may already be allocated.  This means InitA() needs to be additionally complex in order to handle both the new initialization and reinitialization cases properly.</p>
+<p>Fortunately, C++11 adds the ability to chain constructors together (called <strong>delegating constructors</strong>)</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        // code to do A
+    }
+
+    Foo(int nValue): Foo() // use Foo() default constructor to do A
+    {
+        // code to do B
+    }
+};
+</pre></td></tr></table>
+<p>As you can see, it&#8217;s much cleaner.</p>
+<p>One thing to note: You should always use the initialization list syntax when delegating constructors, as compilers that do not support delegating constructors will generally flag this as a compiler error.  If you try to call one constructor from the body of another constructor, the compiler will not complain and your program may also not behave as expected.</p>

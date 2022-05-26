@@ -1,0 +1,73 @@
+
+<h3>Pointers and const</h3>
+Pointers can be used to access a variable by its address, and this access may include modifying the value pointed. But it is also possible to declare pointers that can access the pointed value to read it, but not to modify it. For this, it is enough with qualifying the type pointed by the pointer as <code>const</code>. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> x;
+<var>int</var> y = 10;
+<var>const</var> <var>int</var> * p = &amp;y;
+x = *p;          <cite>// ok: reading p</cite>
+*p = x;          <cite>// error: modifying p, which is const-qualified </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Here <code>p</code> points to a variable, but points to it in a <code>const</code>-qualified manner, meaning that it can read the value pointed, but it cannot modify it. Note also, that the expression <code>&y</code> is of type <code>int*</code>, but this is assigned to a pointer of type <code>const int*</code>. This is allowed: a pointer to non-const can be implicitly converted to a pointer to const. But not the other way around! As a safety feature, pointers to <code>const</code> are not implicitly convertible to pointers to non-<code>const</code>.<br>
+<br>
+One of the use cases of pointers to <code>const</code> elements is as function parameters: a function that takes a pointer to non-<code>const</code> as parameter can modify the value passed as argument, while a function that takes a pointer to <code>const</code> as parameter cannot.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br></code></pre></td>
+<td class="source"><pre><code><cite>// pointers as arguments:</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>void</var> increment_all (<var>int</var>* start, <var>int</var>* stop)
+{
+  <var>int</var> * current = start;
+  <var>while</var> (current != stop) {
+    ++(*current);  <cite>// increment value pointed</cite>
+    ++current;     <cite>// increment pointer</cite>
+  }
+}
+
+<var>void</var> print_all (<var>const</var> <var>int</var>* start, <var>const</var> <var>int</var>* stop)
+{
+  <var>const</var> <var>int</var> * current = start;
+  <var>while</var> (current != stop) {
+    cout &lt;&lt; *current &lt;&lt; <kbd>'\n'</kbd>;
+    ++current;     <cite>// increment pointer</cite>
+  }
+}
+
+<var>int</var> main ()
+{
+  <var>int</var> numbers[] = {10,20,30};
+  increment_all (numbers,numbers+3);
+  print_all (numbers,numbers+3);
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>11
+21
+31</samp></pre></td></tr></table></div>
+<br>
+<br>
+Note that <code>print_all</code> uses pointers that point to constant elements. These pointers point to constant content they cannot modify, but they are not constant themselves: i.e., the pointers can still be incremented or assigned different addresses, although they cannot modify the content they point to.<br>
+<br>
+And this is where a second dimension to constness is added to pointers: Pointers can also be themselves const. And this is specified by appending const to the pointed type (after the asterisk):<br>
+ <br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> x;
+      <var>int</var> *       p1 = &amp;x;  <cite>// non-const pointer to non-const int</cite>
+<var>const</var> <var>int</var> *       p2 = &amp;x;  <cite>// non-const pointer to const int</cite>
+      <var>int</var> * <var>const</var> p3 = &amp;x;  <cite>// const pointer to non-const int</cite>
+<var>const</var> <var>int</var> * <var>const</var> p4 = &amp;x;  <cite>// const pointer to const int </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+The syntax with <code>const</code> and pointers is definitely tricky, and recognizing the cases that best suit each use tends to require some experience. In any case, it is important to get constness with pointers (and references) right sooner rather than later, but you should not worry too much about grasping everything if this is the first time you are exposed to the mix of <code>const</code> and pointers. More use cases will show up in coming chapters.<br>
+<br>
+To add a little bit more confusion to the syntax of <code>const</code> with pointers, the <code>const</code> qualifier can either precede or follow the pointed type, with the exact same meaning:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>const</var> <var>int</var> * p2a = &amp;x;  <cite>//      non-const pointer to const int</cite>
+<var>int</var> <var>const</var> * p2b = &amp;x;  <cite>// also non-const pointer to const int </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+As with the spaces surrounding the asterisk, the order of const in this case is simply a matter of style. This chapter uses a prefix <code>const</code>, as for historical reasons this seems to be more extended, but both are exactly equivalent. The merits of each style are still intensely debated on the internet.<br>

@@ -1,0 +1,58 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Quick Review</strong></p>
+<p>Always use parenthesis to disambiguate the precedence of operators if there is any question or opportunity for confusion.</p>
+<p>The arithmetic operators all work like they do in normal mathematics.  The Modulus (%) operator returns the remainder from an integer division.  Beware about rounding or sign errors when the operands of integer division and modulus are negative.</p>
+<p>The increment and decrement operators can be used to easily increment or decrement numbers.  Beware of side effects, particular when it comes to the order that function parameters are evaluated.</p>
+<p>Relational operators can be used to compare floating point numbers.  Beware using equality and inequality on floating point numbers.</p>
+<p><strong>Comprehensive quiz</strong></p>
+<p>1) Evaluate the following:</p>
+<p>a) (5 > 3 &#038;&#038; 4 < 8)<br />
+b) (4 > 6 &#038;&#038; true)<br />
+c) (3 >= 3 || false)<br />
+d) (true || false) ? 4 : 5</p>
+<p>2) Answer the following:</p>
+<p>a) 7 / 4<br />
+b) 14 % 5</p>
+<p>3) Convert the following from binary to decimal:<br />
+a) 1101<br />
+b) 101110</p>
+<p>4) Convert the following from decimal to binary:<br />
+a) 15<br />
+b) 53</p>
+<p>5) Why should you never do the following:<br />
+a) int y = foo(++x, x);<br />
+b) int x = 7 / -2;<br />
+c) int x = -5 % 2;<br />
+d) float x = 0.1 + 0.1; if (x == 0.2) return true; else return false;<br />
+e) int x = 3 / 0;</p>
+<p><strong>Solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id46765636'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id46765636" style="display:none">
+<p>a) (5 > 3 &#038;&#038; 4 < 8) becomes (true &#038;&#038; true), which is true.<br />
+b) (4 > 6 &#038;&#038; true) becomes (false &#038;&#038; true), which is false.<br />
+c) (3 >= 3 || false) becomes (true || false), which is true.<br />
+d) (true || false) ? 4 | 5 becomes (true ? 4 : 5), which is 4.
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1474373132'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1474373132" style="display:none">
+a) 7 / 4 = 1 remainder 3, so this equals 1.<br />
+b) 14 % 5 = 2 remainder 4, so this equals 4.
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id350313053'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id350313053" style="display:none">
+a) 1101 is ((1 * 1) + (0 * 2) + (1 * 4) + (1 * 8)) = (1 + 0 + 4 + 8) = 13<br />
+b) 101110 is ((0 * 1) + (1 * 2) + (1 * 4) + (1 * 8) + (0 * 16) + (1 * 32)) = (0 + 2 + 4 + 8 + 0 + 32) = 46
+</div>
+<p>4) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id955425677'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id955425677" style="display:none">
+a) Is 15 >= 8?  Yes, with 7 left over.  Is 7 >= 4?  Yes, with 3 left over.  Is 3 >= 2?  Yes, with 1 left over.  Is 1 >= 1?  Yes.  So this number is 1111 in binary.<br />
+b) Is 53 >= 32?  Yes, with 21 left over.  Is 21 >= 16?  Yes, with 5 left over.  Is 5 >= 8?  No.  Is 5 >= 4?  Yes, with 1 left over.  Is 1 > 2?  No.  Is 1 >=1?  Yes.  So this number is 110101 in binary.
+</div>
+<p>5) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id197385599'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id197385599" style="display:none">
+a) The parameters to function foo() can execute in any order, so it&#8217;s indeterminate whether x or ++x gets evaluated first.  Because ++x change the value of x, it&#8217;s unclear what values will be passed into the function.<br />
+b) It&#8217;s unclear whether the compiler will round this up to -3 or down to -4.<br />
+c) It&#8217;s unclear whether this will result in 1 or -1.<br />
+d) Floating point errors will cause this to evaluate as false even though it looks like it should be true.<br />
+e) Divide by 0 will crash the program.
+</div>

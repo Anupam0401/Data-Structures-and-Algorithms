@@ -1,0 +1,1 @@
+enum class Colors {black, blue, green, cyan, red, purple, yellow, white};

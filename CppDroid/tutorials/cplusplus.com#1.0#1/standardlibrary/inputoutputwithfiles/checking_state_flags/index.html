@@ -1,0 +1,16 @@
+
+<h3>Checking state flags</h3>
+In addition to <code>good</code>, which checks whether the stream is ready for input/output operations, other member functions exist to check for specific states of a stream (all of them return a <code>bool</code> value): <br>
+<br>
+<dl>
+<dt><code>bad()</code></dt>
+<dd>Returns <code>true</code> if a reading or writing operation fails. For example, in the case that we try to write to a file that is not open for writing or if the device where we try to write has no space left.</dd>
+<dt><code>fail()</code></dt>
+<dd>Returns <code>true</code> in the same cases as <code>bad()</code>, but also in the case that a format error happens, like when an alphabetical character is extracted when we are trying to read an integer number.</dd>
+<dt><code>eof()</code></dt>
+<dd>Returns <code>true</code> if a file open for reading has reached the end.</dd>
+<dt><code>good()</code></dt>
+<dd>It is the most generic state flag: it returns <code>false</code> in the same cases in which calling any of the previous functions would return <code>true</code>. Note that <code>good</code> and <code>bad</code> are not exact opposites (<code>good</code> checks more state flags at once).</dd>
+</dl>
+<br>
+The member function <code>clear()</code> can be used to reset the state flags.<br>

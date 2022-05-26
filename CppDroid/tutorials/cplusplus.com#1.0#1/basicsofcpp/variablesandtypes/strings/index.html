@@ -1,0 +1,58 @@
+
+<h3>Introduction to strings</h3>
+Fundamental types represent the most basic types handled by the machines where the code may run. But one of the major strengths of the C++ language is its rich set of compound types, of which the fundamental types are mere building blocks.<br>
+<br>
+An example of compound type is the <code>string</code> class. Variables of this type are able to store sequences of characters, such as words or sentences. A very useful feature!<br>
+<br>
+A first difference with fundamental data types is that in order to declare and use objects (variables) of this type, the program needs to include the header where the type is defined within the standard library (header <code>&lt;string&gt;</code>): <br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br></code></pre></td>
+<td class="source"><pre><code><cite>// my first string</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  string mystring;
+  mystring = <kbd>"This is a string"</kbd>;
+  cout &lt;&lt; mystring;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>This is a string</samp></pre></td></tr></table></div>
+<br>
+<br>
+As you can see in the previous example, strings can be initialized with any valid string literal, just like numerical type variables can be initialized to any valid numerical literal. As with fundamental types, all initialization formats are valid with strings:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code>string mystring = <kbd>"This is a string"</kbd>;
+string mystring (<kbd>"This is a string"</kbd>);
+string mystring {<kbd>"This is a string"</kbd>};</code></pre></td></tr></table></div>
+<br>
+<br>
+Strings can also perform all the other basic operations that fundamental data types can, like being declared without an initial value and change its value during execution:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><cite>// my first string</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  string mystring;
+  mystring = <kbd>"This is the initial string content"</kbd>;
+  cout &lt;&lt; mystring &lt;&lt; endl;
+  mystring = <kbd>"This is a different string content"</kbd>;
+  cout &lt;&lt; mystring &lt;&lt; endl;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>This is the initial string content
+This is a different string content</samp></pre></td></tr></table></div>
+<br>
+<br>
+Note: inserting the <code>endl</code> manipulator <b>end</b>s the <b>l</b>ine (printing a newline character and flushing the stream).<br>
+<br>
+The <samp><a href="/string">string</a></samp> class is a <i>compound type</i>. As you can see in the example above, <i>compound types</i> are used in the same way as <i>fundamental types</i>: the same syntax is used to declare variables and to initialize them.<br>
+<br>
+For more details on standard C++ strings, see the <samp><a href="/string">string</a></samp> class reference.<br>

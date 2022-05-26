@@ -1,0 +1,47 @@
+
+<p>The <b>break</b> statement in C programming language has the following two usages:</p>
+<ol class="list">
+<li><p>When the <b>break</b> statement is encountered inside a loop, the loop is immediately terminated and program control resumes at the next statement following the loop.</p></li>
+<li><p>It can be used to terminate a case in the <b>switch</b> statement (covered in the next chapter).</p></li>
+</ol>
+<p>If you are using nested loops (i.e., one loop inside another loop), the break statement will stop the execution of the innermost loop and start executing the next line of code after the block.</p>
+<h2>Syntax:</h2>
+<p>The syntax for a <b>break</b> statement in C is as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+break;
+</pre></td></tr></table>
+<h2>Flow Diagram:</h2>
+<img src="{path}/cpp_break_statement.jpg" alt="c break statement" />
+<h2>Example:</h2>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+ 
+int main ()
+{
+   /* local variable definition */
+   int a = 10;
+
+   /* while loop execution */
+   while( a &lt; 20 )
+   {
+      printf("value of a: %d\n", a);
+      a++;
+      if( a &gt; 15)
+      {
+         /* terminate the loop using break statement */
+          break;
+      }
+   }
+ 
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+value of a: 10
+value of a: 11
+value of a: 12
+value of a: 13
+value of a: 14
+value of a: 15
+</pre></td></tr></table>

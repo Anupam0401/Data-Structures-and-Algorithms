@@ -1,0 +1,75 @@
+
+<h3>Jump statements</h3>
+Jump statements allow altering the flow of a program by performing jumps to specific locations.<br>
+<br>
+<div id="break">
+<h4>The break statement</h4>
+<code>break</code> leaves a loop, even if the condition for its end is not fulfilled. It can be used to end an infinite loop, or to force it to end before its natural end. For example, let's stop the countdown before its natural end:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></code></pre></td>
+<td class="source"><pre><code><cite>// break loop example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>for</var> (<var>int</var> n=10; n&gt;0; n--)
+  {
+    cout &lt;&lt; n &lt;&lt; <kbd>", "</kbd>;
+    <var>if</var> (n==3)
+    {
+      cout &lt;&lt; <kbd>"countdown aborted!"</kbd>;
+      <var>break</var>;
+    }
+  }
+}</code></pre></td>
+<td class="output"><pre><samp>10, 9, 8, 7, 6, 5, 4, 3, countdown aborted!</samp></pre></td></tr></table></div>
+<br>
+</div>
+<br>
+<div id="continue">
+<h4>The continue statement</h4>
+The <code>continue</code> statement causes the program to skip the rest of the loop in the current iteration, as if the end of the statement block had been reached, causing it to jump to the start of the following iteration. For example, let's skip number 5 in our countdown:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br></code></pre></td>
+<td class="source"><pre><code><cite>// continue loop example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>for</var> (<var>int</var> n=10; n&gt;0; n--) {
+    <var>if</var> (n==5) <var>continue</var>;
+    cout &lt;&lt; n &lt;&lt; <kbd>", "</kbd>;
+  }
+  cout &lt;&lt; <kbd>"liftoff!\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>10, 9, 8, 7, 6, 4, 3, 2, 1, liftoff!</samp></pre></td></tr></table></div>
+<br>
+</div>
+<br>
+<div id="goto">
+<h4>The goto statement</h4>
+<code>goto</code> allows to make an absolute jump to another point in the program. This unconditional jump ignores nesting levels, and does not cause any automatic stack unwinding. Therefore, it is a feature to use with care, and preferably within the same block of statements, especially in the presence of local variables.<br>
+<br>
+The destination point is identified by a <i>label</i>, which is then used as an argument for the <code>goto</code> statement. A <i>label</i> is made of a valid identifier followed by a colon (<code>:</code>).<br>
+<br>
+<code>goto</code> is generally deemed a low-level feature, with no particular use cases in modern higher-level programming paradigms generally used with C++. But, just as an example, here is a version of our countdown loop using goto:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br></code></pre></td>
+<td class="source"><pre><code><cite>// goto loop example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>int</var> n=10;
+mylabel:
+  cout &lt;&lt; n &lt;&lt; <kbd>", "</kbd>;
+  n--;
+  <var>if</var> (n&gt;0) <var>goto</var> mylabel;
+  cout &lt;&lt; <kbd>"liftoff!\n"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>10, 9, 8, 7, 6, 5, 4, 3, 2, 1, liftoff!</samp></pre></td></tr></table></div>
+<br>
+</div>

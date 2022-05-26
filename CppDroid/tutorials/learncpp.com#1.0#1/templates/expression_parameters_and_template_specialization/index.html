@@ -1,0 +1,166 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In previous lessons, you&#8217;ve learned how to use template type parameters to create functions and classes that are type independent.  However, template type parameters are not the only type of template parameters available.  Template classes (not template functions) can make use of another kind of template parameter known as an expression parameter.</p>
+<p><strong>Expression parameters</strong></p>
+<p>A template expression parameter is a parameter that does not substitute for a type, but is instead replaced by a value.  An expression parameter can be any of the following:</p>
+<ul>
+<li>A value that has an integral type or enumeration</li>
+<li>A pointer or reference to an object</li>
+<li>A pointer or reference to a function</li>
+<li>A pointer or reference to a class member function</li>
+</ul>
+<p>In the following example, we create a buffer class that uses both a type parameter and an expression parameter.  The type parameter controls the data type of the buffer array, and the expression parameter controls how large the buffer array is.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+template &lt;typename T, int nSize&gt; // nSize is the expression parameter
+class Buffer
+{
+private:
+    // The expression parameter controls the size of the array
+    T m_atBuffer[nSize];
+
+public:
+    T* GetBuffer() { return m_atBuffer; }
+
+    T&amp; operator[](int nIndex)
+    {
+        return m_atBuffer[nIndex];
+    }
+};
+
+int main()
+{
+    // declare an integer buffer with room for 12 chars
+    Buffer&lt;int, 12&gt; cIntBuffer;
+
+    // Fill it up in order, then print it backwards
+    for (int nCount=0; nCount &lt; 12; nCount++)
+        cIntBuffer[nCount] = nCount;
+
+    for (int nCount=11; nCount &gt;= 0; nCount--)
+        std::cout &lt;&lt; cIntBuffer[nCount] &lt;&lt; &quot; &quot;;
+    std::cout &lt;&lt; std::endl;
+
+    // declare a char buffer with room for 31 chars
+    Buffer&lt;char, 31&gt; cCharBuffer;
+
+    // strcpy a string into the buffer and print it
+    strcpy(cCharBuffer.GetBuffer(), &quot;Hello there!&quot;);
+    std::cout &lt;&lt; cCharBuffer.GetBuffer() &lt;&lt; std::endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This code produces the following:</p>
+<pre>
+11 10 9 8 7 6 5 4 3 2 1 0
+Hello there!
+</pre>
+<p>One noteworthy thing about the above example is that we do not have to dynamically allocate the m_atBuffer member array!  This is because for any given instance of the Buffer class, nSize is actually constant.  For example, if you instantiate a Buffer<int, 12>, the compiler replaces nSize with 12.  Thus m_atBuffer is of type int[12], which can be allocated statically.</p>
+<p><strong>Template specialization</strong></p>
+<p>When instantiating a template class for a given type, the compiler stencils out a copy of each templated member function, and replaces the template type parameters with the actual types used in the variable declaration.  This means a particular member function will have the same implementation details for each instanced type.  While most of the time, this is exactly what you want, occasionally there are cases where it is useful to implement a templated member function slightly different for a specific data type.  Template specialization lets you accomplish exactly this.</p>
+<p>Let&#8217;s take a look at a very simple example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+using namespace std;
+
+template &lt;typename T&gt;
+class Storage
+{
+private:
+    T m_tValue;
+public:
+    Storage(T tValue)
+    {
+         m_tValue = tValue;
+    }
+
+    ~Storage()
+    {
+    }
+
+    void Print()
+    {
+        std::cout &lt;&lt; m_tValue &lt;&lt; std::endl;;
+    }
+};
+</pre></td></tr></table>
+<p>The above code will work fine for many data types:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // Define some storage units
+    Storage&lt;int&gt; nValue(5);
+    Storage&lt;double&gt; dValue(6.7);
+
+    // Print out some values
+    nValue.Print();
+    dValue.Print();
+}
+</pre></td></tr></table>
+<p>This prints:</p>
+<pre>
+5
+6.7
+</pre>
+<p>Now, let&#8217;s say we want double values to output in scientific notation.  To do so, we will need to use template specialization to create a specialized version of the Print() function for doubles.  This is extremely simple: simply define the specialized function outside of the class definition, replacing the template type with the specific type you wish to redefine the function for.  Here is our specialized Print() function for doubles:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void Storage&lt;double&gt;::Print()
+{
+    std::cout &lt;&lt; std::scientific &lt;&lt; m_tValue &lt;&lt; std::endl;
+}
+</pre></td></tr></table>
+<p>When the compiler goes to instantiate Storage&lt;double&gt;::Print(), it will see we&#8217;ve already defined one, and it will use the one we&#8217;ve defined instead of stenciling out a version from the generic templated member function.</p>
+<p>As a result, when we rerun the above program, it will print:</p>
+<pre>
+5
+6.700000e+000
+</pre>
+<p>Now let&#8217;s take a look at another example where template specialization can be useful.  Consider what happens if we try to use our templated Storage class with datatype char*:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+
+    // Dynamically allocate a temporary string
+    char *strString = new char[40];
+
+    // Ask user for their name
+    cout &lt;&lt; &quot;Enter your name: &quot;;
+    cin &gt;&gt; strString;
+
+    // Store the name
+    Storage&lt;char*&gt; strValue(strString);
+
+    // Delete the temporary string
+    delete strString;
+
+    // Print out our value
+    strValue.Print(); // This will print garbage
+}
+</pre></td></tr></table>
+<p>As it turns out, instead of printing the name the user input, strValue.Print() prints garbage!  What&#8217;s going on here?</p>
+<p>When Storage is instantiated for type char*, the constructor for Storage&lt;char*&gt; looks like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Storage&lt;char*&gt;::Storage(char* tValue)
+{
+     m_tValue = tValue;
+}
+</pre></td></tr></table>
+<p>In other words, this just does a pointer assignment!  As a result, m_tValue ends up pointing at the same memory location as strString.  When we delete strString in main(), we end up deleting the value that m_tValue was pointing at!  And thus, we get garbage when trying to print that value.</p>
+<p>Fortunately, we can fix this problem using template specialization.  Instead of doing a pointer copy, we&#8217;d really like our constructor to make a copy of the input string.  So let&#8217;s write a specialized constructor for datatype char* that does exactly that:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Storage&lt;char*&gt;::Storage(char* tValue)
+{
+    // Allocate memory to hold the tValue string
+    m_tValue = new char[strlen(tValue)+1];
+    // Copy the actual tValue string into the m_tValue memory we just allocated
+    strcpy(m_tValue, tValue);
+}
+</pre></td></tr></table>
+<p>Now when we allocate a variable of type Storage&lt;char*&gt;, this constructor will get used instead of the default one.  As a result, m_tValue will receive its own copy of strString.  Consequently, when we delete strString, m_tValue will be unaffected.</p>
+<p>However, this class now has a memory leak for type char*, because m_tValue will not be deleted when the Storage variable goes out of scope.  As you might have guessed, this can also be solved by specializing the Storage&lt;char*&gt; destructor:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Storage&lt;char*&gt;::~Storage()
+{
+    delete[] m_tValue;
+}
+</pre></td></tr></table>
+<p>Now when variables of type ~Storage&lt;char*&gt; go out of scope, the memory allocated in the specialized constructor will be deleted in the specialized destructor.</p>

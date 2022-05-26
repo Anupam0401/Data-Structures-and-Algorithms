@@ -1,0 +1,33 @@
+
+<h3>Reference operator (&)</h3>
+The address of a variable can be obtained by preceding the name of a variable with an ampersand sign (<code>&</code>), known as <i>reference operator</i>, and which can be literally translated as "address of". For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>foo = &amp;myvar;</code></pre></td></tr></table></div>
+<br>
+<br>
+This would assign the address of variable <code>myvar</code> to <code>foo</code>; by preceding the name of the variable <code>myvar</code> with the <i>reference operator</i> (<code>&</code>), we are no longer assigning the content of the variable itself to <code>foo</code>, but its address.<br>
+<br>
+The actual address of a variable in memory cannot be known before runtime, but let's assume, in order to help clarify some concepts, that <code>myvar</code> is placed during runtime in the memory address <code>1776</code>.<br>
+ <br>
+In this case, consider the following code fragment:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code>myvar = 25;
+foo = &amp;myvar;
+bar = myvar;</code></pre></td></tr></table></div>
+<br>
+<br>
+The values contained in each variable after the execution of this are shown in the following diagram: <br>
+<br>
+<img src="reference_operator.png" alt=""> <br>
+<br>
+First, we have assigned the value <code>25</code> to <code>myvar</code> (a variable whose address in memory we assumed to be <code>1776</code>).<br>
+<br>
+The second statement assigns <code>foo</code> the address of <code>myvar</code>, which we have assumed to be <code>1776</code>.<br>
+<br>
+Finally, the third statement, assigns the value contained in <code>myvar</code> to <code>bar</code>. This is a standard assignment operation, as already done many times in earlier chapters.<br>
+<br>
+The main difference between the second and third statements is the appearance of the <i>reference operator</i> (<code>&</code>).<br>
+<br>
+The variable that stores the address of another variable (like <code>foo</code> in the previous example) is what in C++ is called a <i>pointer</i>. Pointers are a very powerful feature of the language that has many uses in lower level programming. A bit later, we will see how to declare and use pointers.<br>

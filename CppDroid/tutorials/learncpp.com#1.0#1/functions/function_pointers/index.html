@@ -1,0 +1,256 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Function pointers are an advanced topic, and this section can be safely skipped or skimmed by those only looking for C++ basics.</p>
+<p>In the <a href="http://www.learncpp.com/cpp-tutorial/67-introduction-to-pointers/">lesson on pointers</a>, you learned that a pointer is a variable that holds the address of another variable.  Function pointers are similar, except that instead of pointing to variables, they point to functions!</p>
+<p>Consider the case of an array:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nArray[10];
+</pre></td></tr></table>
+<p>As you now know, nArray is actually a constant pointer to a 10 element array.  When we dereference the pointer (either by <code>*nArray</code> or <code>nArray[nIndex]</code>), the appropriate array element is returned.</p>
+<p>Now consider the following function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int foo();
+</pre></td></tr></table>
+<p>If you guessed that foo is actually a constant pointer to a function, you are correct.  When a function is called (via the () operator), the function pointer is dereferenced, and execution branches to the function.</p>
+<p>Just like it is possible to declare a non-constant pointer to a variable, it&#8217;s also possible to declare a non-constant pointer to a function.  The syntax for doing so is one of the ugliest things you will ever see:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// pFoo is a pointer to a function that takes no arguments and returns an integer
+int (*pFoo) ();
+</pre></td></tr></table>
+<p>The parenthesis around *pFoo are necessary for precedence reasons, as <code>int *pFoo()</code> would be interpreted as a function named pFoo that takes no parameters and returns a pointer to an integer.</p>
+<p>In the above snippet, pFoo is a pointer to a function that has no parameters and returns an integer.  pFoo can &#8220;point&#8221; to any function that matches this signature.</p>
+<p><strong>Assigning a function to a function pointer</strong></p>
+<p>There are two primary things that you can do with a pointer to a function.  First, you can assign a function to it:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int foo()
+{
+}
+
+int goo()
+{
+}
+
+int main()
+{
+    int (*pFoo)() = foo; // pFoo points to function foo()
+    pFoo = goo; // pFoo now points to function goo()
+    return 0;
+}
+</pre></td></tr></table>
+<p>One common mistake is to do this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+pFoo = goo();
+</pre></td></tr></table>
+<p>This would actually assign the return value from a call to function goo() to pFoo, which isn&#8217;t what we want.  We want pFoo to be assigned to function goo, not the return value from goo().  So no parenthesis are needed.</p>
+<p>Note that the signature (parameters and return value) of the function pointer must match the signature of the function.  Here is an example of this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// function prototypes
+int foo();
+double goo();
+int hoo(int nX);
+
+// function pointer assignments
+int (*pFcn1)() = foo; // okay
+int (*pFcn2)() = goo; // wrong -- return types don't match!
+double (*pFcn3)() = goo; // okay
+pFcn1 = hoo; // wrong -- pFcn1 has no parameters, but hoo() does
+int (*pFcn3)(int) = hoo; // okay
+</pre></td></tr></table>
+<p><strong>Calling a function using a function pointer</strong></p>
+<p>The second thing you can do with a function pointer is use it to actually call the function.  There are two ways to do this.  The first is via explicit dereference:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int foo(int nX)
+{
+}
+
+int (*pFoo)(int) = foo; // assign pFoo to foo()
+
+(*pFoo)(nValue); // call function foo(nValue) through pFoo.
+</pre></td></tr></table>
+<p>The second way is via implicit dereference:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int foo(int nX)
+{
+}
+
+int (*pFoo)(int) = foo; // assign pFoo to foo()
+
+pFoo(nValue); // call function foo(nValue) through pFoo.
+</pre></td></tr></table>
+<p>As you can see, the implicit dereference method looks just like a normal function call &#8212; which is what you&#8217;d expect, since normal function names are pointers to functions anyway!  However, some older compilers do not support the implicit dereference method, but all modern compilers should.</p>
+<p><strong>Why use pointers to functions?</strong></p>
+<p>There are several cases where pointers to function can be of use.  One of the most common is the case where you are writing a function to perform a task (such as sorting an array), but you want the user to be able to define how a particular part of that task will be performed (such as whether the array is sorted in ascending or descending order).  Let&#8217;s take a closer look at this problem as applied specifically to sorting, as an example that can be generalized to other similar problems.</p>
+<p>All sorting algorithms work on a similar concept: the sorting algorithm walks through a bunch of numbers, does comparisons on pairs of numbers, and reorders the numbers based on the results of those comparisons.  Consequently, by varying the comparison (which can be a function), we can change the way the function sorts without affecting the rest of the sorting code.</p>
+<p>Here is our selection sort routine from a previous lesson:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void SelectionSort(int *anArray, int nSize)
+{
+    using namespace std;
+    for (int nStartIndex= 0; nStartIndex &lt; nSize; nStartIndex++)
+    {
+        int nBestIndex = nStartIndex;
+
+        // Search through every element starting at nStartIndex+1
+        for (int nCurrentIndex = nStartIndex + 1; nCurrentIndex &lt; nSize; nCurrentIndex++)
+        {
+            // Note that we are using the user-defined comparison here
+            if (anArray[nCurrentIndex] &lt; anArray[nBestIndex]) // COMPARISON DONE HERE
+                nBestIndex = nCurrentIndex;
+        }
+
+        // Swap our start element with our best element
+        swap(anArray[nStartIndex], anArray[nBestIndex]);
+    }
+}
+</pre></td></tr></table>
+<p>Now, let&#8217;s replace that comparison with a function to do the comparison.  Because our comparison function is going to compare two integers and return a boolean value, it will look something like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool Ascending(int nX, int nY)
+{
+    return nY &gt; nX;
+}
+</pre></td></tr></table>
+<p>And here&#8217;s our selection sort routine using the Ascending() function to do the comparison:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void SelectionSort(int *anArray, int nSize)
+{
+    using namespace std;
+    for (int nStartIndex= 0; nStartIndex &lt; nSize; nStartIndex++)
+    {
+        int nBestIndex = nStartIndex;
+
+        // Search through every element starting at nStartIndex+1
+        for (int nCurrentIndex = nStartIndex + 1; nCurrentIndex &lt; nSize; nCurrentIndex++)
+        {
+            // Note that we are using the user-defined comparison here
+            if (Ascending(anArray[nCurrentIndex], anArray[nBestIndex])) // COMPARISON DONE HERE
+                nBestIndex = nCurrentIndex;
+        }
+
+        // Swap our start element with our best element
+        swap(anArray[nStartIndex], anArray[nBestIndex]);
+    }
+}
+</pre></td></tr></table>
+<p>In order to let the caller decide how the sorting will be done, instead of using our own hard-coded comparison function, we&#8217;ll allow the caller to provide his own sorting function!  This is done via a function pointer.</p>
+<p>Because the caller&#8217;s comparison function is going to compare two integers and return a boolean value, a pointer to such a function would look something like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool (*pComparison)(int, int);
+</pre></td></tr></table>
+<p>So, we&#8217;ll allow the caller to pass our sort routine a pointer to their desired comparison function as the third parameter, and then we&#8217;ll use the caller&#8217;s function to do the comparison.</p>
+<p>Here&#8217;s a full example of a selection sort that uses a function pointer parameter to do a user-defined comparison, along with an example of how to call it:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;algorithm&gt; // for swap
+
+// Note our user-defined comparison is the third parameter
+void SelectionSort(int *anArray, int nSize, bool (*pComparison)(int, int))
+{
+    using namespace std;
+    for (int nStartIndex= 0; nStartIndex &lt; nSize; nStartIndex++)
+    {
+        int nBestIndex = nStartIndex;
+
+        // Search through every element starting at nStartIndex+1
+        for (int nCurrentIndex = nStartIndex + 1; nCurrentIndex &lt; nSize; nCurrentIndex++)
+        {
+            // Note that we are using the user-defined comparison here
+            if (pComparison(anArray[nCurrentIndex], anArray[nBestIndex])) // COMPARISON DONE HERE
+                nBestIndex = nCurrentIndex;
+        }
+
+        // Swap our start element with our best element
+        swap(anArray[nStartIndex], anArray[nBestIndex]);
+    }
+}
+
+// Here is a comparison function that sorts in ascending order
+// (Note: it's exactly the same as the previous Ascending() function)
+bool Ascending(int nX, int nY)
+{
+    return nY &gt; nX;
+}
+
+// Here is a comparison function that sorts in descending order
+bool Descending(int nX, int nY)
+{
+    return nY &lt; nX;
+}
+
+// This function prints out the values in the array
+void PrintArray(int *pArray, int nSize)
+{
+    for (int iii=0; iii &lt; nSize; iii++)
+        cout &lt;&lt; pArray[iii] &lt;&lt; &quot; &quot;;
+    cout &lt;&lt; endl;
+}
+
+int main()
+{
+    using namespace std;
+
+    int anArray[9] = { 3, 7, 9, 5, 6, 1, 8, 2, 4 };
+
+    // Sort the array in descending order using the Descending() function
+    SelectionSort(anArray, 9, Descending);
+    PrintArray(anArray, 9);
+
+    // Sort the array in ascending order using the Ascending() function
+    SelectionSort(anArray, 9, Ascending);
+    PrintArray(anArray, 9);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the result:</p>
+<pre>
+9 8 7 6 5 4 3 2 1
+1 2 3 4 5 6 7 8 9
+</pre>
+<p>Is that cool or what?  We&#8217;ve given the caller the ability to control how our selection sort does it&#8217;s job.</p>
+<p>The caller can even define his own &#8220;strange&#8221; comparison functions:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool EvensFirst(int nX, int nY)
+{
+        // if nX is not even and nY is, nY goes first
+	if ((nX % 2) &amp;&amp; !(nY % 2))
+		return false;
+
+        // if nX is even and nY is not, nX goes first
+	if (!(nX % 2) &amp;&amp; (nY % 2))
+		return true;
+
+        // otherwise sort in Ascending order
+	return Ascending(nX, nY);
+}
+
+int main()
+{
+    using namespace std;
+
+    int anArray[9] = { 3, 7, 9, 5, 6, 1, 8, 2, 4 };
+
+    SelectionSort(anArray, 9, EvensFirst);
+    PrintArray(anArray, 9);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>The above snippet produces the following result:</p>
+<pre>
+2 4 6 8 1 3 5 7 9
+</pre>
+<p>As you can see, using a function pointer in this context provides a nice way to allow a caller to &#8220;hook&#8221; it&#8217;s own functionality into something you&#8217;ve previously written and tested, which helps facilitate code reuse!  Previously, if you wanted to sort one array in descending order and another in ascending order, you&#8217;d need multiple version of the sort routine.  Now you can have one version that can sort any way the caller desires!</p>
+<p><strong>Making function pointers pretty with typedef</strong></p>
+<p>Let&#8217;s face it &#8212; the syntax for pointers to functions is ugly.  However, typedefs can be used to make pointers to functions look more like regular variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+typedef bool (*pfcnValidate)(int, int);
+</pre></td></tr></table>
+<p>This defines a typedef called &#8220;pfcnValidate&#8221; that is a pointer to a function that takes two ints and returns a bool.</p>
+<p>Now instead of doing this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool Validate(int nX, int nY, bool (*pfcn)(int, int));
+</pre></td></tr></table>
+<p>You can do this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool Validate(int nX, int nY, pfcnValidate pfcn)
+</pre></td></tr></table>
+<p>Which reads a lot nicer!</p>

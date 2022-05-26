@@ -1,0 +1,46 @@
+
+<h3>Enumerated types (enum)</h3>
+<dfn>Enumerated types</dfn> are types that are defined with a set of custom identifiers, known as <i>enumerators</i>, as possible values. Objects of these <i>enumerated types</i> can take any of these enumerators as value.<br>
+<br>
+Their syntax is:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="output"><pre><samp>
+enum type_name {
+  value1,
+  value2,
+  value3,
+  .
+  .
+} object_names;
+</samp></pre></td></tr></table></div>
+<br>
+This creates the type <code>type_name</code>, which can take any of <code>value1</code>, <code>value2</code>, <code>value3</code>, ... as value. Objects (variables) of this type can directly be instantiated as <code>object_names</code>.<br>
+<br>
+For example, a new type of variable called <code>colors_t</code> could be defined to store colors with the following declaration: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>enum</var> colors_t {black, blue, green, cyan, red, purple, yellow, white};</code></pre></td></tr></table></div>
+<br>
+<br>
+Notice that this declaration includes no other type, neither fundamental nor compound, in its definition. To say it another way, somehow, this creates a whole new data type from scratch without basing it on any other existing type. The possible values that variables of this new type <code>color_t</code> may take are the enumerators listed within braces. For example, once the <code>colors_t</code> enumerated type is declared, the following expressions will be valid:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>colors_t mycolor;
+ 
+mycolor = blue;
+<var>if</var> (mycolor == green) mycolor = red; </code></pre></td></tr></table></div>
+<br>
+<br>
+Values of <i>enumerated types</i> declared with <code>enum</code> are implicitly convertible to the integer type <code>int</code>, and vice versa. In fact, the elements of such an <code>enum</code> are always assigned an integer numerical equivalent internally, of which they become an alias. If it is not specified otherwise, the integer value equivalent to the first possible value is <code>0</code>, the equivalent to the second is <code>1</code>, to the third is <code>2</code>, and so on... Therefore, in the data type <code>colors_t</code> defined above, <code>black</code> would be equivalent to <code>0</code>, <code>blue</code> would be equivalent to <code>1</code>, <code>green</code> to <code>2</code>, and so on...<br>
+<br>
+A specific integer value can be specified for any of the possible values in the enumerated type. And if the constant value that follows it is itself not given its own value, it is automatically assumed to be the same value plus one. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><var>enum</var> months_t { january=1, february, march, april,
+                may, june, july, august,
+                september, october, november, december} y2k;</code></pre></td></tr></table></div>
+<br>
+<br>
+In this case, the variable <code>y2k</code> of the enumerated type <code>months_t</Code> can contain any of the 12 possible values that go from <code>january</code> to <code>december</Code> and that are equivalent to the values between <code>1</code> and <code>12</code> (not between <code>0</code> and <code>11</code>, since <code>january</code> has been made equal to <code>1</code>).<br>
+<br>
+Because enumerated types declared with <code>enum</code> are implicitly convertible to <code>int</code>, and each of the enumerator values is actually of type <code>int</code>, there is no way to distinguish <code>1</code> from <code>january</code> - they are the exact same value of the same type. The reasons for this are historical and are inheritance of the C language.<br>

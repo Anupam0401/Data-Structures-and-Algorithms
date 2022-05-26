@@ -1,0 +1,131 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>There are many different cases in which sorting an array can be useful.  Algorithms (such as searching to see if a number exists in an array) can often be made simpler and/or more efficient when the input data is sorted.  Furthermore, sorting is often useful for human readability, such as when printing a list of names in alphabetical order.</p>
+<p>Sorting is generally performed by repeatedly comparing pairs of array elements, and swapping them if they meet some criteria.  The order in which these elements are compared differs depending on which sorting algorithm is used, and the criteria depends on how the list will be sorted (ascending or descending order).  To swap two elements, we can use the swap() function from the C++ standard library.  Swap is defined in the algorithm header, and lives in the std namespace.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;algorithm&gt; // for swap
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+
+    int x = 2;
+    int y = 4;
+    cout &lt;&lt; &quot;Before swap: x = &quot; &lt;&lt; x &lt;&lt; &quot;, y = &quot; &lt;&lt; y &lt;&lt; endl;
+    swap(x, y); // swap also lives in std namespace
+    cout &lt;&lt; &quot;After swap:  x = &quot; &lt;&lt; x &lt;&lt; &quot;, y = &quot; &lt;&lt; y &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program prints:</p>
+<pre>
+Before swap: x = 2, y = 4
+After swap:  x = 4, y = 2
+</pre>
+<p>Note that after the swap, the values of x and y have been interchanged!</p>
+<p><strong>Selection sort</strong></p>
+<p>There are many ways to sort an array.  Selection sort is probably the easiest sort to understand, which makes it a good candidate for teaching even though it is one of the slower sorts.</p>
+<p>Selection sort performs the following steps:<br />
+1) Starting at index 0, search the entire array to find the smallest value<br />
+2) Swap the smallest value found with the value at index 0<br />
+3) Repeat steps 1 &#038; 2 starting from the next index</p>
+<p>In other words, we&#8217;re going to find the smallest element in the array, and put it in the first position.  Then we&#8217;re going to find the next smallest element, and put it in the second position.  This process will be repeated until we run out of elements.</p>
+<p>Here is an example of this algorithm working on 5 elements.  Let&#8217;s start with a sample array:</p>
+<p>{ 30, 50, 20, 10, 40 }</p>
+<p>First, we find the smallest element, starting from index 0:</p>
+<p>{ 30, 50, 20, <strong>10</strong>, 40 }</p>
+<p>We then swap this with the element at index 0:</p>
+<p>{ <strong>10</strong>, 50, 20, <strong>30</strong>, 40 }</p>
+<p>Now that the first element is sorted, we can ignore it.  Consequently, we find the smallest element, starting from index 1:</p>
+<p>{ 10, 50, <strong>20</strong>, 30, 40 }</p>
+<p>And swap it with the element in index 1:</p>
+<p>{ 10, <strong>20</strong>, <strong>50</strong>, 30, 40 }</p>
+<p>Find the smallest element starting at index 2:</p>
+<p>{ 10, 20, 50, <strong>30</strong>, 40 }</p>
+<p>And swap it with the element in index 2:</p>
+<p>{ 10, 20, <strong>30</strong>, <strong>50</strong>, 40 }</p>
+<p>Find the smallest element starting at index 3:</p>
+<p>{ 10, 20, 30, 50, <strong>40</strong> }</p>
+<p>And swap it with the element in index 3:</p>
+<p>{ 10, 20, 30, <strong>40</strong>, <strong>50</strong> }</p>
+<p>Finally, find the smallest element starting at index 4:</p>
+<p>{ 10, 20, 30, 40, <strong>50</strong> }</p>
+<p>And swap it with the element in index 4 (which doesn&#8217;t do anything):</p>
+<p>{ 10, 20, 30, 40, <strong>50</strong> }</p>
+<p>Done!</p>
+<p>{ 10, 20, 30, 40, 50 }</p>
+<p>Here&#8217;s how this algorithm is implemented in C++:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nSize = 5;
+int anArray[nSize] = { 30, 50, 20, 10, 40 };
+
+// Step through each element of the array
+for (int nStartIndex = 0; nStartIndex &lt; nSize; nStartIndex++)
+{
+    // nSmallestIndex is the index of the smallest element
+    // we've encountered so far.
+    int nSmallestIndex = nStartIndex;
+
+    // Search through every element starting at nStartIndex+1
+    for (int nCurrentIndex = nStartIndex + 1; nCurrentIndex &lt; nSize; nCurrentIndex++)
+    {
+        // If the current element is smaller than our previously found smallest
+        if (anArray[nCurrentIndex] &lt; anArray[nSmallestIndex])
+            // Store the index in nSmallestIndex
+            nSmallestIndex = nCurrentIndex;
+    }
+
+    // Swap our start element with our smallest element
+    swap(anArray[nStartIndex], anArray[nSmallestIndex]);
+}
+</pre></td></tr></table>
+<p>The most confusing part of this algorithm is the nested loop.  The outside loop (nStartIndex) steps through each element one by one.  The inner loop (nCurrentIndex) finds the smallest element in the array starting from nStartIndex and sets the variable nSmallestIndex to point to it.  The smallest index is then swapped with the start index.  Then the outer loop (nStartIndex) advances one element, and the process is repeated.</p>
+<p><strong>Quiz</strong></p>
+<p>1) Selection sort the following array: { 30, 60, 20, 50, 40, 10 }.  Show the array after each swap that takes place.</p>
+<p>2) Rewrite the selection sort code above to sort in descending order (largest numbers first).  Although this may seem complex, it is actually surprisingly simple.</p>
+<p><strong>Quiz solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id492305126'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id492305126" style="display:none">
+<p>30 60 20 50 40 10<br />
+<strong>10</strong> 60 20 50 40 <strong>30</strong><br />
+10 <strong>20</strong> <strong>60</strong> 50 40 30<br />
+10 20 <strong>30</strong> 50 40 <strong>60</strong><br />
+10 20 30 <strong>40</strong> <strong>50</strong> 60<br />
+10 20 30 40 <strong>50</strong> 60 (self-swap)<br />
+10 20 30 40 50 <strong>60</strong> (self-swap)
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1561040740'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1561040740" style="display:none">
+<p>Simply change:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+        if (anArray[nCurrentIndex] &lt; anArray[nSmallestIndex])
+</pre></td></tr></table>
+<p>to:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+        if (anArray[nCurrentIndex] &gt; anArray[nSmallestIndex])
+</pre></td></tr></table>
+<p>nSmallestIndex should probably be renamed nLargestIndex as well.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nSize = 5;
+int anArray[nSize] = { 30, 50, 20, 10, 40 };
+
+// Step through each element of the array
+for (int nStartIndex = 0; nStartIndex &lt; nSize; nStartIndex++)
+{
+    // nLargestIndex is the index of the largest element
+    // we've encountered so far.
+    int nLargestIndex = nStartIndex;
+
+    // Search through every element starting at nStartIndex+1
+    for (int nCurrentIndex = nStartIndex + 1; nCurrentIndex &lt; nSize; nCurrentIndex++)
+    {
+        // If the current element is smaller than our previously found smallest
+        if (anArray[nCurrentIndex] &gt; anArray[nLargestIndex])
+            // Store the index in nLargestIndex
+            nLargestIndex = nCurrentIndex;
+    }
+
+    // Swap our start element with our largest element
+    swap(anArray[nStartIndex], anArray[nLargestIndex]);
+}
+</pre></td></tr></table>
+</div>

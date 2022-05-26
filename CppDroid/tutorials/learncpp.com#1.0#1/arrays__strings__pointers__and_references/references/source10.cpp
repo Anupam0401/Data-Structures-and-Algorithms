@@ -1,0 +1,1 @@
+sOther.sSomething.nValue = 5;

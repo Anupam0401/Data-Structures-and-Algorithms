@@ -1,0 +1,338 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>A <strong>function</strong> is a sequence of statements designed to do a particular job.  You already know that every program must have a function named main().  However, most programs have many functions, and they all work analogously to main.</p>
+<p>Often, your program needs to interrupt what it is doing to temporarily do something else.  You do this in real life all the time.  For example, you might be reading a book when you remember you need to make a phone call.  You put a bookmark in your book, make the phone call, and when you are done with the phone call, you return to your book where you left off.</p>
+<p>C++ programs work the same way.  A program will be executing statements sequentially inside one function when it encounters a function call.  A <strong>function call</strong> is an expression that tells the CPU to interrupt the current function and execute another function.  The CPU &#8220;puts a bookmark&#8221; at the current point of execution, and then <strong>calls</strong> (executes) the function named in the function call.  When the called function terminates, the CPU goes back to the point it bookmarked, and resumes execution.</p>
+<p>Here is a sample program that shows how new functions are declared and called:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+//#include &lt;stdafx.h&gt; // Visual Studio users need to uncomment this line
+#include &lt;iostream&gt;
+
+// Declaration of function DoPrint()
+void DoPrint()
+{
+    using namespace std;  // we need this in each function that uses cout and endl
+    cout &lt;&lt; &quot;In DoPrint()&quot; &lt;&lt; endl;
+}
+
+// Declaration of main()
+int main()
+{
+    using namespace std;  // we need this in each function that uses cout and endl
+    cout &lt;&lt; &quot;Starting main()&quot; &lt;&lt; endl;
+    DoPrint(); // This is a function call to DoPrint()
+    cout &lt;&lt; &quot;Ending main()&quot; &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the following output:</p>
+<pre>
+Starting main()
+In DoPrint()
+Ending main()
+</pre>
+<p>This program begins execution at the top of main(), and the first line to be executed prints <code>Starting main()</code>.  The second line in main is a function call to DoPrint.  At this point, execution of statements in main() is suspended, and the CPU jumps to DoPrint().  The first (and only) line in DoPrint prints <code>In DoPrint()</code>.  When DoPrint() terminates, the caller (main()) resumes execution where it left off.  Consequently, the next statment executed in main prints <code>Ending main()</code>.</p>
+<p>Functions can be called multiple times:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+//#include &lt;stdafx.h&gt; // Visual Studio users need to uncomment this line
+#include &lt;iostream&gt;
+
+// Declaration of function DoPrint()
+void DoPrint()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;In DoPrint()&quot; &lt;&lt; endl;
+}
+
+// Declaration of main()
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Starting main()&quot; &lt;&lt; endl;
+    DoPrint(); // This is a function call to DoPrint()
+    DoPrint(); // This is a function call to DoPrint()
+    DoPrint(); // This is a function call to DoPrint()
+    cout &lt;&lt; &quot;Ending main()&quot; &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the following output:</p>
+<pre>
+Starting main()
+In DoPrint()
+In DoPrint()
+In DoPrint()
+Ending main()
+</pre>
+<p>In this case, main() is interrupted 3 times, once for each call to DoPrint().</p>
+<p>Main isn&#8217;t the only function that can call other functions.  In the following example, DoPrint() calls a second function, DoPrint2().</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+//#include &lt;stdafx.h&gt; // Visual Studio users need to uncomment this line
+#include &lt;iostream&gt;
+
+void DoPrint2()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;In DoPrint2()&quot; &lt;&lt; endl;
+}
+
+// Declaration of function DoPrint()
+void DoPrint()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Starting DoPrint()&quot; &lt;&lt; endl;
+    DoPrint2(); // This is a function call to DoPrint2()
+    DoPrint2(); // This is a function call to DoPrint2()
+    cout &lt;&lt; &quot;Ending DoPrint()&quot; &lt;&lt; endl;
+}
+
+// Declaration of main()
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Starting main()&quot; &lt;&lt; endl;
+    DoPrint(); // This is a function call to DoPrint()
+    cout &lt;&lt; &quot;Ending main()&quot; &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the following output:</p>
+<pre>
+Starting main()
+Starting DoPrint()
+In DoPrint2()
+In DoPrint2()
+Ending DoPrint()
+Ending main()
+</pre>
+<p><strong>Return values</strong></p>
+<p>If you remember, when main finishes executing, it returns a value back to the operating system (the caller) by using a return statement.  Functions you write can return a single value to their caller as well.  We do this by changing the return type of the function in the function&#8217;s declaration.  A return type of <strong>void</strong> means the function does not return a value.  A return type of int means the function returns an integer value to the caller.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// void means the function does not return a value to the caller
+void ReturnNothing()
+{
+    // This function does not return a value
+}
+
+// int means the function returns an integer value to the caller
+int Return5()
+{
+    return 5;
+}
+</pre></td></tr></table>
+<p>Let&#8217;s use these functions in a program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+cout &lt;&lt; Return5(); // prints 5
+cout &lt;&lt; Return5() + 2; // prints 7
+cout &lt;&lt; ReturnNothing(); // This will not compile
+</pre></td></tr></table>
+<p>In the first statement, Return5() is executed.  The function returns the value of 5 back to the caller, which passes that value to cout.</p>
+<p>In the second statement, Return5() is executed and returns the value of 5 back to the caller.  The expression 5 + 2 is then evaluated to 7.  The value of 7 is passed to cout.</p>
+<p>In the third statement, ReturnNothing() returns void.  It is not valid to pass void to cout, and the compiler will give you an error when you try to compile this line.</p>
+<p>One commonly asked question is, &#8220;Can my function return multiple values using a return statement?&#8221;.  The answer is no.  Functions can only return a single value using a return statement.  However, there are ways to work around the issue, which we will discuss when we get into the in-depth section on functions.</p>
+<p><strong>Returning to main</strong></p>
+<p>You now have the conceptual tools to understand how the main() function actually works.  When the program is executed, the operating system makes a function call to main().  Execution then jumps to the top of main.  The statements in main are executed sequentially.  Finally, main returns a integer value (usually 0) back to the operating system.  This is why main is declared as <code>int main()</code>.</p>
+<p>Some compilers will let you get away with declaring main as <code>void main()</code>.  Technically this is illegal.  When these compilers see <code>void main()</code>, they interpret it as:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // your code here
+    return 0;
+}
+</pre></td></tr></table>
+<p>You should always declare main as returning an int and your main function should return 0 (or another integer if there was an error).</p>
+<p><strong>Parameters</strong></p>
+<p>In the return values subsection, you learned that a function can return a value back to the caller.  <strong>Parameters</strong> are used to allow the caller to pass information to a function!  This allows functions to be written to perform generic tasks without having to worry about the specific values used, and leaves the exact values of the variables up to the caller.  </p>
+<p>This is a case that is best learned by example.  Here is an example of a very simple function that adds two numbers together and returns the result to the caller.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+//#include &lt;stdafx.h&gt; // Visual Studio users need to uncomment this line
+#include &lt;iostream&gt;
+
+// add takes two integers as parameters, and returns the result of their sum
+// add does not care what the exact values of x and y are
+int add(int x, int y)
+{
+    return x + y;
+}
+
+int main()
+{
+    using namespace std;
+    // It is the caller of add() that decides the exact values of x and y
+    cout &lt;&lt; add(4, 5) &lt;&lt; endl; // x=4 and y=5 are the parameters
+    return 0;
+}
+</pre></td></tr></table>
+<p>When function add() is called, x is assigned the value 4, and y is assigned the value 5.  The function evaluates x + y, which is the value 9, and then returns this value to the caller.  This value of 9 is then sent to cout to be printed on the screen.</p>
+<p>Output:</p>
+<pre>
+9
+</pre>
+<p>Let&#8217;s take a look at a couple of other calls to functions():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+//#include &lt;stdafx.h&gt; // Visual Studio users need to uncomment this line
+#include &lt;iostream&gt;
+
+int add(int x, int y)
+{
+    return x + y;
+}
+
+int multiply(int z, int w)
+{
+    return z * w;
+}
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; add(4, 5) &lt;&lt; endl; // evalutes 4 + 5
+    cout &lt;&lt; add(3, 6) &lt;&lt; endl; // evalues 3 + 6
+    cout &lt;&lt; add(1, 8) &lt;&lt; endl; // evalues 1 + 8
+
+    int a = 3;
+    int b = 5;
+    cout &lt;&lt; add(a, b) &lt;&lt; endl; // evaluates 3 + 5
+
+    cout &lt;&lt; add(1, multiply(2, 3)) &lt;&lt; endl; // evalues 1 + (2 * 3)
+    cout &lt;&lt; add(1, add(2, 3)) &lt;&lt; endl; // evalues 1 + (2 + 3)
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the output:</p>
+<pre>
+9
+9
+9
+8
+7
+6
+</pre>
+<p>The first three statements are straightforward.</p>
+<p>The fourth is relatively easy as well:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    int a = 3;
+    int b = 5;
+    cout &lt;&lt; add(a, b) &lt;&lt; endl; // evaluates 3 + 5
+</pre></td></tr></table>
+<p>In this case, add() is called where x = a and y = b.  Since a = 3 and b = 5, add(a, b) = add(3, 5), which resolves to 8.</p>
+<p>Let&#8217;s take a look at the first tricky statement in the bunch:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    cout &lt;&lt; add(1, multiply(2, 3)) &lt;&lt; endl; // evalues 1 + (2 * 3)
+</pre></td></tr></table>
+<p>When the CPU tries to call function add(), it assigns x = 1, and y = multiply(2, 3).  y is not an integer, it is a function call that needs to be resolved.  So before the CPU calls add(), it calls multiply() where z = 2 and w = 3. multiply(2, 3) produces the value of 6, which is assigned to add()&#8217;s parameter y.  Since x = 1 and y = 6, add(1, 6) is called, which evaluates to 7.  The value of 7 is passed to cout.</p>
+<p>Or, less verbosely (where the => symbol is used to represent evaluation):<br />
+add(1, multiply(2, 3)) => add(1, 6) => 7</p>
+<p>The following statement looks tricky because one of the parameters given to add() is another call to add().</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    cout &lt;&lt; add(1, add(2, 3)) &lt;&lt; endl; // evalues 1 + (2 + 3)
+</pre></td></tr></table>
+<p>But this case works exactly the same as the above case where one of the parameters is a call to multiply().</p>
+<p>Before the CPU can evaluate the outer call to add(), it must evaluate the inner call to add(2, 3).  add(2, 3) evaluates to 5.  Now it can evaluate add(1, 5), which evaluates to the value 6.  cout is passed the value 6.</p>
+<p>Less verbosely:<br />
+add(1, add(2, 3)) => add(1, 5) => 6</p>
+<p><strong>Effectively using functions</strong></p>
+<p>One of the biggest challenges new programmers encounter (besides learning the language) is learning when and how to use functions effectively.  Functions offer a great way to break your program up into manageable and reusable parts, which can then be easily connected together to perform a larger and more complex task.  By breaking your program into smaller parts, the overall complexity of the program is reduced, which makes the program both easier to write and to modify.</p>
+<p>Typically, when learning C++, you will write a lot of programs that involve 3 subtasks:</p>
+<ol>
+<li>Reading inputs from the user
+<li>Calculating a value from the inputs
+<li>Printing the calculated value
+</ol>
+<p>For simple programs, reading inputs from the user can generally be done in main().  However, step #2 is a great candidate for a function.  This function should take the user inputs as a parameter, and return the calculated value.  The calculated value can then be printed (either directly in main(), or by another function if the calculated value is complex or has special printing requirements).</p>
+<p>A good rule of thumb is that each function should perform one (and only one) task.  New programmers often write functions that combine steps 2 and 3 together.  However, because calculating a value and printing it are two different tasks, this violates the one and only one task guideline.  Ideally, a function that calculates a value should return the value to the caller and let the caller decide what to do with the calculated value.</p>
+<p><strong>Quiz</strong></p>
+<p>1) What&#8217;s wrong with this program fragment?</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void multiply(int x, int y)
+{
+    return x * y;
+}
+
+int main()
+{
+    cout &lt;&lt; multiply(4, 5) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>2) What&#8217;s wrong with this program fragment?</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int multiply(int x, int y)
+{
+    int product = x * y;
+}
+
+int main()
+{
+    cout &lt;&lt; multiply(4, 5) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>3) What value does the following program fragment print?</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int add(int x, int y, int z)
+{
+    return x + y + z;
+}
+
+int multiply(int x, int y)
+{
+    return x * y;
+}
+
+int main()
+
+{
+    cout &lt;&lt; multiply(add(1, 2, 3), 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>4) Write a function called doubleNumber() that takes one integer parameter and returns double it&#8217;s value.</p>
+<p>5) Write a complete program that reads an integer from the user (using cin, discussed in section 1.3), doubles it using the doubleNumber() function you wrote for question 4, and then prints the doubled value out to the console.</p>
+<p><strong>Quiz Answers</strong></p>
+<p>To see these answers, select the area below with your mouse.</p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1978623815'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1978623815" style="display:none">multiply() is defined as returning void, which means it can&#8217;t return a value.  Since the function is trying to return a value, this function will produce a compiler error.  The function should return an int.</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id581390427'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id581390427" style="display:none">multiply() calculates a value and puts the result in a variable, but never returns the value to the caller.  Because there is no return statement, and the function is supposed to return an int, this will produce a compiler error.</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id676070821'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id676070821" style="display:none">multiply is called where x = add(1, 2, 3), and y = 4.  First, the CPU resolves x = add(1, 2, 3), which returns 1 + 2 + 3, or x = 6.  multiply(6, 4) = 24, which is the answer.</div>
+<p>4) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1948290064'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1948290064" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int doubleNumber(int x)
+{
+    return 2 * x;
+}
+</pre></td></tr></table>
+</div>
+<p>5) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id2061371725'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id2061371725" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int doubleNumber(int x)
+{
+    return 2 * x;
+}
+
+int main()
+{
+    using namespace std;
+    int x;
+    cin &gt;&gt; x;
+    cout &lt;&lt; doubleNumber(x) &lt;&lt; endl;
+    return 0;
+}
+
+// The following is an alternate way of doing main:
+int main()
+{
+    using namespace std;
+    int x;
+    cin &gt;&gt; x;
+    x = doubleNumber(x);
+    cout &lt;&lt; x &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+</div>

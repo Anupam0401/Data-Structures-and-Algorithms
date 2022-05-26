@@ -1,0 +1,62 @@
+
+<h3>Predefined macro names</h3>
+The following macro names are always defined (they all begin and end with two underscore characters, <code>_</code>):<br>
+<br>
+<table class="boxed">
+<tr><th>macro</th><th>value</th></tr>
+<tr><td><code>__LINE__</code></td><td>Integer value representing the current line in the source code file being compiled.</td></tr>
+<tr><td><code>__FILE__</code></td><td>A string literal containing the presumed name of the source file being compiled.</td></tr>
+<tr><td><code>__DATE__</code></td><td>A string literal in the form "Mmm dd yyyy" containing the date in which the compilation process began.</td></tr>
+<tr><td><code>__TIME__</code></td><td>A string literal in the form "hh:mm:ss" containing the time at which the compilation process began.</td></tr>
+<tr><td><code>__cplusplus</code></td><td>An integer value. All C++ compilers have this constant defined to some value. Its value depends on the version of the standard supported by the compiler:<br>
+<ul>
+<li><b><code>199711L</code></b>: ISO C++ 1998/2003</li>
+<li><b><code>201103L</code></b>: ISO C++ 2011</li>
+</ul>
+Non conforming compilers define this constant as some value at most five digits long. Note that many compilers are not fully conforming and thus will have this constant defined as neither of the values above.<br>
+</td></tr>
+<tr class="cpp11"><td><code>__STD_HOSTED__</code></td><td><code>1</code> if the implementation is a <i>hosted implementation</i> (with all standard headers available)<br>
+<code>0</code> otherwise.</td></tr>
+</table>
+<br>
+The following macros are optionally defined, generally depending on whether a feature is available:<br>
+<br>
+<table class="boxed">
+<tr><th>macro</th><th>value</th></tr>
+<tr class="cpp11"><td><code>__STDC__</code></td><td>In C: if defined to <code>1</code>, the implementation conforms to the C standard.<br>
+In C++: Implementation defined.</td></tr>
+<tr class="cpp11"><td><code>__STDC_VERSION__</code></td><td>In C:<br>
+<ul>
+<li><b><code>199401L</code></b>: ISO C 1990, Ammendment 1</li>
+<li><b><code>199901L</code></b>: ISO C 1999</li>
+<li><b><code>201112L</code></b>: ISO C 2011</li>
+</ul>
+In C++: Implementation defined.</td></tr>
+<tr class="cpp11"><td><code>__STDC_MB_MIGHT_NEQ_WC__</code></td><td><code>1</Code> if multibyte encoding might give a character a different value in character literals</td></tr>
+<tr class="cpp11"><td><code>__STDC_ISO_10646__</code></td><td>A value in the form <code>yyyymmL</code>, specifying the date of the Unicode standard followed by the encoding of <code>wchar_t</code> characters</td></tr>
+<tr class="cpp11"><td><code>__STDCPP_STRICT_POINTER_SAFETY__</code></td><td><code>1</code> if the implementation has <i>strict pointer safety</i> (see <code><a href="/get_pointer_safety">get_pointer_safety</a></code>)</td></tr>
+<tr class="cpp11"><td><code>__STDCPP_THREADS__</code></td><td><code>1</code> if the program can have more than one thread</td></tr>
+</table>
+<br>
+Particular implementations may define additional constants.<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br></code></pre></td>
+<td class="source"><pre><code><cite>// standard macro names</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main()
+{
+  cout &lt;&lt; <kbd>"This is the line number "</kbd> &lt;&lt; __LINE__;
+  cout &lt;&lt; <kbd>" of file "</kbd> &lt;&lt; __FILE__ &lt;&lt; <kbd>".\n"</kbd>;
+  cout &lt;&lt; <kbd>"Its compilation began "</kbd> &lt;&lt; __DATE__;
+  cout &lt;&lt; <kbd>" at "</kbd> &lt;&lt; __TIME__ &lt;&lt; <kbd>".\n"</kbd>;
+  cout &lt;&lt; <kbd>"The compiler gives a __cplusplus value of "</kbd> &lt;&lt; __cplusplus;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>This is the line number 7 of file /home/jay/stdmacronames.cpp.
+Its compilation began Nov  1 2005 at 10:12:29.
+The compiler gives a __cplusplus value of 1</samp></pre></td></tr></table></div>
+<br>

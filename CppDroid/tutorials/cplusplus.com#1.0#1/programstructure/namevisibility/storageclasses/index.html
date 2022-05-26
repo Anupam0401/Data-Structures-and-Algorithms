@@ -1,0 +1,28 @@
+
+<h3>Storage classes</h3>
+The storage for variables with <i>global</i> or <i>namespace scope</i> is allocated for the entire duration of the program. This is known as <i>static storage</i>, and it contrasts with the storage for <i>local variables</i> (those declared within a block). These use what is known as automatic storage. The storage for local variables is only available during the block in which they are declared; after that, that same storage may be used for a local variable of some other function, or used otherwise.<br>
+<br>
+But there is another substantial difference between variables with <i>static storage</i> and variables with <i>automatic storage</i>:<br>
+- Variables with <i>static storage</i> (such as global variables) that are not explicitly initialized are automatically initialized to zeroes.<br>
+- Variables with <i>automatic storage</i> (such as local variables) that are not explicitly initialized are left uninitialized, and thus have an undetermined value.<br>
+<br>
+For example:<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br></code></pre></td>
+<td class="source"><pre><code><cite>// static vs automatic storage</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> x;
+
+<var>int</var> main ()
+{
+  <var>int</var> y;
+  cout &lt;&lt; x &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; y &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>0
+4285838</samp></pre></td></tr></table></div>
+<br>
+<br>
+The actual output may vary, but only the value of <code>x</code> is guaranteed to be zero. <code>y</code> can actually contain just about any value.<br>

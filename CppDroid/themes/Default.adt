@@ -1,0 +1,13 @@
+{
+  "backgroundColor": "#000000",
+  "commentColor": "#7cbe0d",
+  "gutterLineColor": "#7f7f7f",
+  "gutterTextColor": "#7f7f7f",
+  "keywordColor": "#b58900",
+  "numberColor": "#d8b100",
+  "operatorColor": "#2dbda4",
+  "preprocessorColor": "#a020f0",
+  "textColor": "#ffffff",
+  "typeColor": "#3d99da",
+  "unknownColor": "#ffffff"
+}

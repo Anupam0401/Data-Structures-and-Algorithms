@@ -1,0 +1,24 @@
+
+<h3>Enumerated types with enum class</h3>
+But, in C++, it is possible to create real <code>enum</code> types that are neither implicitly convertible to <code>int</code> and that neither have enumerator values of type <code>int</code>, but of the <code>enum</code> type itself, thus preserving type safety. They are declared with <code>enum class</code> (or <code>enum struct</code>) instead of just <code>enum</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>enum</var> <var>class</var> Colors {black, blue, green, cyan, red, purple, yellow, white};</code></pre></td></tr></table></div>
+<br>
+<br>
+Each of the enumerator values of an <code>enum class</code> type needs to be scoped into its type (this is actually also possible with <code>enum</code> types, but it is only optional). For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>Colors mycolor;
+ 
+mycolor = Colors::blue;
+<var>if</var> (mycolor == Colors::green) mycolor = Colors::red; </code></pre></td></tr></table></div>
+<br>
+<br>
+Enumerated types declared with <code>enum class</code> also have more control over their underlying type; it may be any integral data type, such as <code>char</code>, <code>short</code> or <code>unsigned int</code>, which essentially serves to determine the size of the type. This is specified by a colon and the underlying type following the enumerated type. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>enum</var> <var>class</var> EyeColor : <var>char</var> {blue, green, brown}; </code></pre></td></tr></table></div>
+<br>
+<br>
+Here, <code>Eyecolor</code> is a distinct type with the same size of a <code>char</code> (1 byte).<br>

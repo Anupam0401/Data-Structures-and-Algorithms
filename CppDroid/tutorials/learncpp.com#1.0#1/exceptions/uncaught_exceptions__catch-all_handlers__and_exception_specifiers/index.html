@@ -1,0 +1,96 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>By now, you should have a reasonable idea of how exceptions work.  In this lesson, we&#8217;ll cover a few more interesting exception cases.</p>
+<p><strong>Uncaught exceptions</strong></p>
+<p>In the past few examples, there are quite a few cases where a function assumes its caller (or another function somewhere up the call stack) will handle the exception.  In the following example, MySqrt() assumes someone will handle the exception that it throws &#8212; but what happens if nobody actually does?</p>
+<p>Here&#8217;s our square root program again, minus the try block in main():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;math.h&quot; // for sqrt() function
+using namespace std;
+
+// A modular square root function
+double MySqrt(double dX)
+{
+    // If the user entered a negative number, this is an error condition
+    if (dX &lt; 0.0)
+        throw &quot;Can not take sqrt of negative number&quot;; // throw exception of type char*
+
+    return sqrt(dX);
+}
+
+int main()
+{
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    double dX;
+    cin &gt;&gt; dX;
+
+    // Look ma, no exception handler!
+    cout &lt;&lt; &quot;The sqrt of &quot; &lt;&lt; dX &lt;&lt; &quot; is &quot; &lt;&lt; MySqrt(dX) &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Now, let&#8217;s say the user enters -4, and MySqrt(-4) raises an exception.  MySqrt() doesn&#8217;t handle the exception, so the program stack unwinds and control returns to main().  But there&#8217;s no exception handler here either, so main() terminates.  At this point, we just terminated our application!</p>
+<p>When main() terminates with an unhandled exception, the operating system will generally notify you that an unhandled exception error has occurred.  How it does this depends on the operating system, but possibilities include printing an error message, popping up an error dialog, or simply crashing.  Some OS&#8217;s are less graceful than others.  Generally this is something you want to avoid altogether!</p>
+<p><strong>Catch-all handlers</strong></p>
+<p>And now we find ourselves in a condundrum: functions can potentially throw exceptions of any data type, and if an exception is not caught, it will propagate to the top of your program and cause it to terminate.  Since it&#8217;s possible to call functions without knowing how they are even implemented, how can we possibly prevent this from happening?</p>
+<p>Fortunately, C++ provides us with a mechanism to catch all types of exceptions.  This is known as a <strong>catch-all handler</strong>.  A catch-all handler works just like a normal catch block, except that instead of using a specific type to catch, it uses the ellipses operator (&#8230;) as the type to catch.  If you recall from lesson 7.14 on <a href="http://www.learncpp.com/cpp-tutorial/714-ellipses-and-why-to-avoid-them/">ellipses and why to avoid them</a>, ellipses were previously used to pass arguments of any type to a function.  In this context, they represent exceptions of any data type.  Here&#8217;s an simple example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+try
+{
+    throw 5; // throw an int exception
+}
+catch (double dX)
+{
+    cout &lt;&lt; &quot;We caught an exception of type double: &quot; &lt;&lt; dX &lt;&lt; endl;
+}
+catch (...) // catch-all handler
+{
+    cout &lt;&lt; &quot;We caught an exception of an undetermined type&quot; &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Because there is no specific exception handler for type int, the catch-all handler catches this exception.  This example produces the following result:</p>
+<pre>
+We caught an exception of an undetermined type
+</pre>
+<p>The catch-all handler should be placed last in the catch block chain.  This is to ensure that exceptions can be caught by exception handlers tailored to specific data types if those handlers exist.  Visual Studio enforces this constraint &#8212; I am unsure if other compilers do.</p>
+<p>Often, the catch-all handler block is left empty:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+catch(...) {} // ignore any unanticipated exceptions
+</pre></td></tr></table>
+<p>This will catch any unanticipated exceptions and prevent them from stack unwinding to the top of your program, but does no specific error handling.</p>
+<p><strong>Using the catch-all handler to wrap main()</strong></p>
+<p>One interesting use for the catch-all handler is to wrap the contents of main():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+
+    try
+    {
+        RunGame();
+    }
+    catch(...)
+    {
+        cerr &lt;&lt; &quot;Abnormal termination&quot; &lt;&lt; endl;
+    }
+
+    SaveState(); // Save user's game
+    return 1;
+}
+</pre></td></tr></table>
+<p>In this case, if RunGame() or any of the functions it calls throws an exception that is not caught, that exception will unwind up the stack and eventually get caught by this catch-all handler.  This will prevent main() from terminating, and gives us a chance to print an error of our choosing and then save the user&#8217;s state before exiting.  This can be useful to catch and handle problems that may be unanticipated.</p>
+<p><strong>Exception specifiers</strong></p>
+<p>This subsection should be considered optional reading because exception specifiers are rarely used in practice, are not well supported by compilers, and Bjarne Stroustrup (the creator of C++) considers them a failed experiment.</p>
+<p><strong>Exception specifiers</strong> are a mechanism that allows us to use a function declaration to specify whether a function may or will not throw exceptions.  This can be useful in determining whether a function call needs to be put inside a try block or not.</p>
+<p>There are three types of exception specifiers, all of which use what is called the <strong>throw (&#8230;)</strong> syntax.</p>
+<p>First, we can use an empty throw statement to denote that a function does not throw any exceptions outside of itself:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int DoSomething() throw(); // does not throw exceptions
+</pre></td></tr></table>
+<p>Note that DoSomething() can still use exceptions as long as they are handled internally.  Any function that is declared with throw() is supposed to cause the program to terminate immediately if it does try to throw an exception outside of itself, but implementation is spotty.</p>
+<p>Second, we can use a specific throw statement to denote that a function may throw a particular type of exception:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int DoSomething() throw(double); // may throw a double
+</pre></td></tr></table>
+<p>Finally, we can use a catch-all throw statement to denote that a function may throw an unspecified type of exception:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int DoSomething() throw(...); // may throw anything
+</pre></td></tr></table>
+<p>Due to the incomplete compiler implementation, the fact that exception specifiers are more like statements of intent than guarantees, some incompatibility with template functions, and the fact that most C++ programmers are unaware of their existence, I recommend you do not bother using exception specifiers.</p>

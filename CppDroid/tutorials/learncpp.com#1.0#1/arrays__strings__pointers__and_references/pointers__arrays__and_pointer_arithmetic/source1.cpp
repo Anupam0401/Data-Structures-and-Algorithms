@@ -1,0 +1,1 @@
+int anArray[5]; // declare array of 5 integers

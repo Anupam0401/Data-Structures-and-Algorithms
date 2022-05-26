@@ -1,0 +1,24 @@
+
+<h3>The return value of main</h3>
+You may have noticed that the return type of <code>main</code> is <code>int</code>, but most examples in this and earlier chapters did not actually return any value from <code>main</code>.<br>
+<br>
+Well, there is a catch: If the execution of <code>main</code> ends normally without encountering a <code>return</code> statement the compiler assumes the function ends with an implicit return statement:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>return</var> 0;</code></pre></td></tr></table></div>
+<br>
+<br>
+Note that this only applies to function <code>main</code> for historical reasons. All other functions with a return type shall end with a proper <code>return</code> statement that includes a return value, even if this is never used.<br>
+<br>
+When <code>main</code> returns zero (either implicitly or explicitly), it is interpreted by the environment as that the program ended successfully. Other values may be returned by <code>main</code>, and some environments give access to that value to the caller in some way, although this behavior is not required nor necessarily portable between platforms. The values for <code>main</code> that are guaranteed to be interpreted in the same way on all platforms are:<br>
+<br>
+<table class="boxed">
+<tr><th>value</th><th>description</th></tr>
+<tr><td><code>0</code></td><td>The program was successful</td></tr>
+<tr><td><code><a href="/EXIT_SUCCESS">EXIT_SUCCESS</a></code></td><td>The program was successful (same as above).<br>
+This value is defined in header <code><a href="/&lt;cstdlib&gt;">&lt;cstdlib&gt;</a></code>.</td></tr>
+<tr><td><code><a href="/EXIT_FAILURE">EXIT_FAILURE</a></code></td><td>The program failed.<br>
+This value is defined in header <code><a href="/&lt;cstdlib&gt;">&lt;cstdlib&gt;</a></code>.</td></tr>
+</table>
+<br>
+Because the implicit <code>return 0;</code> statement for <code>main</code> is a tricky exception, some authors consider it good practice to explicitly write the statement.<br>

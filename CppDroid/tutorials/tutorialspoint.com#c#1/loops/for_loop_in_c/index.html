@@ -1,0 +1,47 @@
+
+<p>A <b>for</b> loop is a repetition control structure that allows you to efficiently write a loop that needs to execute a specific number of times.</p>
+<h2>Syntax:</h2>
+<p>The syntax of a <b>for</b> loop in C programming language is:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+for ( init; condition; increment )
+{
+   statement(s);
+}
+</pre></td></tr></table>
+<p>Here is the flow of control in a for loop:</p>
+<ol class="list">
+<li><p>The <b>init</b> step is executed first, and only once. This step allows you to declare and initialize any loop control variables. You are not required to put a statement here, as long as a semicolon appears.</p></li>
+<li><p>Next, the <b>condition</b> is evaluated. If it is true, the body of the loop is executed. If it is false, the body of the loop does not execute and flow of control jumps to the next statement just after the for loop.</p></li>
+<li><p>After the body of the for loop executes, the flow of control jumps back up to the <b>increment</b> statement. This statement allows you to update any loop control variables. This statement can be left blank, as long as a semicolon appears after the condition.</p></li>
+<li><p>The condition is now evaluated again. If it is true, the loop executes and the process repeats itself (body of loop, then increment step, and then again condition). After the condition becomes false, the for loop terminates.</p></li>
+</ol>
+<h2>Flow Diagram:</h2>
+<img src="{path}/cpp_for_loop.jpg" alt="for loop in C" />
+<h2>Example:</h2>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+ 
+int main ()
+{
+   /* for loop execution */
+   for( int a = 10; a &lt; 20; a = a + 1 )
+   {
+      printf("value of a: %d\n", a);
+   }
+ 
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+value of a: 10
+value of a: 11
+value of a: 12
+value of a: 13
+value of a: 14
+value of a: 15
+value of a: 16
+value of a: 17
+value of a: 18
+value of a: 19
+</pre></td></tr></table>

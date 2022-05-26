@@ -1,0 +1,73 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous lesson on <a href="http://www.learncpp.com/cpp-tutorial/712-handling-errors-assert-cerr-exit-and-exceptions/">handling errors</a>, we talked about ways to use assert(), cerr(), and exit() to handle errors.  However, we punted on one further topic that we will now cover: exceptions.</p>
+<p><strong>When return codes fail</strong></p>
+<p>When writing reusable code, error handling is a necessity.  One of the most common ways to handle potential errors is via return codes.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int FindFirstChar(const char* strString, char chChar)
+{
+    // Step through each character in strString
+    for (int nIndex=0; nIndex &lt; strlen(strString); nIndex++)
+        // If the charater matches chChar, return it's index
+        if (strString[nIndex] == chChar)
+            return nIndex;
+
+    // If no match was found, return -1
+    return -1;
+}
+</pre></td></tr></table>
+<p>This function returns the index of the first character matching chChar within strString.  If the character can not be found, the function returns -1 as an error indicator.</p>
+<p>The primary virtue of this approach is that it is extremely simple.  However, using return codes has a number of drawbacks which can quickly become apparent when used in non-trivial cases:</p>
+<p>First, return values can be cryptic &#8212; if a function returns -1, is it trying to indicate an error, or is that actually a valid return value?  It&#8217;s often hard to tell without digging into the guts of the function.</p>
+<p>Second, functions can only return one value, so what happens when you need to return both a function result and an error code?  Consider the following function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double Divide(int nX, int nY)
+{
+    return static_cast&lt;double&gt;(nX)/nY;
+}
+</pre></td></tr></table>
+<p>This function is in desperate need of some error handling, because it will crash if the user passes in 0 for nY.  However, it also needs to return the result of nX/nY.  How can it do both?  The most common answer is that either the result or the error handling will have to be passed back as a reference parameter, which makes for ugly code that is less convenient to use.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double Divide(int nX, int nY, bool &amp;bSuccess)
+{
+    if (nY == 0)
+    {
+        bSuccess = false;
+        return 0.0;
+    }
+
+    bSuccess = true;
+    return static_cast&lt;double&gt;(nX)/nY;
+}
+
+int main()
+{
+    bool bSuccess; // we must now pass in a bSuccess
+    double dResult = Divide(5, 3, bSuccess);
+
+    if (!bSuccess) // and check it before we use the result
+        cerr &lt;&lt; &quot;An error occurred&quot; &lt;&lt; endl;
+    else
+        cout &lt;&lt; &quot;The answer is &quot; &lt;&lt; dResult &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Third, in sequences of code where many things can go wrong, error codes have to be checked constantly.  Consider the following code that involves parsing a text file for values that are supposed to be there:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    std::ifstream fSetupIni(&quot;setup.ini&quot;); // open setup.ini for reading
+    if (!fSetupIni)
+        return ERROR_OPENING_FILE; // Some enum value indicating error
+
+    // Read parameters and return an error if the parameter is missing
+    if (!ReadParameter(fSetupIni, m_nFirstParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+    if (!ReadParameter(fSetupIni, m_nSecondParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+    if (!ReadParameter(fSetupIni, m_nThirdParameter))
+        return ERROR_PARAMETER_MISSING; // Some other enum value indicating error
+</pre></td></tr></table>
+<p>Now imagine if there were twenty parameters &#8212; you&#8217;re essentially checking for an error and returning ERROR_PARAMETER_MISSING twenty times!  This makes the function harder to read.</p>
+<p>Fourth, return codes do not mix with constructors very well.  What happens if you&#8217;re creating an object and something inside the constructor goes catastrophically wrong?  Constructors have no return type to pass back a status indicator, and passing one back via a reference parameter is messy and must be explicitly checked.  Furthermore, even if you do this, the object will still be created and then has to be dealt with or disposed of.</p>
+<p>Finally, when an error code is returned to the caller, the caller may not always be equipped to handle the error.  If the caller doesn&#8217;t want to handle the error, it either has to ignore it (in which case it will be lost forever), or return the error up the stack to the function that called it.  This can be messy and lead to many of the same issues noted above.</p>
+<p>The primary issue with return codes is that the error handling code ends up intricately linked to the normal control flow of the code.  This in turns ends up constraining both how the code is laid out, and how errors can be reasonably handled.</p>
+<p><strong>Exceptions</strong></p>
+<p>Exception handling provides a mechanism to decouple handling of errors or other exceptional circumstances from the typical control flow of your code.  This allows more freedom to handle errors when and however is most useful for a given situation, alleviating many (if not all) of the messiness that return codes cause.</p>
+<p>In the next lesson, we&#8217;ll take a look at how exceptions work in C++.</p>

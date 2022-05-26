@@ -1,0 +1,59 @@
+
+<h3>Initialization of variables</h3>
+When the variables in the example above are declared, they have an undetermined value until they are assigned a value for the first time. But it is possible for a variable to have a specific value from the moment it is declared. This is called the <i>initialization</i> of the variable.<br>
+<br>
+In C++, there are three ways to initialize variables. They are all equivalent and are reminiscent of the evolution of the language over the years:<br>
+<br>
+The first one, known as <i>c-like initialization</i> (because it is inherited from the C language), consists of appending an equal sign followed by the value to which the variable is initialized:<br>
+<br>
+<code>type identifier = initial_value;</code>
+<br>
+For example, to declare a variable of type <code>int</code> called <code>x</code> and initialize it to a value of zero from the same moment it is declared, we can write:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> x = 0;</code></pre></td></tr></table></div>
+<br>
+<br>
+A second method, known as <i>constructor initialization</i> (introduced by the C++ language), encloses the initial value between parentheses (<code>()</code>):<br>
+<br>
+<code>type identifier (initial_value);</code>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> x (0);</code></pre></td></tr></table></div>
+<br>
+<br>
+Finally, a third method, known as <i>uniform initialization</i>, similar to the above, but using curly braces (<code>{}</code>) instead of parentheses (this was introduced by the revision of the C++ standard, in 2011):<br>
+<br>
+<code>type identifier {initial_value};</code>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> x {0}; </code></pre></td></tr></table></div>
+<br>
+<br>
+All three ways of initializing variables are valid and equivalent in C++.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br></code></pre></td>
+<td class="source"><pre><code><cite>// initialization of variables</cite>
+
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>int</var> a=5;               <cite>// initial value: 5</cite>
+  <var>int</var> b(3);              <cite>// initial value: 3</cite>
+  <var>int</var> c{2};              <cite>// initial value: 2</cite>
+  <var>int</var> result;            <cite>// initial value undetermined</cite>
+
+  a = a + b;
+  result = a - c;
+  cout &lt;&lt; result;
+
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>6</samp></pre></td></tr></table></div>
+<br>

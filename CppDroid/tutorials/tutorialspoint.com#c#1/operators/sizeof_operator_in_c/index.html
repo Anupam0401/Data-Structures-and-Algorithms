@@ -1,0 +1,55 @@
+
+<p>There are few other important operators including <b>sizeof</b> and <b>? :</b>  supported by C Language.</p>
+<table class="src">
+<tr><th style="width:10%">Operator</th><th style="width:45%;">Description</th><th>Example</th></tr>
+<tr>
+<td>sizeof()</td><td>Returns the size of an variable.</td><td> sizeof(a), where a is interger, will return 4.</td>
+</tr>
+<tr>
+<td>&amp;</td><td>Returns the address of an variable.</td><td>&amp;a; will give actaul address of the variable.</td>
+</tr>
+<tr>
+<td>*</td><td>Pointer to a variable.</td><td>*a; will pointer to a variable.</td>
+</tr>
+<tr>
+<td>? :</td><td>Conditional Expression</td><td> If Condition is true ? Then value X : Otherwise value Y</td>
+</tr>
+</table>
+<h2>Example</h2>
+<p>Try following example to understand all the miscellaneous operators available in C programming language:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+
+main()
+{
+   int a = 4;
+   short b;
+   double c;
+   int* ptr;
+
+   /* example of sizeof operator */
+   printf("Line 1 - Size of variable a = %d\n", sizeof(a) );
+   printf("Line 2 - Size of variable b = %d\n", sizeof(b) );
+   printf("Line 3 - Size of variable c= %d\n", sizeof(c) );
+
+   /* example of &amp; and * operators */
+   ptr = &a;	/* 'ptr' now contains the address of 'a'*/
+   printf("value of a is  %d\n", a);
+   printf("*ptr is %d.\n", *ptr);
+
+   /* example of ternary operator */
+   a = 10;
+   b = (a == 1) ? 20: 30;
+   printf( "Value of b is %d\n", b );
+
+   b = (a == 10) ? 20: 30;
+   printf( "Value of b is %d\n", b );
+}
+</pre></td></tr></table>
+<p>When you compile and execute the above program it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+value of a is  4
+*ptr is 4.
+Value of b is 30
+Value of b is 20
+</pre></td></tr></table>

@@ -1,0 +1,46 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>As programs get larger, it is not uncommon to split them into multiple files for organizational purposes.  One advantage of working with an IDE is they make working with multiple files much easier.  You already know how to create and compile single-file projects.  Adding new files to existing projects is very easy.</p>
+<p>In Visual Studio 2005 Express, right click on &#8220;Source Files&#8221; in the Solution Explorer window on the left, and choose Add -> New Item.  Give the new file a name, and it will be added to your project.</p>
+<p>In Code::Blocks, go to the file menu and choose &#8220;new file&#8221;.  Give the new file a name, and Code::Blocks will ask you if you want to add it to the active project.  Click &#8220;Yes&#8221;.  Note that you will also have to click the &#8220;Release&#8221; and &#8220;Debug&#8221; checkboxes, to make sure it gets added to both versions.</p>
+<p>Compile your project just the same as before.  Couldn&#8217;t be much easier!</p>
+<p>Now, consider the following multiple-file program:</p>
+<p>add.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int add(int x, int y)
+{
+    return x + y;
+}
+</pre></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>Try compiling this program for yourself.  You will note that it doesn&#8217;t compile, and it gives the same compiler error as the program in the previous lesson where the functions were declared in the wrong order:</p>
+<pre>
+add.cpp(10) : error C3861: &#039;add&#039;: identifier not found
+add.cpp(15) : error C2365: &#039;add&#039; : redefinition; previous definition was &#039;formerly unknown identifier&#039;
+</pre>
+<p>When the compiler is compiling a code file, it does not know about the existence of functions that live in any other files.  This is done so that files may have functions or variables that have the same names as those in other files without causing a conflict.</p>
+<p>However, in this case, we want main.cpp to know about (and use) the add() function that lives in add.cpp.  To give main.cpp access to the add function, we can use a forward declaration:</p>
+<p>main.cpp with forward declaration:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int add(int x, int y); // forward declaration using function prototype
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>Now, when the compiler is compiling main.cpp, it will know what add is.  Using this method, we can give files access to functions that live in another file.  However, as programs grow larger and larger, it becomes tedious to have to forward declare every function you use that lives in a different file.  To solve that problem, the concept of header files was introduced.  We discuss header files in the lesson on <a href="http://www.learncpp.com/cpp-tutorial/19-header-files/">header files</a>.</p>
+<p>Try compiling add.cpp and the main.cpp with the forward declaration for yourself.  We will begin working with multiple files a lot once we get into object-oriented programming, so now&#8217;s as good a time as any to make sure you understand how to add and compile multiple file projects.</p>

@@ -1,0 +1,77 @@
+
+<h3>Standard exceptions</h3>
+The C++ Standard library provides a base class specifically designed to declare objects to be thrown as exceptions. It is called <code><a href="/exception">std::exception</a></code> and is defined in the <code><a href="/&lt;exception&gt;">&lt;exception&gt;</a></code> header. This class has a virtual member function called <code>what</code> that returns a null-terminated character sequence (of type <code>char *</code>) and that can be overwritten in derived classes to contain some sort of description of the exception.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br></code></pre></td>
+<td class="source"><pre><code><cite>// using standard exceptions</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;exception&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> myexception: <var>public</var> exception
+{
+  <var>virtual</var> <var>const</var> <var>char</var>* what() <var>const</var> <var>throw</var>()
+  {
+    <var>return</var> <kbd>"My exception happened"</kbd>;
+  }
+} myex;
+
+<var>int</var> main () {
+  <var>try</var>
+  {
+    <var>throw</var> myex;
+  }
+  <var>catch</var> (exception&amp; e)
+  {
+    cout &lt;&lt; e.what() &lt;&lt; <kbd>'\n'</kbd>;
+  }
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>My exception happened.</samp></pre></td></tr></table></div>
+<br>
+<br>
+We have placed a handler that catches exception objects by reference (notice the ampersand <code>&</code> after the type), therefore this catches also classes derived from <code>exception</code>, like our <code>myex</code> object of type <code>myexception</code>.<br>
+<br>
+All exceptions thrown by components of the C++ Standard library throw exceptions derived from this <code>exception</code> class. These are:<br>
+<br>
+<table class="boxed">
+<tr><th>exception</th><th>description</th></tr>
+<tr><td><code><a href="/bad_alloc">bad_alloc</a></code></td><td>thrown by <code>new</code> on allocation failure</td></tr>
+<tr><td><code><a href="/bad_cast">bad_cast</a></code></td><td>thrown by <code>dynamic_cast</code> when it fails in a dynamic cast</td></tr>
+<tr><td><code><a href="/bad_exception">bad_exception</a></code></td><td>thrown by certain dynamic exception specifiers</td></tr>
+<tr><td><code><a href="/bad_typeid">bad_typeid</a></code></td><td>thrown by <code>typeid</code></td></tr>
+<tr><td><code><a href="/bad_function_call">bad_function_call</a></code></td><td>thrown by empty <code><a href="/function">function</a></code> objects</td></tr>
+<tr><td><code><a href="/bad_weak_ptr">bad_weak_ptr</a></code></td><td>thrown by <code><a href="/shared_ptr">shared_ptr</a></code> when passed a bad <code><a href="/weak_ptr">weak_ptr</a></code></td></tr>
+</table>
+<br>
+Also deriving from <code>exception</code>, header <code><a href="/&lt;exception&gt;">&lt;exception&gt;</a></code> defines two generic exception types that can be inherited by custom exceptions to report errors:<br>
+<br>
+<table class="boxed">
+<tr><th>exception</th><th>description</th></tr>
+<tr><td><code><a href="/logic_error">logic_error</a></code></td><td>error related to the internal logic of the program</td></tr>
+<tr><td><code><a href="/runtime_error">runtime_error</a></code></td><td>error detected during runtime</td></tr>
+</table>
+<br>
+A typical example where standard exceptions need to be checked for is on memory allocation:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></code></pre></td>
+<td class="source"><pre><code><cite>// bad_alloc standard exception</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;exception&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main () {
+  <var>try</var>
+  {
+    <var>int</var>* myarray= <var>new</var> <var>int</var>[1000];
+  }
+  <var>catch</var> (exception&amp; e)
+  {
+    cout &lt;&lt; <kbd>"Standard exception: "</kbd> &lt;&lt; e.what() &lt;&lt; endl;
+  }
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp> </samp></pre></td></tr></table></div>
+<br>
+<br>
+The exception that may be caught by the exception handler in this example is a <code>bad_alloc</code>. Because <code>bad_alloc</code> is derived from the standard base class <code>exception</code>, it can be caught (capturing by reference, captures all related classes).<br>

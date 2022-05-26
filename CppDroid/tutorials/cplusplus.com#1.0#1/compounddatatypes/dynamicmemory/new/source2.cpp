@@ -1,0 +1,1 @@
+foo = new int [5];  // if allocation fails, an exception is thrown  

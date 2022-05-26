@@ -1,0 +1,111 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>1) Write a program that reads two numbers from the user, adds them together, and then outputs the answer.  The program should use two functions: A function named ReadNumber() should be used to get an integer from the user, and a function named &#8220;WriteAnswer&#8221; should be used to output the answer.  You do not need to write a function to do the adding.</p>
+<p>2) Modify the program you wrote in #1 so that the function to read a number from the user and the function to output the answer are in a separate file called &#8220;io.cpp&#8221;.  Use a forward declaration to access them from your main() function, which should live in &#8220;main.cpp&#8221;.</p>
+<p>3) Modify the program you wrote in #2 so that it uses a header file to access the functions instead of forward declarations.  Make sure your header file uses header guards.</p>
+<p><strong>Quiz solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id163379069'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id163379069" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int ReadNumber()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int x;
+    cin &gt;&gt; x;
+    return x;
+}
+
+void WriteAnswer(int x)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The answer is &quot; &lt;&lt; x &lt;&lt; endl;
+}
+
+int main()
+{
+    int x = ReadNumber();
+    int y = ReadNumber();
+    WriteAnswer(x+y);
+    return 0;
+}
+</pre></td></tr></table>
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id2023178910'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id2023178910" style="display:none">
+io.cpp:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int ReadNumber()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int x;
+    cin &gt;&gt; x;
+    return x;
+}
+
+void WriteAnswer(int x)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The answer is &quot; &lt;&lt; x &lt;&lt; endl;
+}
+</pre></td></tr></table></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+
+int ReadNumber();
+void WriteAnswer(int x);
+
+int main()
+{
+    int x = ReadNumber();
+    int y = ReadNumber();
+    WriteAnswer(x+y);
+    return 0;
+}
+</pre></td></tr></table>
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1174075549'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1174075549" style="display:none">
+io.cpp:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int ReadNumber()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int x;
+    cin &gt;&gt; x;
+    return x;
+}
+
+void WriteAnswer(int x)
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The answer is &quot; &lt;&lt; x &lt;&lt; endl;
+}
+</pre></td></tr></table></td></tr></table>
+<p>io.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef IO_H
+#define IO_H
+
+int ReadNumber();
+void WriteAnswer(int x);
+
+#endif
+</pre></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;io.h&quot;
+
+int main()
+{
+    int x = ReadNumber();
+    int y = ReadNumber();
+    WriteAnswer(x+y);
+    return 0;
+}
+</pre></td></tr></table>
+</div>

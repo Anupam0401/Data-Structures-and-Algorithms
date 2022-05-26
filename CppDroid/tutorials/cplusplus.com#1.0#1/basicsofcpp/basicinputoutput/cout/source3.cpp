@@ -1,0 +1,1 @@
+cout << "This " << " is a " << "single C++ statement";

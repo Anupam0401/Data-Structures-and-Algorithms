@@ -1,0 +1,54 @@
+
+<h3>Pointers and arrays</h3>
+The concept of arrays is related to that of pointers. In fact, arrays work very much like pointers to their first elements, and, actually, an array can always be implicitly converted to the pointer of the proper type. For example, consider these two declarations:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> myarray [20];
+<var>int</var> * mypointer;</code></pre></td></tr></table></div>
+<br>
+<br>
+The following assignment operation would be valid: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>mypointer = myarray;</code></pre></td></tr></table></div>
+<br>
+<br>
+After that, <code>mypointer</code> and <code>myarray</code> would be equivalent and would have very similar properties. The main difference being that <code>mypointer</code> can be assigned a different address, whereas <code>myarray</code> can never be assigned anything, and will always represent the same block of 20 elements of type <code>int</code>. Therefore, the following assignment would not be valid:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>myarray = mypointer;</code></pre></td></tr></table></div>
+<br>
+<br>
+Let's see an example that mixes arrays and pointers:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br></code></pre></td>
+<td class="source"><pre><code><cite>// more pointers</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  <var>int</var> numbers[5];
+  <var>int</var> * p;
+  p = numbers;  *p = 10;
+  p++;  *p = 20;
+  p = &amp;numbers[2];  *p = 30;
+  p = numbers + 3;  *p = 40;
+  p = numbers;  *(p+4) = 50;
+  <var>for</var> (<var>int</var> n=0; n&lt;5; n++)
+    cout &lt;&lt; numbers[n] &lt;&lt; <kbd>", "</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>10, 20, 30, 40, 50, </samp></pre></td></tr></table></div>
+<br>
+<br>
+Pointers and arrays support the same set of operations, with the same meaning for both. The main difference being that pointers can be assigned new addresses, while arrays cannot.<br>
+<br>
+In the chapter about arrays, brackets (<code>[]</code>) were explained as specifying the index of an element of the array. Well, in fact these brackets are a dereferencing operator known as <i>offset operator</i>. They dereference the variable they follow just as <code>*</code> does, but they also add the number between brackets to the address being dereferenced. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>a[5] = 0;       <cite>// a [offset of 5] = 0</cite>
+*(a+5) = 0;     <cite>// pointed by (a+5) = 0  </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+These two expressions are equivalent and valid, not only if <code>a</code> is a pointer, but also if <code>a</code> is an array. Remember that if an array, its name can be used just like a pointer to its first element.<br>

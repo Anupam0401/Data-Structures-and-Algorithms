@@ -1,0 +1,1 @@
+int nVarName; // int is the type, nVarName is the name of the variable

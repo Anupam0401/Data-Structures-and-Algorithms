@@ -1,0 +1,156 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>The iostream library is fairly complex &#8212; so we will not be able to cover it in it&#8217;s entirety in these tutorials.  However, we will show you the most commonly used functionality.  In this section, we will look at various aspects of the input class (istream).</p>
+<p>Note: All of the I/O functionality in this lesson lives in the std namespace.  That means all I/O objects and functions either have to be prefixed with &#8220;std::&#8221;, or the &#8220;using namespace std;&#8221; statement has to be used.</p>
+<p><strong>The extraction operator</strong></p>
+<p>As seen in many lessons now, we can use the extraction operator (>>) to read information from an input stream.  C++ has predefined extraction operations for all of the built-in data types, and you&#8217;ve already seen how you can <a href="http://www.learncpp.com/cpp-tutorial/93-overloading-the-io-operators/">overload the extraction operator</a> for your own classes.</p>
+<p>When reading strings, one common problem with the extraction operator is how to keep the input from overflowing your buffer.  Given the following example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char buf[10];
+cin &gt;&gt; buf;
+</pre></td></tr></table>
+<p>what happens if the user enters 18 characters?  The buffer overflows, and bad stuff happens.  Generally speaking, it&#8217;s a bad idea to make any assumption about how many characters your user will enter.</p>
+<p>One way to handle this problem is through use of manipulators.  A <strong>manipulator</strong> is an object that is used to modify a stream when applied with the extraction (>>) or insertion (<<) operators.  One manipulator you have already worked with extensively is "endl", which both prints a newline character and flushes any buffered output.</p>
+<p>C++ provides a manipulator known as <strong>setw</strong> (in the iomanip.h header) that can be used to limit the number of characters read in from a stream.  To use setw(), simply provide the maximum number of characters to read as a parameter, and insert it into your input statement like such:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iomanip.h&gt;
+char buf[10];
+cin &gt;&gt; setw(10) &gt;&gt; buf;
+</pre></td></tr></table>
+<p>This program will now only read the first 9 characters out of the stream (leaving room for a terminator).  Any remaining characters will be left in the stream until the next extraction.</p>
+<p><strong>Extraction and whitespace</strong></p>
+<p>The one thing that we have omitted to mention so far is that the extraction operator works with &#8220;formatted&#8221; data &#8212; that is, it skips whitespace (blanks, tabs, and newlines).</p>
+<p>Take a look at the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char ch;
+    while (cin &gt;&gt; ch)
+        cout &lt;&lt; ch;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>When the user inputs the following:</p>
+<pre>
+Hello my name is Alex
+</pre>
+<p>The insertion operator skips the spaces and the newline.  Consequently, the output is:</p>
+<pre>
+HellomynameisAlex
+</pre>
+<p>Oftentimes, you&#8217;ll want to get user input but not discard whitespace.  To do this, the istream class provides many functions that can be used for this purpose.</p>
+<p>One of the most useful is the <strong>get()</strong> function, which simply gets a character from the input stream.  Here&#8217;s the same program as above using get():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char ch;
+    while (cin.get(ch))
+        cout &lt;&lt; ch;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Now when we use the input:</p>
+<pre>
+Hello my name is Alex
+</pre>
+<p>The output is:</p>
+<pre>
+Hello my name is Alex
+</pre>
+<p>get() also has a string version that takes a maximum number of characters to read:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char strBuf[11];
+    cin.get(strBuf, 11);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>If we input:</p>
+<pre>
+Hello my name is Alex
+</pre>
+<p>The output is:</p>
+<pre>
+Hello my n
+</pre>
+<p>Note that we only read<noscript>Convert mp3 to <a href="http://www.qualidade-toques.com/mais-populares-eua-baixar-toques-para-celular.html">baixar toques para celular</a> gospel gratuito, pe?as para toques gratis para celulares Nokia que possuem o compositor Nokia.</noscript> the first 10 characters (we had to leave one character for a terminator).  The remaining characters were left in the input stream.</p>
+<p>One important thing to note about get() is that it does not read in a newline character!  This can cause some unexpected results:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char strBuf[11];
+    // Read up to 10 characters
+    cin.get(strBuf, 11);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+
+    // Read up to 10 more characters
+    cin.get(strBuf, 11);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>If the user enters:</p>
+<pre>
+Hello!
+</pre>
+<p>The program will print:</p>
+<pre>
+Hello!
+</pre>
+<p>and then terminate!  Why didn&#8217;t it ask for 10 more characters?  The answer is because the first get() read up to the newline and then stopped.  The second get() saw there was still input in the cin stream and tried to read it.  But the first character was the newline, so it stopped immediately.</p>
+<p>Consequently, there is another function called <strong>getline()</strong> that works exactly like get() but reads the newline as well.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char strBuf[11];
+    // Read up to 10 characters
+    cin.getline(strBuf, 11);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+
+    // Read up to 10 more characters
+    cin.getline(strBuf, 11);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This code will perform as you expect, even if the user enters a string with a newline in it.</p>
+<p>If you need to know how many character were extracted by the last call of getline(), use <strong>gcount()</strong>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    char strBuf[100];
+    cin.getline(strBuf, 100);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+    cout &lt;&lt; cin.gcount() &lt;&lt; &quot; characters were read&quot; &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>A special version of getline() for std::string</strong></p>
+<p>There is a special version of getline() that lives outside the istream class that is used for reading in variables of type std::string.  This special version is not a member of either ostream nor istream, and is included in the string header.  Here is an example of it&#8217;s use:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    string strBuf;
+    getline(cin, strBuf);
+    cout &lt;&lt; strBuf &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>A<noscript>Beruhmte <a href="http://www.kostenlose-casino.de/downloaden-sie-casino-net-spiel.html">casino net</a>.</noscript> few more useful istream functions</strong></p>
+<p>There are a few more useful input functions that you might want to make use of:</p>
+<p><strong>ignore()</strong> discards the first character in the stream.<br />
+<strong>ignore(int nCount)</strong> discards the first nCount characters.<br />
+<strong>peek()</strong> allows you to read a character from the stream without removing it from the stream.<br />
+<strong>unget()</strong> returns the last character read back into the stream so it can be read again by the next call.<br />
+<strong>putback(char ch)</strong> allows you to put a character of your choice back into the stream to be read by the next call.</p>
+<p>istream contains many other functions and variants of the above mentioned functions that may be useful, depending on what you need to do.  However, those topics are really more suited for a tutorial or book focusing on the standard library (such as the excellent <a href="http://astore.amazon.com/lc0a-20/detail/0201379260/102-6574246-5645752">&#8220;The C++ Standard Template Library&#8221;</a> by Nicolai M. Josuttis).</p>

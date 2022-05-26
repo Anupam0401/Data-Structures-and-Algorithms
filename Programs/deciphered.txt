@@ -1,0 +1,24 @@
+Beforehead , I just wanted to learn about cyber 
+security and what we call as 'hacking'
+but didn't actually give it a start and actually
+don't know much about it.
+ 
+But, after I participated in the CTF competition ,
+ I found it very interesting and I got to
+ learn explore many new things . So, I think 
+afer joining this club , I will have a
+wonderful opportunity to learn and explore the 
+field of cyber security and other fields I am 
+still not aware of!!
+ 
+
+the members of de.ci.phe.red LAB published their 
+first academic paper in Cryptanalysis between 
+late 2019 to early 2020. Currently, de.ci.phe.red
+ LAB is working on topics in Core Cryptography, 
+RFID Security, Embedded Device Security. 
+We are actively looking for new topics in 
+cybersecurity to work on and are hence open to 
+having research collaborations with other 
+academic institutes on topics from cybersecurity 
+including but not limited to the above.

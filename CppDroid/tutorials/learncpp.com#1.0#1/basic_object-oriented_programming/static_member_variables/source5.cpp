@@ -1,0 +1,1 @@
+int Something::s_nValue = 1;

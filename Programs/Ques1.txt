@@ -1,0 +1,36 @@
+There are N types of sticks with their lengths specified. Each stick of length Ai is present in Fi units (i = 1 to N). You have to construct squares & rectangles using these sticks. Each unit of stick can be used as length or breadth of a rectangle or as a side of a square. A single unit of stick can be used only once.
+
+Let S be the sum of lengths of all the sticks that are used in constructing squares and rectangles. You need to maximize S.
+
+Note: Each kind of stick has a different length.
+
+
+Input:
+First Line: Integer T denoting number of test cases.
+For every test case:
+First Line: Integer N denoting number of different lengths of sticks available
+Each of following N lines contain two Integers Ai Fi
+Ai : Length of ith stick
+Fi : Amount in which ith stick is available
+
+Output:
+For each test case, print the maximum value of S as described in the problem statement. The answer to each test case must be printed in a new line.
+
+Constraints
+1 ≤ T ≤ 10
+1 ≤ N, Ai, Fi ≤ 106
+
+Sample Input:
+    1
+    4
+    3 7
+    10 1
+    6 4
+    5 7
+
+Sample Output:
+    72
+
+EXPLANATION:
+So input tells us there is only one test case with N = 4. There are 7 sticks of length 3, 1 stick of length 10, 4 sticks of length 6 and another 7 sticks of length 5.
+So, our optimal construction of rectangles is to form 3 squares by using 4 sticks of length 3, 4 sticks of length 6 and 4 sticks of length 5. Then lastly, form a rectangle using 2 sticks of length 3 and 2 sticks of length 5. The only leftover unused is 1 stick of length 10. Thus, total perimeter of all shapes formed (3 squares & 1 rectangle) = 4 * 3 + 4 *6 + 4 * 5 + 2 * (3 + 5) = 72.

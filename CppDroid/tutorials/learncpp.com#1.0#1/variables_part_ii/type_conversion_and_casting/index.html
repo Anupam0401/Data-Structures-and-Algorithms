@@ -1,0 +1,71 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Previously, you learned that the value of a variable is stored as a sequence of bits, and the data type of the variable tells the compiler how to translate those bits into meaningful values.  Often it is the case that data needs to be converted from one type to another type.  This is called <strong>type conversion</strong>.</p>
+<p><strong>Implicit type conversion</strong> is done automatically by the compiler whenever data from different types is intermixed.  When a value from one type is assigned to another type, the compiler implicitly converts the value into a value of the new type.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double dValue = 3; // implicit conversion to double value 3.0
+int nValue = 3.14156; // implicit conversion to integer value 3
+</pre></td></tr></table>
+<p>In the top example, the value 3 is promoted to a double value and then assigned to dValue.  The compiler will not complain about doing this.  However, some type conversions are inherently unsafe, and if the compiler can detect that an unsafe conversion is being implicitly requested, it will issue a warning.  In the second example, the fractional part of the double value is dropped because integers can not support fractional values.  Because converting a double to an int usually causes data loss (making it unsafe), compilers such as Visual Studio Express 2005 will typically issue a warning.  Other unsafe conversions involve assigning unsigned variables to signed variables (and vice-versa), and assigning large integers (eg. a 4-byte long) to integer variables of a smaller size (eg. a 2-byte short).</p>
+<p><em>Warning:  Microsoft&#8217;s Visual C++ 2005 does not seem to issue warnings for unsafe signed/unsigned conversions.</em></p>
+<p>When evaluating expressions, the compiler breaks each expression down into individual subexpressions.  Typically, these subexpressions involve a unary or binary operator and some operands.  Most binary operators require their operands to be of the same type.  If operands of mixed types are used, the compiler will convert one operand to agree with the other.  To do this, it uses a heirarchy of data types:</p>
+<p>Long double (highest)<br />
+Double<br />
+Float<br />
+Unsigned long int<br />
+Long int<br />
+Unsigned int<br />
+Int (lowest)</p>
+<p>For example, in the expression <code>2 + 3.14159</code>, the + operator requires both operands to be the same type.  In this case, the left operand is an int, and the right operand is a double.  Because double is higher in the heirarchy, the int gets converted to a double.  Consequently, this expression is evaluated as <code>2.0 + 3.14159</code>, which evaluates to 5.14159.</p>
+<p>A good question is, &#8220;why is integer at the bottom of the tree?  What about char and short?&#8221;.  Char and short are always implicitly promoted to integers (or unsigned integers) before evaluation.  This is called <strong>widening</strong>.</p>
+<p>This heirarchy can cause some interesting issues.  For example, you might expect the expression <code>5u - 10</code> to evalute to -5 (5u means 5 as an unsigned integer).  But in this case, the signed integer (10) is promoted to an unsigned integer, and the result of this expression is the unsigned integer 4294967291!</p>
+<p>Many mixed conversion work as expected.  For example, <code>int nValue = 10 * 2.7</code> yields the result 27.  10 is promoted to a float, 10.0 * 2.7 evaluates to 27.0, and 27.0 is truncated into an integer (which the compiler will complain about).</p>
+<p>Many new programmers try something like this:  <code>float fValue = 10 / 4;</code>.  However, because 10 and 4 are both integers, no promotion takes place.  Integer division is performed on 10 / 4, resulting in the value of 2, which is then implicitly converted to 2.0 and assigned to fValue!</p>
+<p>In the case where you are using literal values (such as 10, or 4), replacing one or both of the integer literal value with a floating point literal value (10.0 or 4.0) will cause both operands to be converted to floating point values, and the division will be done using floating point math.</p>
+<p>But what if you are using variables?  Consider this case:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 10;
+int nValue2 = 4;
+float fValue = nValue1 / nValue2;
+</pre></td></tr></table>
+<p>fValue will end up with the value of 2.  How do we tell the compiler that we want to use floating point division instead of integer division?  The answer is by using a cast.</p>
+<p><strong>Casting</strong></p>
+<p><strong>Casting</strong> represents a request by the programmer to do an explicit type conversion.  In standard C programming, casts are done via the () operator, with the name of the type to cast to inside.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 10;
+int nValue2 = 4;
+float fValue = (float)nValue1 / nValue2;
+</pre></td></tr></table>
+<p>In the above program, we use a float cast to tell the compiler to promote nValue1 to a floating point value.  Because nValue1 is a floating point value, nValue2 will then be promoted to a floating point value as well, and the division will be done using floating point division instead of integer division!</p>
+<p>C++ will also let you use a C style cast with a more function-call like syntax:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 10;
+int nValue2 = 4;
+float fValue = float(nValue1) / nValue2;
+</pre></td></tr></table>
+<p>The C style cast can be inherently misused, because it will let you do things that may not make sense, such as getting rid of a const or changing a data type without changing the underlying representation.  C++ introduces a new casting operator called <strong>static_cast</strong>.  A static cast works similarly to the C style cast, except it will only do standard type conversions, which reduces the potential for inadvertant misuse:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 10;
+int nValue2 = 4;
+float fValue = static_cast&lt;float&gt;(nValue1) / nValue2;
+</pre></td></tr></table>
+<p>As mentioned above, compilers will often complain when an unsafe implicit cast is performed.  For example, consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 48;
+char ch = nValue; // implicit cast
+</pre></td></tr></table>
+<p>Casting an int (4 bytes) to a char (1 byte) is potentially unsafe, and the compiler will typically complain.  In order to announce to the compiler that you are explicitly doing something you recognize is potentially unsafe (but want to do anyway), you should use a static_cast:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 48;
+char ch = static_cast&lt;char&gt;(nValue);
+</pre></td></tr></table>
+<p>In the following program, the compiler will typically complain that converting a double to an int may result in loss of data:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 100;
+nValue = nValue / 2.5;
+</pre></td></tr></table>
+<p>To tell the compiler that we explicitly mean to do this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 100;
+nValue = static_cast&lt;int&gt;(nValue / 2.5);
+</pre></td></tr></table>
+<p>Casting should be avoided if at all possible, because any time a cast is used, there is potential for trouble.  But there are many times when it can not be avoided.  In these cases, the C++ static_cast should be used instead of the C-style cast.</p>

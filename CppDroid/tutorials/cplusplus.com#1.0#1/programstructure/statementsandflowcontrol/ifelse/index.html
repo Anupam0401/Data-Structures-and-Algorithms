@@ -1,0 +1,62 @@
+
+<h3>Selection statements: if and else</h3>
+The <code>if</code> keyword is used to execute a statement or block, if, and only if, a condition is fulfilled. Its syntax is:<br>
+<br>
+<code>if (condition) statement</code> <br>
+<br>
+Here, <code>condition</code> is the expression that is being evaluated. If this <code>condition</code> is true, <code>statement</code> is executed. If it is false, <code>statement</code> is not executed (it is simply ignored), and the program continues right after the entire selection statement.<br>
+For example, the following code fragment prints the message <code>(x is 100)</code>, only if the value stored in the <code>x</code> variable is indeed 100:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>if</var> (x == 100)
+  cout &lt;&lt; <kbd>"x is 100"</kbd>;</code></pre></td></tr></table></div>
+<br>
+<br>
+If <code>x</code> is not exactly 100, this statement is ignored, and nothing is printed.<br>
+<br>
+If you want to include more than a single statement to be executed when the condition is fulfilled, these statements shall be enclosed in braces (<code>{}</code>), forming a block:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code><var>if</var> (x == 100)
+{
+   cout &lt;&lt; <kbd>"x is "</kbd>;
+   cout &lt;&lt; x;
+}</code></pre></td></tr></table></div>
+<br>
+<br>
+As usual, indentation and line breaks in the code have no effect, so the above code is equivalent to:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>if</var> (x == 100) { cout &lt;&lt; <kbd>"x is "</kbd>; cout &lt;&lt; x; }</code></pre></td></tr></table></div>
+<br>
+<br>
+Selection statements with <code>if</code> can also specify what happens when the condition is not fulfilled, by using the <code>else</code> keyword to introduce an alternative statement. Its syntax is:<br>
+<br>
+<code>
+if (condition) statement1 else statement2<br>
+</code>
+<br>
+where <code>statement1</code> is executed in case condition is true, and in case it is not, <code>statement2</code> is executed.<br>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>if</var> (x == 100)
+  cout &lt;&lt; <kbd>"x is 100"</kbd>;
+<var>else</var>
+  cout &lt;&lt; <kbd>"x is not 100"</kbd>;</code></pre></td></tr></table></div>
+<br>
+<br>
+This prints <code>x is 100</code>, if indeed x has a value of 100, but if it does not, and only if it does not, it prints <code>x is not 100</code> instead.<br>
+Several if + else structures can be concatenated with the intention of checking a range of values. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code><var>if</var> (x &gt; 0)
+  cout &lt;&lt; <kbd>"x is positive"</kbd>;
+<var>else</var> <var>if</var> (x &lt; 0)
+  cout &lt;&lt; <kbd>"x is negative"</kbd>;
+<var>else</var>
+  cout &lt;&lt; <kbd>"x is 0"</kbd>;</code></pre></td></tr></table></div>
+<br>
+<br>
+This prints whether x is positive, negative, or zero by concatenating two if-else structures. Again, it would have also been possible to execute more than a single statement per case by grouping them into blocks enclosed in braces: <code>{}</code>.<br>

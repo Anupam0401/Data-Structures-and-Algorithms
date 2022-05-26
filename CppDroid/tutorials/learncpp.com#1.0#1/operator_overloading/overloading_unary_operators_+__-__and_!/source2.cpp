@@ -1,0 +1,2 @@
+if (!nX)
+    // do something

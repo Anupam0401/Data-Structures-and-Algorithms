@@ -1,0 +1,96 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Pointers and arrays</strong><br />
+Pointers and arrays are intricately linked in the C language.  In previous lessons, you learned how to declare an array of variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int anArray[5]; // declare array of 5 integers
+</pre></td></tr></table>
+<p>anArray is actually a pointer that points to the first element of the array!  Because the array variable is a pointer, you can dereference it, which returns array element 0:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int anArray[5] = { 9, 7, 5, 3, 1 };
+
+// dereferencing an array returns the first element (element 0)
+cout &lt;&lt; *anArray; // prints 9!
+
+char szName[] = &quot;Jason&quot;; // C-style string (also an array)
+cout &lt;&lt; *szName; // prints 'J'
+</pre></td></tr></table>
+<p><strong>Pointer arithmetic</strong></p>
+<p>The C language allows you to perform integer addition or subtraction operations on pointers.  If pnPtr points to an integer, <code>pnPtr + 1</code> is the address of the next integer in memory after pnPtr.  <code>pnPtr - 1</code> is the address of the previous integer before pnPtr.</p>
+<p>Note that <code>pnPtr+1</code> does not return the <em>address</em> after pnPtr, but the <em>next object of the type</em> that pnPtr points to.  If pnPtr points to an integer (assuming 4 bytes), <code>pnPtr+3</code> means 3 integers after pnPtr, which is 12 addresses after pnPtr.  If pnPtr points to a char, which is always 1 byte, <code>pnPtr+3</code> means 3 chars after pnPtr, which is 3 addresses after pnPtr.</p>
+<p>When calculating the result of a pointer arithmetic expression, the compiler always multiplies the integer operand by the size of the object being pointed to.  This is called <strong>scaling</strong>.</p>
+<p>The following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 7;
+int *pnPtr = &amp;nValue;
+
+cout &lt;&lt; pnPtr &lt;&lt; endl;
+cout &lt;&lt; pnPtr+1 &lt;&lt; endl;
+cout &lt;&lt; pnPtr+2 &lt;&lt; endl;
+cout &lt;&lt; pnPtr+3 &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Outputs:</p>
+<pre>
+0012FF7C
+0012FF80
+0012FF84
+0012FF88
+</pre>
+<p>As you can see, each of these addresses differs by 4 (7C + 4 = 80 in hexadecimal).  This is because an integer is 4 bytes on the author&#8217;s machine.</p>
+<p>The same program using short instead of int:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+short nValue = 7;
+short *pnPtr = &amp;nValue;
+
+cout &lt;&lt; pnPtr &lt;&lt; endl;
+cout &lt;&lt; pnPtr+1 &lt;&lt; endl;
+cout &lt;&lt; pnPtr+2 &lt;&lt; endl;
+cout &lt;&lt; pnPtr+3 &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Outputs:</p>
+<pre>
+0012FF7C
+0012FF7E
+0012FF80
+0012FF82
+</pre>
+<p>Because a short is 2 bytes, each address differs by 2.</p>
+<p>It is rare to see the + and &#8211; operator used in such a manner with pointers.  However, it is more common to see the ++ or &#8212; operator being used to increment or decrement a pointer to point to the next or previous element in an array.</p>
+<p><strong>Pointer arithmetic and arrays</strong></p>
+<p>If anArray is a pointer that points to the first element (element 0) of the array, and adding 1 to a pointer already returns the next object, then anArray+1 must point to the second element (element 1) of the array!  We can verify experimentally that this is true:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int anArray[5] = { 9, 7, 5, 3, 1 };
+cout &lt;&lt; *(anArray+1) &lt;&lt; endl; // prints 7
+</pre></td></tr></table>
+<p>The parentheses are necessary to ensure the operator precedence is correct &#8212; operator * has higher precedence than operator +.</p>
+<p>Note that *(anArray+1) has the same effect as anArray[1].  It turns out that the array indexing operator ([]) actually does an implicit pointer addition and dereference!  It just looks prettier.</p>
+<p>We can use a pointer and pointer arithmetic to loop through an array.  Although not commonly done this way (using indices is generally easier to read and less error prone), the following example goes to show it is possible:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nArraySize = 7;
+char szName[nArraySize] = &quot;Mollie&quot;;
+int nVowels = 0;
+for (char *pnPtr = szName; pnPtr &lt; szName + nArraySize; pnPtr++)
+{
+    switch (*pnPtr)
+    {
+        case 'A':
+        case 'a':
+        case 'E':
+        case 'e':
+        case 'I':
+        case 'i':
+        case 'O':
+        case 'o':
+        case 'U':
+        case 'u':
+            nVowels++;
+            break;
+    }
+}
+
+cout &lt;&lt; szName &lt;&lt; &quot; has &quot; &lt;&lt; nVowels &lt;&lt; &quot; vowels&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>This program uses a pointer to step through each of the elements in an array.  Each element is dereferenced by the switch expression, and if the element is a vowel, nVowels is incremented.  The for loop then uses the ++ operator to advance the pointer to the next character in the array.  The for loop terminates when all characters have been examined.</p>
+<p>The above program produces the result:</p>
+<pre>
+Mollie has 3 vowels
+</pre>

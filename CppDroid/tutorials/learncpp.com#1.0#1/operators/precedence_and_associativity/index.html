@@ -1,0 +1,355 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In order to properly evaluate an expression such as <code>4 + 2 * 3</code>, we must understand both what the operators do, and the correct order to apply them.  The order in which operators are evaluated in a compound expression is called <strong>operator precedence</strong>.  Using normal mathematical precedence rules (which states that multiplication is resolved before addition), we know that the above expression should evaluate as <code>4 + (2 * 3) = 10</code>.</p>
+<p>In C++, all operators are assigned a level of precedence.  Those with the highest precedence are evaluated first.  You can see in the table below that multiplication and division (precedence level 5) have a higher precedence than addition and subtraction (precedence level 6).  The compiler uses these levels to determine how to evaluate expressions it encounters.</p>
+<p>If two operators with the same precedence level are adjacent to each other in an expression, the <strong>associativity rules</strong> tell the compiler whether to evaluate the operators from left to right or from right to left.  For example, in the expression <code>3 * 4 / 2</code>, the multiplication and division operators are both precedence level 5.  Level 5 has an associativity of left to right, so the expression is resolved from left to right: <code>(3 * 4) / 2 = 6</code>.</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Prec/Ass</th>
+<th>Operator</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>1 None</td>
+<td>
+		::<br />
+		::
+	</td>
+<td>
+		Global scope (unary)<br />
+		Class scope (binary)
+	</td>
+<td>
+		::g_nGlobalVar = 5;<br />
+		Class::m_nMemberVar = 5;</br>
+    </td>
+</tr>
+<tr>
+<td>2 L->R</td>
+<td>
+		()<br />
+		()<br />
+		()<br />
+		[]<br />
+		.<br />
+		-><br />
+		++<br />
+		&ndash;&ndash;<br />
+		typeid<br />
+		const_cast<br />
+		dynamic_cast<br />
+		reinterpret_cast<br />
+		static_cast
+	</td>
+<td>
+		Parenthesis<br />
+		Function call<br />
+		Implicit assignment<br />
+		Array subscript<br />
+		Member access from object<br />
+		Member access from object ptr<br />
+		Post-increment<br />
+		Post-decrement<br />
+		Run-time type information<br />
+		Cast away const<br />
+		Run-time type-checked cast<br />
+		Cast one type to another<br />
+		Compile-time type-checked cast
+	</td>
+<td>
+		(x + y) * 2;<br />
+		Add(x, y);<br />
+		int nValue(5);<br />
+		aValue[3] = 2;<br />
+		cObject.m_nValue = 4;<br />
+		pObject->m_nValue = 4;<br />
+		nValue++;<br />
+		nValue&ndash;&ndash;;<br />
+		typeid(cClass).name();<br />
+		const_cast&lt;int*&gt;(pnConstValue);<br />
+		dynamic_cast&lt;Shape*&gt;(pShape);<br />
+		reinterpret_cast&lt;Class2&gt;(cClass1);<br />
+		fValue = static_cast&lt;float&gt;(nValue);
+	</td>
+</tr>
+<tr>
+<td>3 R->L</td>
+<td>
+		+<br />
+		-<br />
+		++<br />
+		&ndash;&ndash;<br />
+		!<br />
+		~<br />
+		(type)<br />
+		sizeof<br />
+		&#038;<br />
+		*<br />
+		new<br />
+		new[]<br />
+		delete<br />
+		delete[]
+	</td>
+<td>
+		Unary plus<br />
+		Unary minus<br />
+		Pre-increment<br />
+		Pre-decrement<br />
+		Logical NOT<br />
+		Bitwise NOT<br />
+		C-style cast<br />
+		Size in bytes<br />
+		Address of<br />
+		Dereference<br />
+		Dynamic memory allocation<br />
+		Dynamic array allocation <br />
+		Dynamic memory deletion<br />
+		Dynamic array deletion
+	</td>
+<td>
+	    nValue = +5;M<br />
+		nValue = -1;<br />
+		++nValue;<br />
+		&ndash;&ndash;nValue;<br />
+		if (!bValue)<br />
+		nFlags = ~nFlags;<br />
+		float fValue = (float)nValue;<br />
+		sizeof(int);<br />
+		address = &nValue;<br />
+		nValue = *pnValue;<br />
+		int *pnValue = new int;<br />
+		int *panValue = new int[5];<br />
+		delete pnValue;<br />
+		delete[] panValue;
+	</td>
+</tr>
+<tr>
+<td>4 L->R</td>
+<td>
+		->*<br />
+		.*
+	</td>
+<td>
+		Member pointer selector<br />
+		Member object selector
+	</td>
+<td>
+		pObject->*pnValue = 24;<br />
+		cObject->.*pnValue = 24;
+    </td>
+</tr>
+<tr>
+<td>5 L->R</td>
+<td>
+		*<br />
+		/<br />
+		%
+	</td>
+<td>
+		Multiplication<br />
+		Division<br />
+		Modulus
+	</td>
+<td>
+		int nValue = 2 * 3;<br />
+		float fValue = 5.0 / 2.0;<br />
+		int nRemainder = 10 % 3;
+    </td>
+</tr>
+<tr>
+<td>6 L->R</td>
+<td>
+		+<br />
+		-
+	</td>
+<td>
+		Addition<br />
+		Subtraction
+	</td>
+<td>
+		int nValue = 2 + 3;<br />
+		int nValue = 2 &#8211; 3;
+    </td>
+</tr>
+<tr>
+<td>7 L->R</td>
+<td>
+		&lt;&lt;<br />
+		&gt;&gt;
+	</td>
+<td>
+		Bitwise shift left<br />
+		Bitwise shift right
+	</td>
+<td>
+		int nFlags = 17 &lt;&lt; 2;<br />
+		int nFlags = 17 &gt;&gt; 2;
+    </td>
+</tr>
+<tr>
+<td>8 L->R</td>
+<td>
+		&lt;<br />
+		&lt;=<br />
+		&gt;<br />
+		&gt;=
+	</td>
+<td>
+		Comparison less than<br />
+		Comparison less than or equals<br />
+		Comparison greater than<br />
+		Comparison greater than or equals
+	</td>
+<td>
+		if (x &lt; y)<br />
+		if (x &lt;= y)<br />
+		if (x &gt; y)<br />
+		if (x &gt;= y)
+    </td>
+</tr>
+<tr>
+<td>9 L->R</td>
+<td>
+		==<br />
+		!=
+	</td>
+<td>
+		Equality<br />
+		Inequality
+	</td>
+<td>
+		if (x == y)<br />
+		if (x != y)<br />
+		</br>
+    </td>
+</tr>
+<tr>
+<td>10 L->R</td>
+<td>
+		&#038;
+	</td>
+<td>
+		Bitwise AND
+	</td>
+<td>
+		nFlags = nFlags &#038; 17;
+    </td>
+</tr>
+<tr>
+<td>11 L->R</td>
+<td>
+		^
+	</td>
+<td>
+		Bitwise XOR
+	</td>
+<td>
+		nFlags = nFlags ^ 17;
+    </td>
+</tr>
+<tr>
+<td>12 L->R</td>
+<td>
+		|
+	</td>
+<td>
+		Bitwise OR
+	</td>
+<td>
+		nFlags = nFlags | 17;
+    </td>
+</tr>
+<tr>
+<td>13 L->R</td>
+<td>
+		&#038;&#038;
+	</td>
+<td>
+		Logical AND
+	</td>
+<td>
+		if (bValue1 &#038;&#038; bValue2)
+    </td>
+</tr>
+<tr>
+<td>14 L->R</td>
+<td>
+		||
+	</td>
+<td>
+		Logical OR
+	</td>
+<td>
+		if (bValue1 || bValue2)
+    </td>
+</tr>
+<tr>
+<td>15 L->R</td>
+<td>
+		?:
+	</td>
+<td>
+		Arithmetic if
+	</td>
+<td>
+		return (x &lt; y) ? true : false;
+    </td>
+</tr>
+<tr>
+<td>16 R->L</td>
+<td>
+		=<br />
+		*=<br />
+		/=<br />
+		%=<br />
+		+=<br />
+		-=<br />
+		&lt;&lt;=<br />
+		&gt;&gt;=<br />
+		&#038;=<br />
+		|=<br />
+		^=
+	</td>
+<td>
+		Assignment<br />
+		Multiplication assignment<br />
+		Division assignment<br />
+		Modulus assignment<br />
+		Addition assignment<br />
+		Subtraction assignment<br />
+		Bitwise shift left assignment<br />
+		Bitwise shift right assignment<br />
+		Logical AND assingment<br />
+		Logical OR assignment<br />
+		Logical XOR assignment
+	</td>
+<td>
+		nValue = 5;<br />
+		nValue *= 5;<br />
+		fValue /= 5.0;<br />
+		nValue %= 5;<br />
+		nValue += 5;<br />
+		nValue -= 5;<br />
+		nFlags &lt;&lt;= 2;<br />
+		nFlags &gt;&gt;= 2;<br />
+		nFlags &#038;= 17;<br />
+		nFlags |= 17;<br />
+		nFlags ^= 17;
+    </td>
+</tr>
+<tr>
+<td>17 L->R</td>
+<td>
+		,
+	</td>
+<td>
+		Comma operator
+	</td>
+<td>
+		iii++, jjj++, kkk++;
+    </td>
+</tr>
+</table>
+<p>A few operators you should already recognize: +, -, *, /, (), =, <, >, <=, and >=.  These arithmetic and relational operators have the same meaning in C++ as they do in every-day usage.</p>
+<p>However, unless you have experience with another programming language, it&#8217;s likely the majority of the operators in this table will be incomprehensible to you at this point in time.  That&#8217;s expected at this point.  We&#8217;ll cover many of them in this chapter, and the rest will be introduced as there is a need for them.</p>
+<p>The above table is primarily meant to be a reference chart that you can refer back to in the future to resolve any precedence or associativity questions you have.</p>

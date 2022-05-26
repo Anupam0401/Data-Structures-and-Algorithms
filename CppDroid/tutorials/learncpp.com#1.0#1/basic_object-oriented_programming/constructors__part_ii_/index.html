@@ -1,0 +1,101 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Private constructors</strong></p>
+<p>Occasionally, we do not want users outside of a class to use particular constructors.  To enforce this behavior, we can make constructors private.  Just like regular private functions, private constructors can only be accessed from within the class.  Let&#8217;s take a look at an example of this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Book
+{
+private:
+    int m_nPages;
+
+    // This constructor can only be used by Book's members
+    Book() // private default constructor
+    {
+         m_nPages = 0;
+    }
+
+public:
+    // This constructor can be used by anybody
+    Book(int nPages) // public non-default constructor
+    {
+        m_nPages = nPages;
+    }
+};
+
+int main()
+{
+    Book cMyBook; // fails because default constructor Book() is private
+    Book cMyOtherBook(242); // okay because Book(int) is public
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>One problem with public constructors is that they do not provide any way to control how many of a particular class may be created.  If a public constructor exists, it can be used to instantiate as many class objects as the user desires.  Often it is useful to restrict users to being able to create only one instance of a particular class.  Classes that can only be instantiated once are called <strong>singletons</strong>.  There are many ways to implement singletons, but most of them involve use of a private (or protected) constructor to prevent users from instantiating as many of the class as they want.</p>
+<p><strong>Constructor chaining and initialization issues</strong></p>
+<p>When you instantiate a new object, the object&#8217;s constructor is called implicitly by the C++ compiler.  Let&#8217;s take a look at two related situations that often cause problems for new programmers:</p>
+<p>First, sometimes a class has a constructor which needs to do the same work as another constructor, plus something extra.  The process of having one constructor call another constructor is called <strong>constructor chaining</strong>.  Although some languages such as C# support constructor chaining, C++ does not.  If you try to chain constructors, it will usually compile, but it will not work right, and you will likely spend a long time trying to figure out why, even with a debugger.  However, constructors <em>are</em> allowed to call non-constructor functions in the class.  Just be careful that any members the non-constructor function uses have already been initialized.</p>
+<p>Although you may be tempted to copy code from the first constructor into the second constructor, having duplicate code makes your class harder to understand and more burdensome to maintain.  The best solution to this issue is to create a non-constructor function that does the common initialization, and have both constructors call that function.</p>
+<p>For example, the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        // code to do A
+    }
+
+    Foo(int nValue)
+    {
+        // code to do A
+        // code to do B
+    }
+};
+</pre></td></tr></table>
+<p>becomes:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        DoA();
+    }
+
+    Foo(int nValue)
+    {
+        DoA();
+        // code to do B
+    }
+
+    void DoA()
+    {
+        // code to do A
+    }
+};
+</pre></td></tr></table>
+<p>Code duplication is kept to a minimum, and no chained constructor calls are needed.</p>
+<p>Second, you may find yourself in the situation where you want to write a member function to re-initialize a class back to default values.  Because you probably already have a constructor that does this, you may be tempted to try to call the constructor from your member function.  As mentioned, chaining constructor calls are illegal in C++.  You could copy the code from the constructor in your function, which would work, but lead to duplicate code.  The best solution in this case is to move the code from the constructor to your new function, and have the constructor call your function to do the work of initializing the data:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Foo
+{
+public:
+    Foo()
+    {
+        Init();
+    }
+
+    Foo(int nValue)
+    {
+        Init();
+        // do something with nValue
+    }
+
+    void Init()
+    {
+        // code to init Foo
+    }
+};
+</pre></td></tr></table>
+<p>It is fairly common to include an Init() function that initializes member variables to their default values, and then have each constructor call that Init() function before doing it&#8217;s parameter-specific tasks.  This minimizes code duplication and allows you to explicitly call Init() from wherever you like.</p>
+<p>One small caveat: be careful when using Init() functions and dynamically allocated memory.  Because Init() functions can be called by anyone at any time, dynamically allocated memory may or may not have already been allocated when Init() is called.  Be careful to handle this situation appropriately &#8212; it can be slightly confusing, since a non-null pointer could be either dynamically allocated memory or an uninitialized pointer!</p>
+<p>Note: C++11 now supports chaining constructors via the <a href="http://www.learncpp.com/cpp-tutorial/b-5-delegating-constructors/">delegating constructors</a> functionality.</p>

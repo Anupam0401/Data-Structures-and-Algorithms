@@ -1,0 +1,127 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Loops and arrays</strong></p>
+<p>Because array elements can be accessed by a variable, it is common to use a loop to access or manipulate each array element in turn.  Wherever you find arrays, you will almost certainly find loops as well.</p>
+<p>Consider the case where we want to find the average test score of a class of students.  Using individual variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nNumStudents = 5;
+int nScore0 = 84;
+int nScore1 = 92;
+int nScore2 = 76;
+int nScore3 = 81;
+int nScore4 = 56;
+
+int nTotalScore = nScore0 + nScore1 + nScore2 + nScore3 + nScore4;
+double dAverageScore = static_cast&lt;double&gt;(nTotalScore) / nNumStudents;
+</pre></td></tr></table>
+<p>That&#8217;s a lot of variables and a lot of typing &#8212; and this is just 5 students!  Imagine how much work we&#8217;d have to do for 30 students, or 150.  </p>
+<p>Plus, if a new student is added, a new variable has to be declared, initialized, and added to the nTotalScore calculation.  Any time you have to adjust old code, you run the risk of introducing errors.</p>
+<p>Using arrays without loops offers a slightly better solution:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nNumStudents = 5;
+int anScores[nNumStudents] = { 84, 92, 76, 81, 56 };
+int nTotalScore = anScores[0] + anScores[1] + anScores[2] + anScores[3] + anScores[4];
+double dAverageScore = static_cast&lt;double&gt;(nTotalScore) / nNumStudents;
+</pre></td></tr></table>
+<p>This cuts down on the number of variables declared significantly, but nTotalScore still requires each array element be listed individually.  Furthermore, changing the number of students means the nTotalScore formula needs to be adjusted.</p>
+<p>Using arrays with loops:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nNumStudents = 5;
+int anScores[nNumStudents] = { 84, 92, 76, 81, 56 };
+int nTotalScore = 0;
+for (int nStudent = 0; nStudent &lt; nNumStudents; nStudent++)
+    nTotalScore += anScores[nStudent];
+
+double dAverageScore = static_cast&lt;double&gt;(nTotalScore) / nNumStudents;
+</pre></td></tr></table>
+<p>This solution is ideal in terms of both readability and maintenance.  Because the loop does all of our array element accesses, the formulas adjust automatically to account for the number of elements in the array.  This means the formulas do not have to be manually altered to account for new students, and we do not have to manually enter the name of each array element!</p>
+<p>Here&#8217;s another example of using a loop with an array to determine the best score in the class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nNumStudents = 5;
+int anScores[nNumStudents] = { 84, 92, 76, 81, 56 };
+int nMaxScore = 0;
+for (int nStudent = 0; nStudent &lt; nNumStudents; nStudent++)
+    if (anScores[nStudent] &gt; nMaxScore)
+        nMaxScore = anScores[nStudent];
+
+cout &lt;&lt; &quot;The best score was &quot; &lt;&lt; nMaxScore &lt;&lt; endl;
+</pre></td></tr></table>
+<p>In this example, we use a non-loop variable called nMaxScore.  nMaxScore is initialized to 0 to represent that we have not seen any scores yet.  We then iterate through each element of the array, and if we find a score that is higher than any we&#8217;ve seen before, we set nMaxScore to that value.  Thus, nMaxScore always represents the best score out of all the elements we&#8217;ve searched so far.  By the time we reach the end of the array, nMaxScore holds the highest score in the entire array.</p>
+<p>Loops are typically used with arrays to do one of three things:<br />
+1) Search for a value (eg. highest, lowest).<br />
+2) Calculate a value (eg. average, total)<br />
+3) Reorganize the array (eg. sort from lowest to highest)</p>
+<p>When searching for a value, a variable is typically used to hold the best candidate value seen so far (or the array index of the best candidate).  In the above example where we use a loop to find the best score, this variable is used to hold the highest score encountered so far.</p>
+<p>When calculating a value, a variable is typically used to hold an intermediate result that is used to calculate the final value.  In the above example where we are calculating an average score, nTotalScore holds the total score for all the elements examined so far.  This value is then later used to calculate the overall average score.</p>
+<p>Sorting an array is a bit more tricky, as it typically involves nested loops.  We will cover sorting an array in the next lesson.</p>
+<p><strong>Off-by-one errors</strong></p>
+<p>One of the trickiest parts of using loops with arrays is making sure the loop iterates the proper number of times.  Off-by-one errors are easy to make, and trying to access an element that is larger than the size of the array can have dire consequences.  Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const int nArraySize = 5;
+int anArray[nArraySize ] = { 6, 8, 2, 4, 9 };
+int nMaxValue = 0;
+for (int nIndex = 0; nIndex &lt;= nArraySize; nIndex++)
+    if (anArray[nIndex] &gt; nMaxValue)
+        nMaxValue = anArray[nIndex];
+</pre></td></tr></table>
+<p>The problem with this program is that the conditional in the for loop is wrong!  The array declared has 5 elements, indexed from 0 to 4.  However, this array loops from 0 to 5.  Consequently, on the last iteration, the array will execute this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    if (anArray[5] &gt; nMaxValue)
+        nMaxValue = anArray[5];
+</pre></td></tr></table>
+<p>But anArray[5] is undefined!  This can cause all sorts of issues, with the most likely being that anArray[5] results in a garbage value.  In this case, the probable result is that nMaxValue will be wrong.</p>
+<p>However, imagine what would happen if we inadvertently assigned a value to anArray[5]!  We might overwrite another variable (or part of it), or perhaps corrupt something &#8212; these types of bugs can be very hard to track down!</p>
+<p>Consequently, when using loops with arrays, always double-check your loop conditions to make sure you do not introduce off-by-one errors.</p>
+<p><strong>Quiz</strong></p>
+<p>1) Print the following array to the screen using a loop:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int anArray[9] = { 4, 6, 7, 3, 8, 2, 1, 9, 5 };
+</pre></td></tr></table>
+<p>2) Ask the user for a number between 1 and 9.  If the user does not enter a number between 1 and 9, repeatedly ask for a number until they do.  Once they have entered a number between 1 and 9, print the array.  Then search the array for the number that the user entered and print the index of that element.  </p>
+<p><strong>Quiz solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id75867229'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id75867229" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int main()
+{
+    using namespace std;
+    int anArray[9] = { 4, 6, 7, 3, 8, 2, 1, 9, 5 };
+    for (int iii=0; iii &lt; 9; iii++)
+        cout &lt;&lt; anArray[iii] &lt;&lt; &quot; &quot;;
+    return 0;
+}
+</pre></td></tr></table>
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id2142184898'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id2142184898" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int main()
+{
+    using namespace std;
+    int nNumber;
+    do
+    {
+        cout &lt;&lt; &quot;Enter a number: &quot;;
+        cin &gt;&gt; nNumber;
+    } while (nNumber &lt; 1 || nNumber &gt; 9);
+
+    int anArray[9] = { 4, 6, 7, 3, 8, 2, 1, 9, 5 };
+    for (int iii=0; iii &lt; 9; iii++)
+        cout &lt;&lt; anArray[iii] &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+
+    for (int jjj=0; jjj&lt; 9; jjj++)
+    {
+        if (anArray[jjj] == nNumber)
+        {
+            cout &lt;&lt; &quot;The number &quot; &lt;&lt; nNumber &lt;&lt; &quot; has index &quot; &lt;&lt; jjj &lt;&lt; endl;
+            break; // since each # in the array is unique, no need to search rest of array
+        }
+    }
+
+    return 0;
+}
+</pre></td></tr></table>
+</div>

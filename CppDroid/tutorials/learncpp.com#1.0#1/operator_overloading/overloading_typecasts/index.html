@@ -1,0 +1,115 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the lesson on <a href="http://www.learncpp.com/cpp-tutorial/44-type-conversion-and-casting/">type conversion and casting</a>, you learned that C++ allows you to convert one data type to another.  The following example shows an int being converted into a double:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+double dValue = nValue; // int implicitly cast to a double
+</pre></td></tr></table>
+<p>C++ already knows how to convert between the built-in data types.  However, it does not know how to convert any of our user-defined classes.  That&#8217;s where overloading the typecast operators comes into play.</p>
+<p>Overloading the typecast operators allows us to convert our class into another data type.  Take a look at the following class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents=0)
+    {
+        m_nCents = nCents;
+    }
+
+    int GetCents() { return m_nCents; }
+    void SetCents(int nCents) { m_nCents = nCents; }
+};
+</pre></td></tr></table>
+<p>This class is pretty simple: it holds some number of cents as an integer, and provides access functions to get and set the number of cents.  It also provides a constructor for converting an int into a Cents.</p>
+<p>If we can convert an int into a Cents, then doesn&#8217;t it also make sense for us to be able to convert a Cents back into an int?  In the following example, we have to use GetCents() to convert our Cents variable back into an integer so we can print it using PrintInt():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintInt(int nValue)
+{
+    cout &lt;&lt; nValue;
+}
+
+int main()
+{
+    Cents cCents(7);
+    PrintInt(cCents.GetCents()); // print 7
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>If we have already written a lot of functions that take integers as parameters, our code will be littered with calls to GetCents(), which makes it more messy than it needs to be.</p>
+<p>To make things easier, we&#8217;ll overload the int cast, which will allow us to cast our Cents class into an int.  The following example shows how this is done:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents=0)
+    {
+        m_nCents = nCents;
+    }
+
+    // Overloaded int cast
+    operator int() { return m_nCents; }
+
+    int GetCents() { return m_nCents; }
+    void SetCents(int nCents) { m_nCents = nCents; }
+};
+</pre></td></tr></table>
+<p>There are two things to note:<br />
+1) To overload the function that casts our class to an int, we write a new function in our class called operator int().  Note that there is a space between the word operator and the type we are casting to.<br />
+2) Casting operators do not have a return type.  C++ assumes you will be returning the correct type.</p>
+<p>Now in our example, we call PrintInt() like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Cents cCents(7);
+    PrintInt(cCents); // print 7
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>The compiler will first note that PrintInt takes an integer parameter.  Then it will note that cCents is not an int.  Finally, it will look to see if we&#8217;ve provided a way to convert a Cents into an int.  Since we have, it will call our operator int() function, which returns an int, and the returned int will be passed to PrintInt().</p>
+<p>We can now also explicitly cast our Cents variable to an int:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cents cCents(7);
+int nCents = static_cast&lt;int&gt;(cCents);
+</pre></td></tr></table>
+<p>You can overload cast operators for any data type you wish, including your own user-defined data types!</p>
+<p>Here&#8217;s a new class called Dollars that provides an overloaded Cents cast operator:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Dollars
+{
+private:
+    int m_nDollars;
+public:
+    Dollars(int nDollars=0)
+    {
+        m_nDollars = nDollars;
+    }
+
+     // Allow us to convert Dollars into Cents
+     operator Cents() { return Cents(m_nDollars * 100); }
+};
+</pre></td></tr></table>
+<p>This allows us to convert a Dollars object directly into a Cents object!  This allows you to do something like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintCents(Cents cCents)
+{
+    cout &lt;&lt; cCents.GetCents();
+}
+
+int main()
+{
+    Dollars cDollars(9);
+    PrintCents(cDollars); // cDollars will be cast to a Cents
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Consequently, this program will print the value:</p>
+<pre>
+900
+</pre>
+<p>which makes sense, since 9 dollars is 900 cents!</p>

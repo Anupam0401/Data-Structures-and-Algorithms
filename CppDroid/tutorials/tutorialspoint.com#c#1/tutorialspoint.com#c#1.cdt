@@ -1,0 +1,1862 @@
+{
+	"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+	"INSTANCE": {
+		"children": [
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 1,
+					"title": "Overview",
+					"path": "overview"
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 2,
+					"title": "Environment Setup",
+					"path": "environment_setup"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 3,
+					"title": "Program Structure",
+					"path": "program_structure"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 4,
+					"title": "Basic Syntax",
+					"path": "basic_syntax"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 5,
+					"title": "Data Types",
+					"path": "data_types"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 6,
+					"title": "Variables",
+					"path": "variables"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+						,
+						{
+							"path": "source9.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 7,
+					"title": "Constants",
+					"path": "constants"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+						,
+						{
+							"path": "source9.c"
+						}
+						,
+						{
+							"path": "source10.c"
+						}
+						,
+						{
+							"path": "source11.c"
+						}
+						,
+						{
+							"path": "source12.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 8,
+					"title": "Storage Classes",
+					"path": "storage_classes"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Operators",
+					"path": "operators",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 9,
+							"title": "Operators",
+							"path": "operators"
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 10,
+							"title": "Arithmetic Operators in C",
+							"path": "arithmetic_operators_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 11,
+							"title": "Relational Operators in C",
+							"path": "relational_operators_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 12,
+							"title": "Logical Operators in C",
+							"path": "logical_operators_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 13,
+							"title": "Bitwise Operators in C",
+							"path": "bitwise_operators_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 14,
+							"title": "Assignment Operators in C",
+							"path": "assignment_operators_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 15,
+							"title": "sizeof operator in C",
+							"path": "sizeof_operator_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 16,
+							"title": "Operators Precedence in C",
+							"path": "operators_precedence_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Decision Making",
+					"path": "decision_making",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 17,
+							"title": "Decision Making",
+							"path": "decision_making"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 18,
+							"title": "if statement in C",
+							"path": "if_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 19,
+							"title": "if...else statement in C",
+							"path": "if___else_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 20,
+							"title": "nested if statements in C",
+							"path": "nested_if_statements_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 21,
+							"title": "switch statement in C",
+							"path": "switch_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 22,
+							"title": "nested switch statements in C",
+							"path": "nested_switch_statements_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Loops",
+					"path": "loops",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 23,
+							"title": "Loops",
+							"path": "loops"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 24,
+							"title": "while loop in C",
+							"path": "while_loop_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 25,
+							"title": "for loop in C",
+							"path": "for_loop_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 26,
+							"title": "do...while loop in C",
+							"path": "do___while_loop_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 27,
+							"title": "nested loops in C",
+							"path": "nested_loops_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 28,
+							"title": "break statement in C",
+							"path": "break_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 29,
+							"title": "continue statement in C",
+							"path": "continue_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 30,
+							"title": "goto statement in C",
+							"path": "goto_statement_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Functions",
+					"path": "functions",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 31,
+							"title": "Functions",
+							"path": "functions"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 32,
+							"title": "Function call by value in C",
+							"path": "function_call_by_value_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 33,
+							"title": "Function call by reference in C",
+							"path": "function_call_by_reference_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 34,
+					"title": "Scope Rules",
+					"path": "scope_rules"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Arrays",
+					"path": "arrays",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 35,
+							"title": "Arrays",
+							"path": "arrays"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+								,
+								{
+									"path": "source8.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 36,
+							"title": "Multi-dimensional arrays in C",
+							"path": "multi-dimensional_arrays_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+								,
+								{
+									"path": "source8.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 37,
+							"title": "Passing arrays to functions as arguments in C",
+							"path": "passing_arrays_to_functions_as_arguments_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 38,
+							"title": "Return array from function in C",
+							"path": "return_array_from_function_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 39,
+							"title": "Pointer to an array in C",
+							"path": "pointer_to_an_array_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialChapter",
+				"INSTANCE": {
+					"title": "Pointers",
+					"path": "pointers",
+					"children": [
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 40,
+							"title": "Pointers",
+							"path": "pointers"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+								,
+								{
+									"path": "source8.c"
+								}
+								,
+								{
+									"path": "source9.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 41,
+							"title": "C - Pointer Arithmetic",
+							"path": "c_-_pointer_arithmetic"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 42,
+							"title": "C - Array of Pointers",
+							"path": "c_-_array_of_pointers"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+								,
+								{
+									"path": "source5.c"
+								}
+								,
+								{
+									"path": "source6.c"
+								}
+								,
+								{
+									"path": "source7.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 43,
+							"title": "C - Pointer to Pointer Operators",
+							"path": "c_-_pointer_to_pointer_operators"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 44,
+							"title": "Passing pointers to functions in C",
+							"path": "passing_pointers_to_functions_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+								,
+								{
+									"path": "source4.c"
+								}
+							]
+						}
+					}
+					,
+					{
+						"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+						"INSTANCE": {
+							"id": 45,
+							"title": "Return pointer from functions in C",
+							"path": "return_pointer_from_functions_in_c"
+							,"sources": [
+								{
+									"path": "source1.c"
+								}
+								,
+								{
+									"path": "source2.c"
+								}
+								,
+								{
+									"path": "source3.c"
+								}
+							]
+						}
+					}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 46,
+					"title": "Strings",
+					"path": "strings"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 47,
+					"title": "Structures",
+					"path": "structures"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+						,
+						{
+							"path": "source9.c"
+						}
+						,
+						{
+							"path": "source10.c"
+						}
+						,
+						{
+							"path": "source11.c"
+						}
+						,
+						{
+							"path": "source12.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 48,
+					"title": "Unions",
+					"path": "unions"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 49,
+					"title": "Bit Fields",
+					"path": "bit_fields"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 50,
+					"title": "Typedef",
+					"path": "typedef"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 51,
+					"title": "Input & Output",
+					"path": "input_&_output"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 52,
+					"title": "File I/O",
+					"path": "file_i_o"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+						,
+						{
+							"path": "source9.c"
+						}
+						,
+						{
+							"path": "source10.c"
+						}
+						,
+						{
+							"path": "source11.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 53,
+					"title": "Preprocessors",
+					"path": "preprocessors"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+						,
+						{
+							"path": "source9.c"
+						}
+						,
+						{
+							"path": "source10.c"
+						}
+						,
+						{
+							"path": "source11.c"
+						}
+						,
+						{
+							"path": "source12.c"
+						}
+						,
+						{
+							"path": "source13.c"
+						}
+						,
+						{
+							"path": "source14.c"
+						}
+						,
+						{
+							"path": "source15.c"
+						}
+						,
+						{
+							"path": "source16.c"
+						}
+						,
+						{
+							"path": "source17.c"
+						}
+						,
+						{
+							"path": "source18.c"
+						}
+						,
+						{
+							"path": "source19.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 54,
+					"title": "Header Files",
+					"path": "header_files"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+						,
+						{
+							"path": "source8.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 55,
+					"title": "Type Casting",
+					"path": "type_casting"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+						,
+						{
+							"path": "source7.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 56,
+					"title": "Error Handling",
+					"path": "error_handling"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 57,
+					"title": "Recursion",
+					"path": "recursion"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 58,
+					"title": "Variable Arguments",
+					"path": "variable_arguments"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 59,
+					"title": "Memory Management",
+					"path": "memory_management"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+			,
+			{
+				"CLASSNAME": "name.antonsmirnov.android.cppdroid.core.TutorialLesson",
+				"INSTANCE": {
+					"id": 60,
+					"title": "Command Line Arguments",
+					"path": "command_line_arguments"
+					,"sources": [
+						{
+							"path": "source1.c"
+						}
+						,
+						{
+							"path": "source2.c"
+						}
+						,
+						{
+							"path": "source3.c"
+						}
+						,
+						{
+							"path": "source4.c"
+						}
+						,
+						{
+							"path": "source5.c"
+						}
+						,
+						{
+							"path": "source6.c"
+						}
+					]
+				}
+			}
+		]
+	}
+}

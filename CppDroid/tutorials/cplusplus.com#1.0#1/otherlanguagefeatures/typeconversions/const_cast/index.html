@@ -1,0 +1,23 @@
+
+<h3>const_cast</h3>
+This type of casting manipulates the constness of the object pointed by a pointed, either to be set or to be removed. For example, in order to pass a const pointer to a function that expects a non-const argument:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><cite>// const_cast</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>void</var> print (<var>char</var> * str)
+{
+  cout &lt;&lt; str &lt;&lt; <kbd>'\n'</kbd>;
+}
+
+<var>int</var> main () {
+  <var>const</var> <var>char</var> * c = <kbd>"sample text"</kbd>;
+  print ( <var>const_cast</var>&lt;<var>char</var> *&gt; (c) );
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>sample text</samp></pre></td></tr></table></div>
+<br>
+<br>
+The example above is guaranteed to work because function <code>print</code> does not write to the pointed object. Note though, that removing the constness of a pointed object to actually write to it causes <i>undefined behavior</i>.<br>

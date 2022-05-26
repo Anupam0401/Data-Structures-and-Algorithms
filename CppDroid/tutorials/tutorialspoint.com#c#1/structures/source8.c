@@ -1,0 +1,1 @@
+struct_pointer = &Book1;

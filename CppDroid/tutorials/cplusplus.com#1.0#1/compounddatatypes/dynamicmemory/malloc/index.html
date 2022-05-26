@@ -1,0 +1,5 @@
+
+<h3>Dynamic memory in C</h3>
+C++ integrates the operators <code>new</code> and <code>delete</code> for allocating dynamic memory. But these were not available in the C language; instead, it used a library solution, with the functions <code><a href="/malloc">malloc</a></code>, <code><a href="/calloc">calloc</a></code>, <code><a href="/realloc">realloc</a></code> and <code><a href="/free">free</a></code>, defined in the header <code><a href="/&lt;cstdlib&gt;">&lt;cstdlib&gt;</a></code> (known as <code>&lt;stdlib.h&gt;</code> in C). The functions are also available in C++ and can also be used to allocate and deallocate dynamic memory.<br>
+<br>
+Note, though, that the memory blocks allocated by these functions are not necessarily compatible with those returned by <code>new</code>, so they should not be mixed; each one should be handled with its own set of functions or operators.<br>

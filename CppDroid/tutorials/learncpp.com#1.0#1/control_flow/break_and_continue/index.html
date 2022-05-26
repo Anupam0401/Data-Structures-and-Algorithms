@@ -1,0 +1,125 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Break</strong></p>
+<p>Although you have already seen the break statement in the context of switch statements, it deserves a fuller treatment since it can be used with other types of loops as well.</p>
+<p>The break statement causes a switch statement, while loop, do while loop, or for loop to terminate.  In the context of a switch statement, a break is typically used at the end of each case to signify the case is finished (which prevents fall-through):</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+switch (chChar)
+{
+    case '+':
+        DoAddition(x, y);
+        break;
+    case '-':
+        DoSubtraction(x, y);
+        break;
+    case '*':
+        DoMultiplication(x, y);
+        break;
+    case '/':
+        DoDivision(x, y);
+        break;
+}
+</pre></td></tr></table>
+<p>In the context of a loop statement, a break can be used to cause the loop to terminate early:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cstdio&gt; // for getchar()
+#include &lt;iostream&gt;
+
+using namespace std;
+
+int main()
+{
+    // count how many spaces the user has entered
+    int nSpaceCount = 0;
+
+    // loop 80 times
+    for (int nCount=0; nCount &lt; 80; nCount++)
+    {
+        char chChar = getchar(); // read a char from user
+
+        // exit loop if user hits enter
+        if (chChar == '\n')
+            break;
+
+        // increment count if user entered a space
+        if (chChar == ' ')
+            nSpaceCount++;
+    }
+
+    cout &lt;&lt; &quot;You typed &quot; &lt;&lt; nSpaceCount &lt;&lt; &quot; spaces&quot; &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program allows the user to type up to 80 characters (the standard length of a console line).  If the user hits enter, the break causes the loop to terminate early.</p>
+<p>Note that break can be used to get out of an infinite loop.  The following program loops until the user hits enter:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+while (1)
+{
+    char chChar = getchar();
+    if (chChar == '\n')
+        break;
+}
+</pre></td></tr></table>
+<p><strong>Continue</strong></p>
+<p>The continue statement provides a convenient way to jump back to the top of a loop earlier than normal, which can be used to bypass the remainder of the loop for an iteration.  Here&#8217;s an example of using continue:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+for (int iii=0; iii &lt; 20; iii++)
+{
+    // if the number is divisible by 4, skip this iteration
+    if ((iii % 4) == 0)
+        continue;
+
+    cout &lt;&lt; iii &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program prints all of the numbers from 0 to 19 that aren&#8217;t divisible by 4.</p>
+<p>Be careful when using continue with while or do while loops.  Because these loops typically iterate the loop variables in the body of the loop, using continue can cause the loop to become infinite!  Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int iii=0;
+while (iii &lt; 10)
+{
+    if (iii==5)
+        continue;
+    cout &lt;&lt; iii &lt;&lt; &quot; &quot;;
+    iii++;
+}
+</pre></td></tr></table>
+<p>This program is intended to print every number between 0 and 9 except 5.  But it actually prints:</p>
+<pre>
+0 1 2 3 4
+</pre>
+<p>and then goes into an infinite loop.  When iii is 5, the if statement is true, and the loop returns back to the top.  iii is never incremented.  Consequently, on the next pass, iii is still 5, the if statement is still true, and the program continues to loop forever.</p>
+<p><strong>Using break and continue</strong></p>
+<p>Many textbooks caution readers not to use break and continue because it causes the execution flow to jump around.  While this is certainly true, judicious use of break and continue can actually help make loops much more readable.  For example, the following program prints all numbers from 0 to 99 which are not divisible by 3 or 4, and then prints out how many numbers were found that meet this criteria:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nPrinted = 0;
+
+for (int iii=0; iii &lt; 100; iii++)
+{
+    // messy!
+    if ((iii % 3) &amp;&amp; (iii % 4))
+    {
+        cout &lt;&lt; iii &lt;&lt; endl;
+        nPrinted++;
+    }
+}
+
+cout &lt;&lt; nPrinted &lt;&lt; &quot; numbers were found&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>However, this can be rewritten as the following, which is easier to read:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nPrinted = 0;
+
+for (int iii=0; iii &lt; 100; iii++)
+{
+    // if the number is divisible by 3 or 4, skip this iteration
+    if ((iii % 3)==0 || (iii % 4)==0)
+        continue;
+
+    cout &lt;&lt; iii &lt;&lt; endl;
+    nPrinted++;
+}
+
+cout &lt;&lt; nPrinted &lt;&lt; &quot; numbers were found&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Keeping the number of nested blocks down often improves code readability more than a break or continue harms it.  For that reason, your author is generally in favor of using break and continue when and where it makes the code easier to understand.</p>

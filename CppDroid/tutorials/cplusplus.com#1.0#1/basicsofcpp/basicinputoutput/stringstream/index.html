@@ -1,0 +1,42 @@
+
+<h3>stringstream</h3>
+The standard header <code><a href="/&lt;sstream&gt;">&lt;sstream&gt;</a></code> defines a type called <code><a href="/stringstream">stringstream</a></code> that allows a string to be treated as a stream, and thus allowing extraction or insertion operations from/to strings in the same way as they are performed on <code>cin</code> and <code>cout</code>. This feature is most useful to convert strings to numerical values and vice versa. For example, in order to extract an integer from a string we can write:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code>string mystr (<kbd>"1204"</kbd>);
+<var>int</var> myint;
+stringstream(mystr) &gt;&gt; myint;</code></pre></td></tr></table></div>
+<br>
+<br>
+This declares a <code>string</code> with initialized to a value of <code>"1204"</code>, and a variable of type <code>int</code>. Then, the third line uses this variable to extract from a <code>stringstream</code> constructed from the string. This piece of code stores the numerical value <code>1204</code> in the variable called <code>myint</code>.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br></code></pre></td>
+<td class="source"><pre><code><cite>// stringstreams</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<dfn>#include &lt;sstream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  string mystr;
+  <var>float</var> price=0;
+  <var>int</var> quantity=0;
+
+  cout &lt;&lt; <kbd>"Enter price: "</kbd>;
+  getline (cin,mystr);
+  stringstream(mystr) &gt;&gt; price;
+  cout &lt;&lt; <kbd>"Enter quantity: "</kbd>;
+  getline (cin,mystr);
+  stringstream(mystr) &gt;&gt; quantity;
+  cout &lt;&lt; <kbd>"Total price: "</kbd> &lt;&lt; price*quantity &lt;&lt; endl;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>Enter price: 22.25
+Enter quantity: 7
+Total price: 155.75</samp></pre></td></tr></table></div>
+<br>
+<br>
+In this example, we acquire numeric values from the <i>standard input</i> indirectly: Instead of extracting numeric values directly from <code>cin</code>, we get lines from it into a string object (<code>mystr</code>), and then we extract the values from this string into the variables <code>price</code> and <code>quantity</code>. Once these are numerical values, arithmetic operations can be performed on them, such as multiplying them to obtain a total price.<br>
+<br>
+With this approach of getting entire lines and extracting their contents, we separate the process of getting user input from its interpretation as data, allowing the input process to be what the user expects, and at the same time gaining more control over the transformation of its content into useful data by the program.<br>

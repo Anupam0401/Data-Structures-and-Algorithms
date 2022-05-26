@@ -1,0 +1,299 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous lesson on <a href="http://www.learncpp.com/cpp-tutorial/121-pointers-and-references-to-the-base-class-of-derived-objects/">pointers and references to the base class of derived objects</a>, we took a look at a number of examples where using pointers or references to a base class had the potential to simplify code.  However, in every case, we ran up against the problem that the base pointer or reference was only able to call the base version of a function, not a derived version.</p>
+<p>Here&#8217;s a simple example of this behavior:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+protected:
+
+public:
+    const char* GetName() { return &quot;Base&quot;; }
+};
+
+class Derived: public Base
+{
+public:
+    const char* GetName() { return &quot;Derived&quot;; }
+};
+
+int main()
+{
+    Derived cDerived;
+    Base &amp;rBase = cDerived;
+    cout &lt;&lt; &quot;rBase is a &quot; &lt;&lt; rBase.GetName() &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This example prints the result:</p>
+<pre>
+rBase is a Base
+</pre>
+<p>Because rBase is a Base pointer, it calls Base::GetName(), even though it&#8217;s actually pointing to the Base portion of a Derived object.</p>
+<p>In this lesson, we will address this issue using virtual functions.</p>
+<p><strong>Virtual functions</strong></p>
+<p>A <strong>virtual function</strong> is a special type of function that resolves to the most-derived version of the function with the same signature.  To make a function virtual, simply place the &#8220;virtual&#8221; keyword before the function declaration.</p>
+<p>Note that virtual functions and <a href="http://www.learncpp.com/cpp-tutorial/118-virtual-base-classes/">virtual base classes</a> are two entirely different concepts, even though they share the same keyword.</p>
+<p>Here&#8217;s the above example with a virtual function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+protected:
+
+public:
+    virtual const char* GetName() { return &quot;Base&quot;; }
+};
+
+class Derived: public Base
+{
+public:
+    virtual const char* GetName() { return &quot;Derived&quot;; }
+};
+
+int main()
+{
+    Derived cDerived;
+    Base &amp;rBase = &amp;cDerived;
+    cout &lt;&lt; &quot;rBase is a &quot; &lt;&lt; rBase.GetName() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This example prints the result:</p>
+<pre>
+rBase is a Derived
+</pre>
+<p>Because rBase is a pointer to the Base portion of a Derived object, when <strong>rBase.GetName()</strong> is evaluated, it would normally resolve to Base::GetName().  However, Base::GetName() is virtual, which tells the program to go look and see if there are any more-derived versions of the function available.  Because the Base object that rBase is pointing to is actually part of a Derived object, the program will check every inherited class between Base and Derived and use the most-derived version of the function that it finds.  In this case, that is Derived::GetName()!</p>
+<p>Let&#8217;s take a look at a slightly more complex example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class A
+{
+public:
+    virtual const char* GetName() { return &quot;A&quot;; }
+};
+
+class B: public A
+{
+public:
+    virtual const char* GetName() { return &quot;B&quot;; }
+};
+
+class C: public B
+{
+public:
+    virtual const char* GetName() { return &quot;C&quot;; }
+};
+
+class D: public C
+{
+public:
+    virtual const char* GetName() { return &quot;D&quot;; }
+};
+
+int main()
+{
+    C cClass;
+    A &amp;rBase = cClass;
+    cout &lt;&lt; &quot;rBase is a &quot; &lt;&lt; rBase.GetName() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>What do you think this program will output?</p>
+<p>Let&#8217;s look at how this works.  First, we instantiate a C class object.  rBase is an A pointer, which we set to point to the A portion of the C object.  Finally, we call rBase.GetName().  rBase.GetName() evaluates to A::GetName().  However, A::GetName() is virtual, so the compiler will check all the classes between A and C to see if it can find a more-derived match.  First, it checks B::GetName(), and finds a match.  Then it checks C::GetName() and finds a better match.  It does not check D::GetName() because our original object was a C, not a D.  Consequently, rBase.GetName() resolves to C::GetName().</p>
+<p>As a result, our program outputs:</p>
+<pre>
+rBase is a C
+</pre>
+<p><strong>A more complex example</strong></p>
+<p>Let&#8217;s take another look at the Animal example we were working with in the previous lesson.  Here&#8217;s the original class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Animal
+{
+protected:
+    std::string m_strName;
+
+    // We're making this constructor protected because
+    // we don't want people creating Animal objects directly,
+    // but we still want derived classes to be able to use it.
+    Animal(std::string strName)
+        : m_strName(strName)
+    {
+    }
+
+public:
+    std::string GetName() { return m_strName; }
+    const char* Speak() { return &quot;???&quot;; }
+};
+
+class Cat: public Animal
+{
+public:
+    Cat(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    const char* Speak() { return &quot;Meow&quot;; }
+};
+
+class Dog: public Animal
+{
+public:
+    Dog(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    const char* Speak() { return &quot;Woof&quot;; }
+};
+</pre></td></tr></table>
+<p>And here&#8217;s the class with virtual functions:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Animal
+{
+protected:
+    std::string m_strName;
+
+    // We're making this constructor protected because
+    // we don't want people creating Animal objects directly,
+    // but we still want derived classes to be able to use it.
+    Animal(std::string strName)
+        : m_strName(strName)
+    {
+    }
+
+public:
+    std::string GetName() { return m_strName; }
+    virtual const char* Speak() { return &quot;???&quot;; }
+};
+
+class Cat: public Animal
+{
+public:
+    Cat(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    virtual const char* Speak() { return &quot;Meow&quot;; }
+};
+
+class Dog: public Animal
+{
+public:
+    Dog(std::string strName)
+        : Animal(strName)
+    {
+    }
+
+    virtual const char* Speak() { return &quot;Woof&quot;; }
+};
+</pre></td></tr></table>
+<p>Note that we didn&#8217;t make Animal::GetName() virtual.  This is because GetName() is never overridden in any of the derived classes, therefore there is no need.</p>
+<p>Now, using the virtual Speak() function, the following function should work correctly:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void Report(Animal &amp;rAnimal)
+{
+    cout &lt;&lt; rAnimal.GetName() &lt;&lt; &quot; says &quot; &lt;&lt; rAnimal.Speak() &lt;&lt; endl;
+}
+
+int main()
+{
+    Cat cCat(&quot;Fred&quot;);
+    Dog cDog(&quot;Garbo&quot;);
+
+    Report(cCat);
+    Report(cDog);
+}
+</pre></td></tr></table>
+<p>Indeed, this program produces the result:</p>
+<pre>
+Fred says Meow
+Garbo says Woof
+</pre>
+<p>When cAnimal.Speak() is evaluated, the program notes that it is a virtual function.  In the case where rAnimal is pointing to the Animal portion of a Cat object, the program looks at all the classes between Animal and Cat to see if it can find a more derived function.  In that case, it finds Cat::Speak().  In the case where rAnimal points to the Animal portion of a Dog object, the program resolves the function call to Dog::Speak().</p>
+<p>Similarly, the following array example now works as expected:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cat cFred(&quot;Fred&quot;), cTyson(&quot;Tyson&quot;), cZeke(&quot;Zeke&quot;);
+Dog cGarbo(&quot;Garbo&quot;), cPooky(&quot;Pooky&quot;), cTruffle(&quot;Truffle&quot;);
+
+// Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
+Animal *apcAnimals[] = { &amp;cFred, &amp;cGarbo, &amp;cPooky, &amp;cTruffle, &amp;cTyson, &amp;cZeke };
+for (int iii=0; iii &lt; 6; iii++)
+    cout &lt;&lt; apcAnimals[iii]-&gt;GetName() &lt;&lt; &quot; says &quot; &lt;&lt; apcAnimals[iii]-&gt;Speak() &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Which produces the result:</p>
+<pre>
+Fred says Meow
+Garbo says Woof
+Pooky says Woof
+Truffle says Woof
+Tyson says Meow
+Zeke says Meow
+</pre>
+<p>Even though these two examples only use Cat and Dog, any other classes we derive from Animal would also work with our Report() function and Animal array without further modification!  This is perhaps the biggest benefit of virtual functions &#8212; the ability to structure your code in such a way that newly derived classes will automatically work with the old code without modification!</p>
+<p>A word of warning: the signature of the derived class function must exactly match the signature of the base class virtual function in order for the derived class function to be used.  If the derived class function has different parameter types, the program will likely still compile fine, but the virtual function will not resolve as intended.</p>
+<p><strong>Use of the virtual keyword</strong></p>
+<p>Technically, the virtual keyword is not needed in derived class.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+protected:
+
+public:
+    virtual const char* GetName() { return &quot;Base&quot;; }
+};
+
+class Derived: public Base
+{
+public:
+    const char* GetName() { return &quot;Derived&quot;; } // note lack of virtual keyword
+};
+
+int main()
+{
+    Derived cDerived;
+    Base &amp;rBase = cDerived;
+    cout &lt;&lt; &quot;rBase is a &quot; &lt;&lt; rBase.GetName() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>prints</p>
+<pre>
+rBase is a Derived
+</pre>
+<p>Exactly the same as if Derived::GetName() was explicitly tagged as virtual.  Only the most base class function needs to be tagged as virtual for all of the derived functions to work virtually.  However, having the keyword virtual on the derived functions does not hurt, and it serves as a useful reminder that the function is a virtual function rather than a normal one.  Consequently, it&#8217;s generally a good idea to use the virtual keyword for virtualized functions in derived classes even though it&#8217;s not strictly necessary.</p>
+<p><strong>Return types of virtual functions</strong></p>
+<p>Under normal circumstances, the return type of a virtual function and it&#8217;s override must match.  Thus, the following will not work:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+public:
+    virtual int GetValue() { return 5; }
+};
+
+class Derived: public Base
+{
+public:
+    virtual double GetValue() { return 6.78; }
+};
+</pre></td></tr></table>
+<p>However, there is one special case in which this is not true.  If the return type of a virtual function is a pointer or a reference to a class, override functions can return a pointer or a reference to a derived class.  These are called covariant return types.  Here is an example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+public:
+    // This version of GetThis() returns a pointer to a Base class
+    virtual Base* GetThis() { return this; }
+};
+
+class Derived: public Base
+{
+    // Normally override functions have to return objects of the same type as the base function
+    // However, because Derived is derived from Base, it's okay to return Derived* instead of Base*
+    virtual Derived* GetThis() { return this; }
+};
+</pre></td></tr></table>
+<p>Note that some older compilers (eg. Visual Studio 6) do not support covariant return types.</p>

@@ -1,0 +1,61 @@
+
+<p>Sometimes, you may come across a situation, when you want to have a function, which can take variable number of arguments, i.e., parameters, instead of predefined number of parameters. The C programming language provides a solution for this situation and you are allowed to define a function which can accept variable number of parameters based on your requirement. The following example shows the definition of such a function.</p>
+<table><tr><td class="source"><pre class="prettyprint">
+int func(int, ... ) 
+{
+   .
+   .
+   .
+}
+
+int main()
+{
+   func(1, 2, 3);
+   func(1, 2, 3, 4);
+}
+</pre></td></tr></table>
+<p>It should be noted that function <b>func()</b> has last argument as ellipses i.e. three dotes (<b>...</b>) and the one just before the ellipses is always an <b>int</b> which will represent total number variable arguments passed. To use such functionality you need to make use of <b>stdarg.h</b> header file which provides functions and macros to implement the functionality of variable arguments and follow the following steps: </p>
+<ul class="list">
+<li><p>Define a function with last parameter as ellipses and the one just before the ellipses is always an <b>int</b> which will represent number of arguments.</p></li>
+<li><p>Create a <b>va_list</b> type variable in the function definition. This type is defined in stdarg.h header file.</p></li>
+<li><p>Use <b>int</b> parameter and <b>va_start</b> macro to initialize the <b>va_list</b> variable to an argument list. The macro va_start is defined in stdarg.h header file.</p></li>
+<li><p>Use <b>va_arg</b> macro and <b>va_list</b> variable to access each item in argument list.</p></li>
+<li><p>Use a macro <b>va_end</b> to clean up the memory assigned to <b>va_list</b> variable.</p></li>
+</ul>
+<p>Now let us follow the above steps and write down a simple function which can take variable number of parameters and returns their average:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+#include &lt;stdarg.h&gt;
+
+double average(int num,...)
+{
+
+    va_list valist;
+    double sum = 0.0;
+    int i;
+
+    /* initialize valist for num number of arguments */
+    va_start(valist, num);
+
+    /* access all the arguments assigned to valist */
+    for (i = 0; i &lt; num; i++)
+    {
+       sum += va_arg(valist, int);
+    }
+    /* clean memory reserved for valist */
+    va_end(valist);
+
+    return sum/num;
+}
+
+int main()
+{
+   printf("Average of 2, 3, 4, 5 = %f\n", average(4, 2,3,4,5));
+   printf("Average of 5, 10, 15 = %f\n", average(3, 5,10,15));
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result. It should be noted that the function <b>average()</b> has been called twice and each time first argument represents the total number of variable arguments being passed. Only ellipses will be used to pass variable number of arguments.</p>
+<table><tr><td class="source"><pre class="result">
+Average of 2, 3, 4, 5 = 3.500000
+Average of 5, 10, 15 = 10.000000
+</pre></td></tr></table>

@@ -1,0 +1,58 @@
+
+<h3>Pointers to base class</h3>
+One of the key features of class inheritance is that a pointer to a derived class is type-compatible with a pointer to its base class. <i>Polymorphism</i> is the art of taking advantage of this simple but powerful and versatile feature.<br>
+<br>
+The example about the rectangle and triangle classes can be rewritten using pointers taking this feature into account:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br></code></pre></td>
+<td class="source"><pre><code><cite>// pointers to base class</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Polygon {
+  <var>protected</var>:
+    <var>int</var> width, height;
+  <var>public</var>:
+    <var>void</var> set_values (<var>int</var> a, <var>int</var> b)
+      { width=a; height=b; }
+};
+
+<var>class</var> Rectangle: <var>public</var> Polygon {
+  <var>public</var>:
+    <var>int</var> area()
+      { <var>return</var> width*height; }
+};
+
+<var>class</var> Triangle: <var>public</var> Polygon {
+  <var>public</var>:
+    <var>int</var> area()
+      { <var>return</var> width*height/2; }
+};
+
+<var>int</var> main () {
+  Rectangle rect;
+  Triangle trgl;
+  Polygon * ppoly1 = &amp;rect;
+  Polygon * ppoly2 = &amp;trgl;
+  ppoly1-&gt;set_values (4,5);
+  ppoly2-&gt;set_values (4,5);
+  cout &lt;&lt; rect.area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; trgl.area() &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>20
+10</samp></pre></td></tr></table></div>
+<br>
+<br>
+Function <code>main</code> declares two pointers to <code>Polygon</code> (named <code>ppoly1</code> and <code>ppoly2</code>). These are assigned the addresses of <code>rect</code> and <code>trgl</code>, respectively, which are objects of type <code>Rectangle</code> and <code>Triangle</code>. Such assignments are valid, since both <code>Rectangle</code> and <code>Triangle</code> are classes derived from <code>Polygon</code>.<br>
+<br>
+Dereferencing <code>ppoly1</code> and <code>ppoly2</code> (with <code>*ppoly1</code> and <code>*ppoly2</code>) is valid and allows us to access the members of their pointed objects. For example, the following two statements would be equivalent in the previous example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>ppoly1-&gt;set_values (4,5);
+rect.set_values (4,5);</code></pre></td></tr></table></div>
+<br>
+<br>
+But because the type of <code>ppoly1</code> and <code>ppoly2</code> is pointer to <code>Polygon</code> (and not pointer to <code>Rectangle</code> nor pointer to <code>Triangle</code>), only the members inherited from <code>Polygon</code> can be accessed, and not those of the derived classes <code>Rectangle</code> and <code>Triangle</code>. That is why the program above accesses the <code>area</code> members of both objects using <code>rect</code> and <code>trgl</code> directly, instead of the pointers; the pointers to the base class cannot access the <code>area</code> members.<br>
+<br>
+Member <code>area</code> could have been accessed with the pointers to <code>Polygon</code> if <code>area</code> were a member of <code>Polygon</code> instead of a member of its derived classes, but the problem is that <code>Rectangle</code> and <code>Triangle</code> implement different versions of <code>area</code>, therefore there is not a single common version that could be implemented in the base class. <br>

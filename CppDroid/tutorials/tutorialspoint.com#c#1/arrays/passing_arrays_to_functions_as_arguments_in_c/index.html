@@ -1,0 +1,79 @@
+
+<p>If you want to pass a single-dimension array as an argument in a function, you would have to declare function formal parameter in one of following three ways and all three declaration methods produce similar results because each tells the compiler that an integer pointer is going to be received. Similar way you can pass multi-dimensional  array as formal parameters.</p>
+<h2>Way-1</h2>
+<p>Formal parameters as a pointer as follows. You will study what is pointer in next chapter.</p>
+<table><tr><td class="source"><pre class="prettyprint">
+void myFunction(int *param)
+{
+.
+.
+.
+}
+</pre></td></tr></table>
+<h2>Way-2</h2>
+<p>Formal parameters as a sized array as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+void myFunction(int param[10])
+{
+.
+.
+.
+}
+</pre></td></tr></table>
+<h2>Way-3</h2>
+<p>Formal parameters as an unsized array as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+void myFunction(int param[])
+{
+.
+.
+.
+}
+</pre></td></tr></table>
+<h2>Example</h2>
+<p>Now, consider the following function, which will take an array as an argument along with another argument and based on the passed arguments, it will return average of the numbers passed through the array as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+double getAverage(int arr[], int size)
+{
+  int    i;
+  double avg;
+  double sum;
+
+  for (i = 0; i &lt; size; ++i)
+  {
+    sum += arr[i];
+  }
+
+  avg = sum / size;
+
+  return avg;
+}
+
+</pre></td></tr></table>
+<p>Now, let us call the above function as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+ 
+/* function declaration */
+double getAverage(int arr[], int size);
+
+int main ()
+{
+   /* an int array with 5 elements */
+   int balance[5] = {1000, 2, 3, 17, 50};
+   double avg;
+
+   /* pass pointer to the array as an argument */
+   avg = getAverage( balance, 5 ) ;
+ 
+   /* output the returned value */
+   printf( "Average value is: %f ", avg );
+    
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled together and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+Average value is: 214.400000
+</pre></td></tr></table>
+<p>As you can see, the length of the array doesn't matter as far as the function is concerned because C performs no bounds checking for the formal parameters.</p>

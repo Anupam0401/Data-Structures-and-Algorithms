@@ -1,0 +1,11 @@
+Line 1 - =  Operator Example, Value of c = 21
+Line 2 - += Operator Example, Value of c = 42
+Line 3 - -= Operator Example, Value of c = 21
+Line 4 - *= Operator Example, Value of c = 441
+Line 5 - /= Operator Example, Value of c = 21
+Line 6 - %= Operator Example, Value of c = 11
+Line 7 - <<= Operator Example, Value of c = 44
+Line 8 - >>= Operator Example, Value of c = 11
+Line 9 - &= Operator Example, Value of c = 2
+Line 10 - ^= Operator Example, Value of c = 0
+Line 11 - |= Operator Example, Value of c = 2

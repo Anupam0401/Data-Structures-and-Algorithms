@@ -1,0 +1,73 @@
+
+<p>The string in C programming language is actually a one-dimensional array of characters which is terminated by a <b>null</b> character '\0'. Thus a null-terminated string contains the characters that comprise the string followed by a <b>null</b>.</p>
+<p>The following declaration and initialization create a string consisting of the word "Hello". To hold the null character at the end of the array, the size of the character array containing the string is one more than the number of characters in the word "Hello."</p>
+<table><tr><td class="source"><pre class="prettyprint">
+char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+</pre></td></tr></table>
+<p>If you follow the rule  of array initialization then you can write the above statement as follows: </p>
+<table><tr><td class="source"><pre class="prettyprint">
+char greeting[] = "Hello";
+</pre></td></tr></table>
+<p>Following is the memory presentation of above defined string in C/C++:</p>
+<img src="{path}/string_representation.jpg" alt="String Presentation in C/C++"/>
+<p>Actually, you do not place the <i>null</i> character at the end of a string constant. The C compiler automatically places the '\0' at the end of the string when it initializes the array. Let us try to print above mentioned string:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+
+int main ()
+{
+   char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+
+   printf("Greeting message: %s\n", greeting );
+
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces result something as follows:</p>
+<table><tr><td class="source"><pre class="result">
+Greeting message: Hello
+</pre></td></tr></table>
+<p>C supports a wide range of functions that manipulate null-terminated strings:</p>
+<table class="src">
+<tr><th style="width:5%">S.N.</th><th>Function &amp; Purpose</th></tr>
+<tr><td>1</td><td><b>strcpy(s1, s2);</b><br/>Copies string s2 into string s1.</td></tr>
+<tr><td>2</td><td><b>strcat(s1, s2);</b><br/>Concatenates string s2 onto the end of string s1.</td></tr>
+<tr><td>3</td><td><b>strlen(s1);</b><br/>Returns the length of string s1.</td></tr>
+<tr><td>4</td><td><b>strcmp(s1, s2);</b><br/>Returns 0 if s1 and s2 are the same; less than 0 if s1&lt;s2; greater than 0 if s1&gt;s2.</td></tr>
+<tr><td>5</td><td><b>strchr(s1, ch);</b><br/>Returns a pointer to the first occurrence of character ch in string s1.</td></tr>
+<tr><td>6</td><td><b>strstr(s1, s2);</b><br/>Returns a pointer to the first occurrence of string s2 in string s1.</td></tr>
+</table>
+<p>Following example makes use of few of the above-mentioned functions:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main ()
+{
+   char str1[12] = "Hello";
+   char str2[12] = "World";
+   char str3[12];
+   int  len ;
+
+   /* copy str1 into str3 */
+   strcpy(str3, str1);
+   printf("strcpy( str3, str1) :  %s\n", str3 );
+
+   /* concatenates str1 and str2 */
+   strcat( str1, str2);
+   printf("strcat( str1, str2):   %s\n", str1 );
+
+   /* total lenghth of str1 after concatenation */
+   len = strlen(str1);
+   printf("strlen(str1) :  %d\n", len );
+
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces result something as follows:</p>
+<table><tr><td class="source"><pre class="result">
+strcpy( str3, str1) :  Hello
+strcat( str1, str2):   HelloWorld
+strlen(str1) :  10
+</pre></td></tr></table>
+<p>You can find a complete list of c string related functions in C Standard Library.</p>

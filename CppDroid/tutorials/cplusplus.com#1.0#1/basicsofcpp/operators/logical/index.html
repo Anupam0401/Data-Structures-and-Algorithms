@@ -1,0 +1,54 @@
+
+<h3>Logical operators ( !, &&, || )</h3>
+The operator <code>!</code> is the C++ operator for the Boolean operation NOT. It has only one operand, to its right, and inverts it, producing <code>false</code> if its operand is <code>true</code>, and <code>true</code> if its operand is <code>false</code>. Basically, it returns the opposite Boolean value of evaluating its operand. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>!(5 == 5)   <cite>// evaluates to false because the expression at its right (5 == 5) is true</cite>
+!(6 &lt;= 4)   <cite>// evaluates to true because (6 &lt;= 4) would be false</cite>
+!<var>true</var>       <cite>// evaluates to false</cite>
+!<var>false</var>      <cite>// evaluates to true </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+The logical operators <code>&&</code> and <code>||</code> are used when evaluating two expressions to obtain a single relational result. The operator <code>&&</code> corresponds to the Boolean logical operation AND, which yields <code>true</code> if both its operands are <code>true</code>, and <code>false</code> otherwise. The following panel shows the result of operator <code>&&</Code> evaluating the expression <code>a&&b</code>:<br>
+<br>
+<table class="boxed">
+<tr><th colspan="3">&& OPERATOR (and)</th></tr>
+<tr><th><code>a</code></th><th><code>b</code></th><th><code>a && b</code></th></tr>
+<tr><td><code>true</code></td><td><code>true</code></td><td><code>true</code></td></tr>
+<tr><td><code>true</code></td><td><code>false</code></td><td><code>false</code></td></tr>
+<tr><td><code>false</code></td><td><code>true</code></td><td><code>false</code></td></tr>
+<tr><td><code>false</code></td><td><code>false</code></td><td><code>false</code></td></tr>
+</table>
+<br>
+The operator <code>||</code> corresponds to the Boolean logical operation OR, which yields <code>true</code> if either of its operands is <code>true</code>, thus being false only when both operands are false. Here are the possible results of <code>a||b</code>:<br>
+<br>
+<table class="boxed">
+<tr><th colspan="3">|| OPERATOR (or)</th></tr>
+<tr><th><code>a</code></th><th><code>b</code></th><th><code>a || b</code></th></tr>
+<tr><td><code>true</code></td><td><code>true</code></td><td><code>true</code></td></tr>
+<tr><td><code>true</code></td><td><code>false</code></td><td><code>true</code></td></tr>
+<tr><td><code>false</code></td><td><code>true</code></td><td><code>true</code></td></tr>
+<tr><td><code>false</code></td><td><code>false</code></td><td><code>false</code></td></tr>
+</table>
+<br>
+For example:<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>( (5 == 5) &amp;&amp; (3 &gt; 6) )  <cite>// evaluates to false ( true &amp;&amp; false )</cite>
+( (5 == 5) || (3 &gt; 6) )  <cite>// evaluates to true ( true || false ) </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+When using the logical operators, C++ only evaluates what is necessary from left to right to come up with the combined relational result, ignoring the rest. Therefore, in the last example (<code>(5==5)||(3&gt;6)</code>), C++ evaluates first whether <code>5==5</code> is <code>true</code>, and if so, it never checks whether <code>3&gt;6</code> is <code>true</code> or not. This is known as <i>short-circuit evaluation</i>, and works like this for these operators:<br>
+<br>
+<table class="boxed">
+<tr><th>operator</th><th>short-circuit</th></tr>
+<tr><td><code>&&</code></td><td>if the left-hand side expression is <code>false</code>, the combined result is <code>false</code> (the right-hand side expression is never evaluated).</td></tr>
+<tr><td><code>||</code></td><td>if the left-hand side expression is <code>true</code>, the combined result is <code>true</code> (the right-hand side expression is never evaluated).</td></tr>
+</table>
+<br>
+This is mostly important when the right-hand expression has side effects, such as altering values:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>if</var> ( (i&lt;10) &amp;&amp; (++i&lt;n) ) { <cite>/*...*/</cite> }   <cite>// note that the condition increments i </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Here, the combined conditional expression would increase <code>i</code> by one, but only if the condition on the left of <code>&&</code> is <code>true</code>, because otherwise, the condition on the right-hand side (<code>++i&lt;n</code>) is never evaluated.<br>

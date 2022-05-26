@@ -1,0 +1,83 @@
+
+<h3>Default constructor</h3>
+The <dfn>default constructor</dfn> is the constructor called when objects of a class are declared, but are not initialized with any arguments.<br>
+<br>
+If a class definition has no constructors, the compiler assumes the class to have an implicitly defined <i>default constructor</i>. Therefore, after declaring a class like this:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code><var>class</var> Example {
+  <var>public</var>:
+    <var>int</var> total;
+    <var>void</var> accumulate (<var>int</var> x) { total += x; }
+};</code></pre></td></tr></table></div>
+<br>
+<br>
+The compiler assumes that <code>Example</code> has a <i>default constructor</i>. Therefore, objects of this class can be constructed by simply declaring them without any arguments:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Example ex;</code></pre></td></tr></table></div>
+<br>
+<br>
+But as soon as a class has some constructor taking any number of parameters explicitly declared, the compiler no longer provides an implicit default constructor, and no longer allows the declaration of new objects of that class without arguments. For example, the following class:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code><var>class</var> Example2 {
+  <var>public</var>:
+    <var>int</var> total;
+    Example2 (<var>int</var> initial_value) : total(initial_value) { };
+    <var>void</var> accumulate (<var>int</var> x) { total += x; };
+};</code></pre></td></tr></table></div>
+<br>
+<br>
+Here, we have declared a constructor with a parameter of type <code>int</code>. Therefore the following object declaration would be correct:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Example2 ex (100);   <cite>// ok: calls constructor </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+But the following:<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Example2 ex;         <cite>// not valid: no default constructor </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Would not be valid, since the class has been declared with an explicit constructor taking one argument and that replaces the implicit <i>default constructor</i> taking none.<br>
+<br>
+Therefore, if objects of this class need to be constructed without arguments, the proper <i>default constructor</i> shall also be declared in the class. For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br></code></pre></td>
+<td class="source"><pre><code><cite>// classes and default constructors</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<dfn>#include &lt;string&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Example3 {
+    string data;
+  <var>public</var>:
+    Example3 (<var>const</var> string&amp; str) : data(str) {}
+    Example3() {}
+    <var>const</var> string&amp; content() <var>const</var> {<var>return</var> data;}
+};
+
+<var>int</var> main () {
+  Example3 foo;
+  Example3 bar (<kbd>"Example"</kbd>);
+
+  cout &lt;&lt; <kbd>"bar's content: "</kbd> &lt;&lt; bar.content() &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>bar's content: Example</samp></pre></td></tr></table></div>
+<br>
+<br>
+Here, <code>Example3</code> has a <i>default constructor</i> (i.e., a constructor without parameters) defined as an empty block:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Example3() {};</code></pre></td></tr></table></div>
+<br>
+<br>
+This allows objects of class <code>Example3</code> to be constructed without arguments (like <code>foo</code> was declared in this example). Normally, a default constructor like this is implicitly defined for all classes that have no other constructors and thus no explicit definition is required. But in this case, <code>Example3</code> has another constructor:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Example3 (<var>const</var> string&amp; str);</code></pre></td></tr></table></div>
+<br>
+<br>
+And when any constructor is explicitly declared in a class, no implicit <i>default constructors</i> is automatically provided.<br>

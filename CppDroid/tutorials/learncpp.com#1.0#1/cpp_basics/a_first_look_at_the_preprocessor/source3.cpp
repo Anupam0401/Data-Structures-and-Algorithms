@@ -1,0 +1,1 @@
+int nYen = nDollars * 122;

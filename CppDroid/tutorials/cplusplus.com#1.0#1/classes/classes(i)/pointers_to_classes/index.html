@@ -1,0 +1,57 @@
+
+<h3>Pointers to classes</h3>
+Objects can also be pointed to by pointers: Once declared, a class becomes a valid type, so it can be used as the type pointed to by a pointer. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>Rectangle * prect;</code></pre></td></tr></table></div>
+<br>
+<br>
+is a pointer to an object of class <code>Rectangle</code>.<br>
+<br>
+Similarly as with plain data structures, the members of an object can be accessed directly from a pointer by using the arrow operator (<code>-&gt;</code>). Here is an example with some possible combinations:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br></code></pre></td>
+<td class="source"><pre><code><cite>// pointer to classes example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Rectangle {
+  <var>int</var> width, height;
+<var>public</var>:
+  Rectangle(<var>int</var> x, <var>int</var> y) : width(x), height(y) {}
+  <var>int</var> area(<var>void</var>) { <var>return</var> width * height; }
+};
+
+
+<var>int</var> main() {
+  Rectangle obj (3, 4);
+  Rectangle * foo, * bar, * baz;
+  foo = &amp;obj;
+  bar = <var>new</var> Rectangle (5, 6);
+  baz = <var>new</var> Rectangle[2] { {2,5}, {3,6} };
+  cout &lt;&lt; <kbd>"obj's area: "</kbd> &lt;&lt; obj.area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; <kbd>"*foo's area: "</kbd> &lt;&lt; foo-&gt;area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; <kbd>"*bar's area: "</kbd> &lt;&lt; bar-&gt;area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; <kbd>"baz[0]'s area:"</kbd> &lt;&lt; baz[0].area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; <kbd>"baz[1]'s area:"</kbd> &lt;&lt; baz[1].area() &lt;&lt; <kbd>'\n'</kbd>;       
+  <var>delete</var> bar;
+  <var>delete</var>[] baz;
+  <var>return</var> 0;
+}	</code></pre></td></tr></table></div>
+<br>
+<br>
+This example makes use of several operators to operate on objects and pointers (operators <code>*</code>, <code>&</code>, <code>.</code>, <code>-&gt;</code>, <code>[]</code>). They can be interpreted as:<br>
+<br>
+<table class="boxed">
+<tr><th>expression</th><th>can be read as</th></tr>
+<tr><td><code>*x</code></td><td>pointed to by <code>x</code></td></tr>
+<tr><td><code>&x</code></td><td>address of <code>x</code></td></tr>
+<tr><td><code>x.y</code></td><td>member <code>y</code> of object <code>x</code></td></tr>
+<tr><td><code>x-&gt;y</code></td><td>member <code>y</code> of object pointed to by <code>x</code></td></tr>
+<tr><td><code>(*x).y</code></td><td>member <code>y</code> of object pointed to by <code>x</code> (equivalent to the previous one)</td></tr>
+<tr><td><code>x[0]</code></td><td>first object pointed to by <code>x</code></td></tr>
+<tr><td><code>x[1]</code></td><td>second object pointed to by <code>x</code></td></tr>
+<tr><td><code>x[n]</code></td><td>(<code>n+1</code>)th object pointed to by <code>x</code></td></tr>
+</table>
+<br>
+Most of these expressions have been introduced in earlier chapters. Most notably, the chapter about arrays introduced the offset operator (<code>[]</code>) and the chapter about plain data structures introduced the arrow operator (<code>-&gt;</code>).<br>

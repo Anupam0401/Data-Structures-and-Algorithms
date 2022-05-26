@@ -1,0 +1,118 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In some cases, we need a variable only temporarily.  For example, consider the following situation:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int Add(int nX, int nY)
+{
+    int nSum = nX + nY;
+    return nSum;
+}
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; Add(5, 3);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>In the Add() function, note that the nSum variable is really only used as a temporary placeholder variable.  It doesn&#8217;t contribute much &#8212; rather, it&#8217;s only function is to transfer the result of the expression to the return value.</p>
+<p>There is actually an easier way to write the Add() function using an anonymous variable.  An <strong>anonymous variable</strong> is a variable that is given no name.  Anonymous variables in C++ have &#8220;expression scope&#8221;, meaning they are destroyed at the end of the expression in which they are created.   Consequently, they must be used immediately!</p>
+<p>Here is the Add() function rewritten using an anonymous variable:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int Add(int nX, int nY)
+{
+    return nX + nY;
+}
+</pre></td></tr></table>
+<p>When the expression <code>nX + nY</code> is evaluated, the result is placed in an anonymous, unnamed variable.  A copy of the anonymous variable is returned to the caller by value.</p>
+<p>This not only works with return values, but also with function parameters.  For example, instead of this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintValue(int nValue)
+{
+    using namespace std;
+    cout &lt;&lt; nValue;
+}
+
+int main()
+{
+    int nSum = 5 + 3;
+    PrintValue(nSum);
+    return 0;
+}
+</pre></td></tr></table>
+<p>We can write this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    PrintValue(5 + 3);
+    return 0;
+}
+</pre></td></tr></table>
+<p>In this case, the expression 5 + 3 is evaluated to produce the result 8, which is placed in an anonymous variable.  A copy of this anonymous variable is then passed to the PrintValue() function, which prints the value 8.</p>
+<p>Note how much cleaner this keeps our code &#8212; we don&#8217;t have to litter the code with temporary variables that are only used once.</p>
+<p><strong>Anonymous class objects</strong></p>
+<p>Although our prior examples have been with built-in data types, it is possible to construct anonymous objects of our own class types as well.  This is done by creating objects like normal, but omitting the variable name.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cents cCents(5); // normal variable
+Cents(7); // anonymous variable
+</pre></td></tr></table>
+<p>In the above code, <code>Cents(7)</code> will create an anonymous Cents object, initialize it with the value 7, and then destroy it.  In this context, that isn&#8217;t going to do us much good.  So let&#8217;s take a look at an example where it can be put to good use:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+
+public:
+    Cents(int nCents) { m_nCents = nCents; }
+
+    int GetCents() { return m_nCents; }
+};
+
+Cents Add(Cents &amp;c1, Cents &amp;c2)
+{
+    Cents cTemp(c1.GetCents() + c2.GetCents());
+    return cTemp;
+}
+
+int main()
+{
+    Cents cCents1(6);
+    Cents cCents2(8);
+    Cents cCentsSum = Add(cCents1, cCents2);
+    std::cout &lt;&lt; &quot;I have &quot; &lt;&lt; cCentsSum.GetCents() &lt;&lt; &quot; cents.&quot; &lt;&lt; std::endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Note that this example is very similar to the prior one using integers.  In this case, our Add() function is constructing a short-lived cTemp variable that only serves as a placeholder.  We are also using a cCentsSum variable in main().  </p>
+<p>We can simplify this program by using anonymous variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+
+public:
+    Cents(int nCents) { m_nCents = nCents; }
+
+    int GetCents() { return m_nCents; }
+};
+
+Cents Add(Cents &amp;c1, Cents &amp;c2)
+{
+    return Cents(c1.GetCents() + c2.GetCents());
+}
+
+int main()
+{
+    Cents cCents1(6);
+    Cents cCents2(8);
+    std::cout &lt;&lt; &quot;I have &quot; &lt;&lt; Add(cCents1, cCents2).GetCents() &lt;&lt; &quot; cents.&quot; &lt;&lt; std::endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This version of Add() functions identically to the one above, except it uses an anonymous Cents value instead of a named variable.  Also note that in main(), we no longer use a named cCentsSum variable as temporary storage.  Instead, we use the return value of Add() anonymously!</p>
+<p>As a result, our program is shorter, cleaner, and generally easier to follow (once you understand the concept).</p>
+<p>In C++, anonymous variables are primarily used either to pass or return values without having to create lots of temporary variables to do so.  However, it is worth noting that anonymous objects can only be passed or returned by value!  If a variable is passed or returned by reference or address, a named variable must be used instead.  It is also worth noting that because anonymous variables have expression scope, if you need to reference a value in multiple expressions, you will have to use a named variable.</p>

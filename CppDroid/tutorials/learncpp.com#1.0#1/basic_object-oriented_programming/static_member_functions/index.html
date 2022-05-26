@@ -1,0 +1,70 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous lesson on <a href="http://www.learncpp.com/cpp-tutorial/811-static-member-variables/">static member variables</a>, you learned that classes can have member variables that are shared across all objects of that class type.  However, what if our static member variables are private?  Consider the following example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Something
+{
+private:
+    static int s_nValue;
+
+};
+
+int Something::s_nValue = 1; // initializer
+
+int main()
+{
+    // how do we access Something::s_nValue?
+}
+</pre></td></tr></table>
+<p>In this case, we can&#8217;t access Something::s_nValue directly from main(), because it is private.  Normally we access private members through public member functions.  While we could create a normal public member function to access s_nValue, we&#8217;d then need to instantiate an object of the class type to use the function!  We can do better.  In this case, the answer to the problem is that we can also make member functions static.</p>
+<p>Like static member variables, static member functions are not attached to any particular object.  Here is the above example with a static member function accessor:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Something
+{
+private:
+    static int s_nValue;
+public:
+    static int GetValue() { return s_nValue; }
+};
+
+int Something::s_nValue = 1; // initializer
+
+int main()
+{
+    std::cout &lt;&lt; Something::GetValue() &lt;&lt; std::endl;
+}
+</pre></td></tr></table>
+<p>Because static member functions are not attached to a particular object, they can be called directly by using the class name and the scope operator.  Like static member variables, they can also be called through objects of the class type, though this is not recommended.</p>
+<p>Static member functions have two interesting quirks worth noting.  First, because static member functions are not attached to an object, they have no <em>this</em> pointer!  This makes sense when you think about it &#8212; the <em>this</em> pointer always points to the object that the member function is working on.  Static member functions do not work on an object, so the <em>this</em> pointer is not needed.</p>
+<p>Second, static member functions can only access static member variables.  They can not access non-static member variables.  This is because non-static member variables must belong to a class object, and static member functions have no class object to work with!</p>
+<p>Here&#8217;s another example using static member variables and functions:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class IDGenerator
+{
+private:
+    static int s_nNextID;
+
+public:
+     static int GetNextID() { return s_nNextID++; }
+};
+
+// We'll start generating IDs at 1
+int IDGenerator::s_nNextID = 1;
+
+int main()
+{
+    for (int i=0; i &lt; 5; i++)
+        cout &lt;&lt; &quot;The next ID is: &quot; &lt;&lt; IDGenerator::GetNextID() &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program prints:</p>
+<pre>
+The next ID is: 1
+The next ID is: 2
+The next ID is: 3
+The next ID is: 4
+The next ID is: 5
+</pre>
+<p>Note that because all the data and functions in this class are static, we don&#8217;t need to instantiate an object of the class to make use of it&#8217;s functionality!  This class utilizes a static member variable to hold the value of the next ID to be assigned, and provides a static member function to return that ID and increment it.</p>
+<p>Be careful when writing classes with all static members like this.  Although such &#8220;pure static classes&#8221; can be useful, they also come with some potential downsides.  First, because all of the members belong to the class, and the class is accessible from anywhere in the program, it&#8217;s essentially the equivalent of declaring a global variable of the class type.  In the section on global variables, you learned that global variables are dangerous because one piece of code can change the value of the global variable and end up breaking another piece of seemingly unrelated code.  The same holds true for pure static classes.  Second, because all static members are instantiated only once, there is no way to have multiple copies of a pure static class (without cloning the class and renaming it).  For example, if you needed two independent IDGenerators, this would not be possible.</p>

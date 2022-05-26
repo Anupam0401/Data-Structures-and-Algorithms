@@ -1,0 +1,194 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Function template instances</strong></p>
+<p>It&#8217;s worth taking a brief look at how template functions are implemented in C++, because future lessons will build off of some of these concepts.  It turns out that C++ does not compile the template function directly.  Instead, at compile time, when the compiler encounters a call to a template function, it replicates the template function and replaces the template type parameters with actual types!  The function with actual types is called a <strong>function template instance</strong>.</p>
+<p>Let&#8217;s take a look at an example of this process.  First, we have a templated function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+template &lt;typename Type&gt; // this is the template parameter declaration
+Type max(Type tX, Type tY)
+{
+    return (tX &gt; tY) ? tX : tY;
+}
+</pre></td></tr></table>
+<p>When compiling your program, the compiler encounters a call to the templated function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = max(3, 7); // calls max(int, int)
+</pre></td></tr></table>
+<p>The compiler says, &#8220;oh, we want to call max(int, int)&#8221;.  The compiler replicates the function template and creates the template instance max(int, int):</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int max(int tX, int tY)
+{
+    return (tX &gt; tY) ? tX : tY;
+}
+</pre></td></tr></table>
+<p>This is now a &#8220;normal function&#8221; that can be compiled into machine language.</p>
+<p>Now, let&#8217;s say later in your code, you called max() again using a different type:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double dValue = max(6.34, 18.523); // calls max(double, double)
+</pre></td></tr></table>
+<p>C++ automatically creates a template instance for max(double, double):</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double max(double tX, double tY)
+{
+    return (tX &gt; tY) ? tX : tY;
+}
+</pre></td></tr></table>
+<p>and then compiles it into machine language.</p>
+<p>It&#8217;s worth noting that the compiler is smart enough to know it only needs to create one template instance per set of unique type parameters.  It&#8217;s also worth noting that if you create a template function but do not call it, no template instances will be created.</p>
+<p><strong>Operators, function calls, and function templates</strong></p>
+<p>Template functions will work with both built-in types (eg. char, int, double, etc&#8230;) and classes, with one caveat.  When the compiler compiles the template instance, it compiles it just like a normal function.  In a normal function, any operators or function calls that you use with your types must be defined, or you will get a compiler error.  Similarly, any operators or function calls in your template function must be defined for any types the function template is instantiated for.  Let&#8217;s take a look at this in more detail.</p>
+<p>First, we&#8217;ll create a simple class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents)
+        : m_nCents(nCents)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>Now, let&#8217;s see what happens when we try to call our templated max() function with the Cents class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cents cNickle(5);
+Cents cDime(10);
+
+Cents cBigger = max(cNickle, cDime);
+</pre></td></tr></table>
+<p>C++ will create a template instance for max() that looks like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cents max(Cents tX, Cents tY)
+{
+    return (tX &gt; tY) ? tX : tY;
+}
+</pre></td></tr></table>
+<p>And then it will try to compile this function.  See the problem here?  C++ has no idea how to evaluate <code>tX &gt; tY</code>!  Consequently, this will produce a compile error.</p>
+<p>To get around this problem, simply overload the > operator for any class we wish to use max() with:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents)
+        : m_nCents(nCents)
+    {
+    }
+
+    friend bool operator&gt;(Cents &amp;c1, Cents&amp;c2)
+    {
+        return (c1.m_nCents &gt; c2.m_nCents) ? true: false;
+    }
+};
+</pre></td></tr></table>
+<p>Now C++ will know how to compare <code>tX &gt; tY</code> when tX and tY are objects of the Cents class!  As a result, our max() function will now work with two objects of type Cents.</p>
+<p><strong>Another example</strong></p>
+<p>Let&#8217;s do one more example of a function template.  The following function template will calculate the average of a number of objects in an array:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+template &lt;class T&gt;
+T Average(T *atArray, int nNumValues)
+{
+    T tSum = 0;
+    for (int nCount=0; nCount &lt; nNumValues; nCount++)
+        tSum += atArray[nCount];
+
+    tSum /= nNumValues;
+    return tSum;
+}
+</pre></td></tr></table>
+<p>Now let&#8217;s see it in action:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int anArray[] = { 5, 3, 2, 1, 4 };
+cout &lt;&lt; Average(anArray, 5) &lt;&lt; endl;
+
+double dnArray[] = { 3.12, 3.45, 9.23, 6.34 };
+cout &lt;&lt; Average(dnArray, 4) &lt;&lt; endl;
+</pre></td></tr></table>
+<p>This produces the values:</p>
+<pre>
+3
+5.535
+</pre>
+<p>As you can see, it works great for built-in types!</p>
+<p>Now let&#8217;s see what happens when we call this function on our Cents class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Cents cArray[] = { Cents(5), Cents(10), Cents(15), Cents(14) };
+cout &lt;&lt; Average(cArray, 4) &lt;&lt; endl;
+</pre></td></tr></table>
+<p>The compiler goes berserk and produces a ton of error messages!  The first error message will be something like this:</p>
+<pre>
+c:\test.cpp(45) : error C2679: binary &#039;&lt;&lt;&#039; : no operator found which takes a right-hand operand of type &#039;Cents&#039; (or there is no acceptable conversion)
+</pre>
+<p>Remember that Average() returns a Cents object, and we are trying to stream that object to cout using the << operator.  However, we haven't defined the << operator for our Cents class yet.  Let's do that:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents)
+        : m_nCents(nCents)
+    {
+    }
+
+    friend ostream&amp; operator&lt;&lt; (ostream &amp;out, const Cents &amp;cCents)
+    {
+        out &lt;&lt; cCents.m_nCents &lt;&lt; &quot; cents &quot;;
+        return out;
+    }
+};
+</pre></td></tr></table>
+<p>If we compile again, we will get another error:</p>
+<pre>c:\test.cpp(14) : error C2676: binary &#039;+=&#039; : &#039;Cents&#039; does not define this operator or a conversion to a type acceptable to the predefined operator</pre>
+<p>This error is actually being caused by the function template instance created when we call Average(Cents*, int).  Remember that when we call a templated function, the compiler "stencils" out a copy of the function where the template type parameters (the placeholder types) have been replaced with the actual types in the function call.  Here is the function template instance for Average() when T is a Cents object:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+template &lt;class T&gt;
+Cents Average(Cents  *atArray, int nNumValues)
+{
+    Cents tSum = 0;
+    for (int nCount=0; nCount &lt; nNumValues; nCount++)
+        tSum += atArray[nCount];
+
+    tSum /= nNumValues;
+    return tSum;
+}
+</pre></td></tr></table>
+<p>The reason we are getting an error message is because of the following line:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+        tSum += atArray[nCount];
+</pre></td></tr></table>
+<p>In this case, tSum is a Cents object, but we have not defined the += operator for Cents objects!  We will need to define this function in order for Average() to be able to work with Cents.  Looking forward, we can see that Average() also uses the /= operator, so we will go ahead and define that as well:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+public:
+    Cents(int nCents)
+        : m_nCents(nCents)
+    {
+    }
+
+    friend ostream&amp; operator&lt;&lt; (ostream &amp;out, const Cents &amp;cCents)
+    {
+        out &lt;&lt; cCents.m_nCents &lt;&lt; &quot; cents &quot;;
+        return out;
+    }
+
+    void operator+=(Cents cCents)
+    {
+        m_nCents += cCents.m_nCents;
+    }
+
+    void operator/=(int nValue)
+    {
+        m_nCents /= nValue;
+    }
+};
+</pre></td></tr></table>
+<p>Finally, our code will compile and run!  Here is the result:</p>
+<pre>
+11 cents
+</pre>
+<p>Note that we didn't have to modify Average() at all to make it work with objects of type Cents.  We simply had to define the operators used to implement Average() for the Cents class, and the compiler took care of the rest!</p>

@@ -1,0 +1,75 @@
+
+<h3>Declaring functions</h3>
+In C++, identifiers can only be used in expressions once they have been declared. For example, some variable <code>x</code> cannot be used before being declared with a statement, such as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> x;</code></pre></td></tr></table></div>
+<br>
+<br>
+The same applies to functions. Functions cannot be called before they are declared. That is why, in all the previous examples of functions, the functions were always defined before the <code>main</code> function, which is the function from where the other functions were called. If <code>main</code> were defined before the other functions, this would break the rule that functions shall be declared before being used, and thus would not compile.<br>
+<br>
+The prototype of a function can be declared without actually defining the function completely, giving just enough details to allow the types involved in a function call to be known. Naturally, the function shall be defined somewhere else, like later in the code. But at least, once declared like this, it can already be called.<br>
+<br>
+The declaration shall include all types involved (the return type and the type of its arguments), using the same syntax as used in the definition of the function, but replacing the body of the function (the block of statements) with an ending semicolon.<br>
+<br>
+The parameter list does not need to include the parameter names, but only their types. Parameter names can nevertheless be specified, but they are optional, and do not need to necessarily match those in the function definition. For example, a function called <code>protofunction</code> with two int parameters can be declared with either of these statements:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> protofunction (<var>int</var> first, <var>int</var> second);
+<var>int</var> protofunction (<var>int</var>, <var>int</var>);</code></pre></td></tr></table></div>
+<br>
+<br>
+Anyway, including a name for each parameter always improves legibility of the declaration.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br></code></pre></td>
+<td class="source"><pre><code><cite>// declaring functions prototypes</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>void</var> odd (<var>int</var> x);
+<var>void</var> even (<var>int</var> x);
+
+<var>int</var> main()
+{
+  <var>int</var> i;
+  <var>do</var> {
+    cout &lt;&lt; <kbd>"Please, enter number (0 to exit): "</kbd>;
+    cin &gt;&gt; i;
+    odd (i);
+  } <var>while</var> (i!=0);
+  <var>return</var> 0;
+}
+
+<var>void</var> odd (<var>int</var> x)
+{
+  <var>if</var> ((x%2)!=0) cout &lt;&lt; <kbd>"It is odd.\n"</kbd>;
+  <var>else</var> even (x);
+}
+
+<var>void</var> even (<var>int</var> x)
+{
+  <var>if</var> ((x%2)==0) cout &lt;&lt; <kbd>"It is even.\n"</kbd>;
+  <var>else</var> odd (x);
+}</code></pre></td>
+<td class="output"><pre><samp>Please, enter number (0 to exit): 9
+It is odd.
+Please, enter number (0 to exit): 6
+It is even.
+Please, enter number (0 to exit): 1030
+It is even.
+Please, enter number (0 to exit): 0
+It is even.</samp></pre></td></tr></table></div>
+<br>
+<br>
+This example is indeed not an example of efficiency. You can probably write yourself a version of this program with half the lines of code. Anyway, this example illustrates how functions can be declared before its definition:<br>
+<br>
+The following lines:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>void</var> odd (<var>int</var> a);
+<var>void</var> even (<var>int</var> a); </code></pre></td></tr></table></div>
+<br>
+<br>
+Declare the prototype of the functions. They already contain all what is necessary to call them, their name, the types of their argument, and their return type (<code>void</code> in this case). With these prototype declarations in place, they can be called before they are entirely defined, allowing for example, to place the function from where they are called (<code>main</code>)  before the actual definition of these functions.<br>
+<br>
+But declaring functions before being defined is not only useful to reorganize the order of functions within the code. In some cases, such as in this particular case, at least one of the declarations is required, because <code>odd</code> and <code>even</code> are mutually called; there is a call to <code>even</code> in <code>odd</code> and a call to <code>odd</code> in <code>even</code>. And, therefore, there is no way to structure the code so that <code>odd</code> is defined before <code>even</code>, and <code>even</code> before <code>odd</code>.<br>

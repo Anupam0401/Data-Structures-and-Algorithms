@@ -1,0 +1,68 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>There are 6 relational operators:</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>Greater than</td>
+<td>&gt;</td>
+<td>x > y</td>
+<td>true if x is greater than y, false otherwise</td>
+</tr>
+<tr>
+<td>Less than</td>
+<td>&lt;</td>
+<td>x < y</td>
+<td>true if x is less than y, false otherwise</td>
+</tr>
+<tr>
+<td>Greater than or equals</td>
+<td>&gt;=</td>
+<td>x >= y</td>
+<td>true if x is greater than or equal to y, false otherwise</td>
+</tr>
+<tr>
+<td>Less than or equals</td>
+<td>&lt;=</td>
+<td>x <= y</td>
+<td>true if x is less than or equal to y, false otherwise</td>
+</tr>
+<tr>
+<td>Equality</td>
+<td>==</td>
+<td>x == y</td>
+<td>true if x equals y, false otherwise</td>
+</tr>
+<tr>
+<td>Inequality</td>
+<td>!=</td>
+<td>x != y</td>
+<td>true if x does not equal y, false otherwise</td>
+</tr>
+</table>
+<p>You have already seen how all of these work, and they are pretty intuitive.  Each of these operators evaluates to the boolean value true (1), or false (0).</p>
+<p>Keep in mind that comparing floating point values using any of these operators is dangerous.  This is because small rounding errors in the floating point operands may cause an unexpected result.  See the section on <a href="http://www.learncpp.com/?p=46">floating point numbers</a> for more details.</p>
+<p>However, sometimes the need to do floating point comparisons is unavoidable.  In this case, the less than and greater than operators (>, >=, <, and <=) are typically used with floating point values as normal.  The operators will produce the correct result most of the time, only potentially failing when the two operands are almost identical.  Due to the way these operators tends to be used, a wrong result typically only has slight consequences.</p>
+<p>The equality operator is much more troublesome since small rounding errors make it almost useless.  Consequently, using the == operator on floating point numbers is not advised.  The most common method of doing floating point equality involves using a function that calculates how close the two values are to each other.  If the two numbers are "close enough", then we call them equal.</p>
+<p><a href="http://en.wikipedia.org/wiki/Donald_Knuth">Donald Knuth</a>, a famous computer scientist, suggested the following method in his book &#8220;The Art of Computer Programming, Volume II: Seminumerical Algorithms (Addison-Wesley, 1969)&#8221;:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool IsEqual(double dX, double dY)
+{
+    const double dEpsilon = 0.000001; // or some other small number
+    return fabs(dX - dY) &lt;= dEpsilon * fabs(dX);
+}
+</pre></td></tr></table>
+<p>dEpsilon is a very small value (eg. 0.000001) that is used to help define what &#8220;close enough&#8221; is.  fabs() is a function in the standard library (#include &lt;cmath&gt;) that returns the absolute value of it&#8217;s double parameter.</p>
+<p>Let&#8217;s examine how the IsEqual() function works.  On the left side of the <= operator, the absolute value of dX - dY tells how close dX and dY are to each other as a positive number.</p>
+<p>It is easiest to think of dEpsilon as a percentage.  A dEpsilon of 0.01 means that dX and dY have to be within 1% of each other in order to be considered equal.  On the right side of the <= operator, we multiply dEpsilon by fabs(dX) to find the largest distance the two numbers can be apart and still be considered equal.  For example, if fabs(dX) evaluates to 1000, and dEpsilon is 0.01, the largest distance apart the two numbers can be is 10.</p>
+<p>Finally, we compare the distance between dX and dY with the largest distance apart that they can still be considered "close enough".  If they are close enough, the function returns true.  Otherwise, it returns false.</p>
+<p>The value for dEpsilon can be adjusted to whatever is most appropriate for the program.  Often, programmers will make dEpsilon a third parameter of IsEqual() so it can be defined on a call-by-call basis.</p>
+<p>To do inequality (!=) instead of equality, simply call this function and use the logical NOT operator (!) to flip the result:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+if (!IsEqual(dX, dY))
+    cout &lt;&lt; dX &lt;&lt; &quot; is not equal to &quot; &lt;&lt; dY &lt;&lt; endl;
+</pre></td></tr></table>

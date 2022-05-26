@@ -1,0 +1,31 @@
+
+<h3>Increment and decrement (++, --)</h3>
+Some expression can be shortened even more: the increase operator (<code>++</code>) and the decrease operator (<code>--</code>) increase or reduce by one the value stored in a variable. They are equivalent to <code>+=1</code> and to <code>-=1</code>, respectively. Thus:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code>++x;
+x+=1;
+x=x+1;</code></pre></td></tr></table></div>
+<br>
+<br>
+are all equivalent in its functionality; the three of them increase by one the value of <code>x</code>.<br>
+<br>
+In the early C compilers, the three previous expressions may have produced different executable code depending on which one was used. Nowadays, this type of code optimization is generally performed automatically by the compiler, thus the three expressions should produce exactly the same executable code.<br>
+<br>
+A peculiarity of this operator is that it can be used both as a prefix and as a suffix. That means that it can be written either before the variable name (<code>++x</code>) or after it (<code>x++</code>). Although in simple expressions like <code>x++</code> or <code>++x</code>, both have exactly the same meaning; in other expressions in which the result of the increment or decrement operation is evaluated, they may have an important difference in their meaning: In the case that the increase operator is used as a prefix (<code>++x</code>) the value, the expression evaluates to the final value of <code>x</code>, once it is already increased. On the other hand, in case that it is used as a suffix (<code>x++</code>) the value stored in <code>x</code> the expression evaluates to the value <code>x</code> had before being increased. Notice the difference:<br>
+<br>
+<table class="boxed">
+<tr><th>Example 1</th><th>Example 2</th></tr>
+<tr><td><code>
+x = 3;<br>
+y = ++x;<br>
+// x contains 4, y contains 4<br>
+</code></td>
+<td><code>
+x = 3;<br>
+y = x++;<br>
+// x contains 4, y contains 3<br>
+</code></td></tr>
+</table>
+<br>
+In <i>Example 1</i>, the value assigned to <code>y</code> is the value of <code>x</code> after being increased. While in <i>Example 2</i>, it is the value <code>x</code> had before being increased.<br>

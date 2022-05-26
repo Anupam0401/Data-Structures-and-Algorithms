@@ -1,0 +1,38 @@
+
+<h3>Relational and comparison operators ( ==, !=, &gt;, &lt;, &gt;=, &lt;= )</h3>
+Two expressions can be compared using relational and equality operators. For example, to know if two values are equal or if one is greater than the other.<br>
+<br>
+The result of such an operation is either true or false (i.e., a Boolean value).<br>
+<br>
+The relational operators in C++ are:<br>
+<br>
+<table class="boxed">
+<tr><th>operator</th><th>description</th></tr>
+<tr><td><code>==</code></td><td>Equal to</td></tr>
+<tr><td><code>!=</code></td><td>Not equal to</td></tr>
+<tr><td><code>&lt;</code></td><td>Less than</td></tr>
+<tr><td><code>&gt;</code></td><td>Greater than</td></tr>
+<tr><td><code>&lt;=</code></td><td>Less than or equal to</td></tr>
+<tr><td><code>&gt;=</code></td><td>Greater than or equal to</td></tr>
+</table>
+<br>
+Here there are some examples:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code>(7 == 5)     <cite>// evaluates to false</cite>
+(5 &gt; 4)      <cite>// evaluates to true</cite>
+(3 != 2)     <cite>// evaluates to true</cite>
+(6 &gt;= 6)     <cite>// evaluates to true</cite>
+(5 &lt; 5)      <cite>// evaluates to false </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Of course, it's not just numeric constants that can be compared, but just any value, including, of course, variables. Suppose that <code>a=2</code>, <code>b=3</code> and <code>c=6</code>, then:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code>(a == 5)     <cite>// evaluates to false, since a is not equal to 5</cite>
+(a*b &gt;= c)   <cite>// evaluates to true, since (2*3 &gt;= 6) is true</cite>
+(b+4 &gt; a*c)  <cite>// evaluates to false, since (3+4 &gt; 2*6) is false</cite>
+((b=2) == a) <cite>// evaluates to true </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Be careful! The assignment operator (operator <code>=</code>, with one equal sign) is not the same as the equality comparison operator (operator <code>==</code>, with two equal signs); the first one (<code>=</code>) assigns the value on the right-hand to the variable on its left, while the other (<code>==</code>) compares whether the values on both sides of the operator are equal. Therefore, in the last expression (<code>(b=2) == a</code>), we first assigned the value <code>2</code> to <code>b</code> and then we compared it to <code>a</code> (that also stores the value 2), yielding <code>true</code>.<br>

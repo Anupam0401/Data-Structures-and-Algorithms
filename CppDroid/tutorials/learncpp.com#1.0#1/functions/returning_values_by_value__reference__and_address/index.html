@@ -1,0 +1,86 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the three previous lessons, you learned about passing arguments to functions by value, reference, and address.  In this section, we&#8217;ll consider the issue of returning values back to the caller via all three methods.</p>
+<p>As it turns out, returning values from a function to its caller by value, address, or reference works almost exactly the same way as passing parameters to a function does.  All of the same upsides and downsides for each method are present.  The primary difference between the two is simply that the direction of data flow is reversed.  However, there is one more added bit of complexity &#8212; because local variables in a function go out of scope when the function returns, we need to consider the effect of this on each return type.</p>
+<p>(Author&#8217;s note: This lesson has a funny lesson number because it was originally omitted from chapter 7)</p>
+<p><strong>Return by value</strong></p>
+<p>Return by value is the simplest and safest return type to use.  When a value is returned by value, a copy of that value is returned to the caller.  As with pass by value, you can return by value literals (eg. 5), variables (eg. x), or expressions (eg. x+1), which makes return by value very flexible.</p>
+<p>Another advantage of return by value is that you can return variables (or expressions) that involve local variables declared within the function.  Because the variables are evaluated before the function goes out of scope, and a copy of the value is returned to the caller, there are no problems when the variable goes out of scope at the end of the function.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int DoubleValue(int nX)
+{
+    int nValue = nX * 2;
+    return nValue; // A copy of nValue will be returned here
+} // nValue goes out of scope here
+</pre></td></tr></table>
+<p>Return by value is the most appropriate when returning variables that were declared inside the function, or for returning function arguments that were passed by value.  However, like pass by value, return by value is slow for structs and large classes.</p>
+<p><strong>Return by reference</strong></p>
+<p>Just like with pass by reference, values returned by reference must be variables (you can not return a reference to a literal or an expression).  When a variable is returned by reference, a reference to the variable is passed back to the caller.  The caller can then use this reference to continue modifying the variable, which can be useful at times.  Return by reference is also fast, which can be useful when returning structs and classes.</p>
+<p>However, returning by reference has one additional downside that pass by reference doesn&#8217;t &#8212; you can not return local variables to the function by reference.  Consider the following example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int&amp; DoubleValue(int nX)
+{
+    int nValue = nX * 2;
+    return nValue; // return a reference to nValue here
+} // nValue goes out of scope here
+</pre></td></tr></table>
+<p>See the problem here?  The function is trying to return a reference to a value that is going to go out of scope when the function returns.  This would mean the caller receives a reference to garbage.  Fortunately, your compiler will give you an error if you try to do this.</p>
+<p>Return by reference is typically used to return arguments passed by reference to the function back to the caller.  In the following example, we return (by reference) an element of an array that was passed to our function by reference:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+
+// This struct holds an array of 25 integers
+struct FixedArray25
+{
+    int anValue[25];
+};
+
+// Returns a reference to the nIndex element of rArray
+int&amp; Value(FixedArray25 &amp;rArray, int nIndex)
+{
+    return rArray.anValue[nIndex];
+}
+
+int main()
+{
+    FixedArray25 sMyArray;
+
+    // Set the 10th element of sMyArray to the value 5
+    Value(sMyArray, 10) = 5;
+
+    cout &lt;&lt; sMyArray.anValue[10] &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This prints:</p>
+<pre>
+5
+</pre>
+<p>When we call <code>Value(sMyArray, 10)</code>, Value() returns a reference to the 10th element of the array inside sMyArray.  main() then uses this reference to assign that element the value 5.</p>
+<p>Although this is somewhat of a contrived example (because you could access sMyArray.anValue directly), once you learn about classes you will find a lot more uses for returning values by reference.</p>
+<p><strong>Return by address</strong></p>
+<p>Returning by address involves returning the address of a variable to the caller.  Just like pass by address, return by address can only return the address of a variable, not a literal or an expression.  Like return by reference, return by address is fast.  However, as with return by reference, return by address can not return local variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int* DoubleValue(int nX)
+{
+    int nValue = nX * 2;
+    return &amp;nValue; // return nValue by address here
+} // nValue goes out of scope here
+</pre></td></tr></table>
+<p>As you can see here, nValue goes out of scope just after its address is returned to the caller.  The end result is that the caller ends up with the address of non-allocated memory, which will cause lots of problems if used.  This is one of the most common programming mistakes that new programmers make.  Many newer compilers will give a warning (not an error) if the programmer tries to return a local variable by address &#8212; however, there are quite a few ways to trick the compiler into letting you do something illegal without generating a warning, so the burden is on the programmer to ensure the address they are returning will be to a valid variable after the function returns.</p>
+<p>Return by address is often used to return newly allocated memory to the caller:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int* AllocateArray(int nSize)
+{
+    return new int[nSize];
+}
+
+int main()
+{
+    int *pnArray = AllocateArray(25);
+    // do stuff with pnArray
+
+    delete[] pnArray;
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>Conclusion</strong></p>
+<p>Most of the time, return by value will be sufficient for your needs.  It&#8217;s also the most flexible and safest way to return information to the caller.  However, return by reference or address can also be useful, particularly when working with dynamically allocated classes or structs.  When using return by reference or address, make sure you are not returning a reference to, or the address of, a variable that will go out of scope when the function returns!</p>

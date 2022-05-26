@@ -1,0 +1,40 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>To recap the process needed to use a library:</p>
+<p>Once per library:<br />
+1) Acquire the library.  Download it from the website or via a package manager.<br />
+2) Install the library.  Unzip it to a directory or install it via a package manager.<br />
+3) Tell the compiler where to look for the header file(s) for the library.<br />
+4) Tell the linker where to look for the library file(s) for the library.</p>
+<p>Once per project:<br />
+5) Tell the linker which static or import library files to link.<br />
+6) #include the libraryâ€™s header file(s) in your program.<br />
+7) Make sure the program know where to find any dynamic libraries being used.</p>
+<p><strong>Steps 1 and 2 &#8212; Acquire and install library</strong></p>
+<p>Download and install the library to your hard disk.  See the tutorial on <a href="http://www.learncpp.com/cpp-tutorial/a1-static-and-dynamic-libraries/">static and dynamic libraries</a> for more information about this step.</p>
+<p><strong>Steps 3 and 4 &#8212; Tell the compiler where to find headers and library files</strong></p>
+<p>We are going to do this on a global basis so the library will be available to all of our projects.  Consequently, the following steps only need to be done once per library.</p>
+<p>A) Go to the &#8220;Tools menu&#8221; and pick &#8220;Options&#8221;.</p>
+<p><img src="{path}/VC2005-ToolsMenu.png"></p>
+<p>B) Open the &#8220;Projects and Solutions&#8221; node, and click on &#8220;VC++ Directories&#8221;.</p>
+<p>C) In the upper right under &#8220;Show directories for:&#8221;, pick &#8220;Include Files&#8221;.  Add the path to the .h files for the library.</p>
+<p><img src="{path}/VC2005-OptionsMenuInclude.png"></p>
+<p>D) In the upper right under &#8220;Show directories for:&#8221;, pick &#8220;Library Files&#8221;.  Add the path to the .lib files for the library.</p>
+<p><img src="{path}/VC2005-OptionsMenuLibrary.png"></p>
+<p>E) Click &#8220;OK&#8221;.</p>
+<p><strong>Step 5 &#8212; Tell the linker which libraries your program is using</strong></p>
+<p>For step 5, we need to add .lib files from the library to our project.  We do this on an individual project basis.  Visual Studio offers us 3 different methods for adding .lib files to our project.</p>
+<p>A) Use a #pragma preprocessor directive to your primary .cpp file.  This solution only works with Visual Studio and is non-portable.  Other compilers will ignore this line.</p>
+<p><img src="{path}/VC2005-PragmaLib.png"></p>
+<p>B) Add the .lib file to your project as if it were a .cpp or .h file.  This solution works with Visual Studio, but not with many other compilers.  This is the solution we recommend.</p>
+<p><img src="{path}/VC2005-AddLibToProject.png"></p>
+<p>C) Add the library to the linker input.  This is the most &#8220;portable&#8221; solution in the sense that every IDE will provide a similar mechanism.  If you ever move to another compiler or IDE, this is the solution you will have to use.  This solution requires 5 steps:</p>
+<p>C-1) In the Solution Explorer, right click on the bolded project name and choose &#8220;Properties&#8221; from the menu.</p>
+<p><img src="{path}/VC2005-ProjectProperties.png"></p>
+<p>C-2) Under the &#8220;Configuration:&#8221; dropdown, select &#8220;All Configurations&#8221;.</p>
+<p>C-3) Open the &#8220;Configuration Properties&#8221; node, the &#8220;Linker&#8221; node, and click on &#8220;Input&#8221;.</p>
+<p>C-4) Under &#8220;Additional Dependencies&#8221;, add the name of your library.</p>
+<p><img src="{path}/VC2005-LinkerInput.png"></p>
+<p>C-5) Click &#8220;OK&#8221;.</p>
+<p><strong>Steps 6 and 7 &#8212; #include header files and make sure project can find DLLs</strong></p>
+<p>Simply #include the header file(s) from the library in your project.</p>
+<p>See the tutorial <a href="http://www.learncpp.com/cpp-tutorial/a1-static-and-dynamic-libraries/">A1 &#8212; Static and dynamic libraries</a> for more information step 7.</p>

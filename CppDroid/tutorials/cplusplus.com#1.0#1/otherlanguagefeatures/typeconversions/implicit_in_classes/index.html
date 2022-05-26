@@ -1,0 +1,40 @@
+
+<h3>Implicit conversions with classes</h3>
+In the world of classes, implicit conversions can be controlled by means of three member functions:<br>
+<ul>
+<li><b>Single-argument constructors:</b> allow implicit conversion from a particular type to initialize an object.</li>
+<li><b>Assignment operator:</b> allow implicit conversion from a particular type on assignments.</li>
+<li><b>Type-cast operator:</b> allow implicit conversion to a particular type.</li>
+</ul>
+<br>
+For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br></code></pre></td>
+<td class="source"><pre><code><cite>// implicit conversion of classes:</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> A {};
+
+<var>class</var> B {
+<var>public</var>:
+  <cite>// conversion from A (constructor):</cite>
+  B (<var>const</var> A&amp; x) {}
+  <cite>// conversion from A (assignment):</cite>
+  B&amp; <var>operator</var>= (<var>const</var> A&amp; x) {<var>return</var> *<var>this</var>;}
+  <cite>// conversion to A (type-cast operator)</cite>
+  <var>operator</var> A() {<var>return</var> A();}
+};
+
+<var>int</var> main ()
+{
+  A foo;
+  B bar = foo;    <cite>// calls constructor</cite>
+  bar = foo;      <cite>// calls assignment</cite>
+  foo = bar;      <cite>// calls type-cast operator</cite>
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp> </samp></pre></td></tr></table></div>
+<br>
+<br>
+The type-cast operator uses a particular syntax: it uses the <code>operator</code> keyword followed by the destination type and an empty set of parentheses. Notice that the return type is the destination type and thus is not specified before the <code>operator</code> keyword.<br>

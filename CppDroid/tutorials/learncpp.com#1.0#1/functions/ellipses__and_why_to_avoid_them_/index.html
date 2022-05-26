@@ -1,0 +1,97 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In all of the functions we&#8217;ve seen so far, the number of parameters a function will take must be known in advance (even if they have default values).  However, there are certain cases where it would be useful to be able to pass a variable number of parameters to a function.  C provides a special specifier known as ellipses (aka &#8220;&#8230;&#8221;) that allow us to do precisely this.</p>
+<p>Because ellipses are rarely used, dangerous, and we strongly recommend avoiding their use, this section can be considered optional reading.</p>
+<p>Functions that use ellipses take the form <code>return_type function_name(argument_list, ...)</code>.  argument_list is one or more fixed parameters, just like normal functions use.  The ellipses (which are represented as three periods in a row) must always be the last parameter in the function.  Any arguments passed to the function must match the argument_list.  The ellipses capture any additional arguments (if there are any).    Though it is not quite accurate, it is conceptually useful to think of the ellipses as an array that holds any additional parameters beyond those in the argument_list.</p>
+<p>The best way to learn about ellipses is by example.  So let&#8217;s write a simple program that uses ellipses.  Let&#8217;s say we want to write a function that calculates the average of a bunch of integers.  We&#8217;d do it like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cstdarg&gt; // needed to use ellipses
+// The ellipses must be the last parameter
+double FindAverage(int nCount, ...)
+{
+    long lSum = 0;
+
+    // We access the ellipses through a va_list, so let's declare one
+    va_list list;
+
+    // We initialize the va_list using va_start.  The first parameter is
+    // the list to initialize.  The second parameter is the last non-ellipse
+    // parameter.
+    va_start(list, nCount);
+
+    // Loop nCount times
+    for (int nArg=0; nArg &lt; nCount; nArg++)
+         // We use va_arg to get parameters out of our ellipses
+         // The first parameter is the va_list we're using
+         // The second parameter is the type of the parameter
+         lSum += va_arg(list, int);
+
+    // Cleanup the va_list when we're done.
+    va_end(list);
+
+    return static_cast&lt;double&gt;(lSum) / nCount;
+}
+
+int main()
+{
+    cout &lt;&lt; FindAverage(5, 1, 2, 3, 4, 5) &lt;&lt; endl;
+    cout &lt;&lt; FindAverage(6, 1, 2, 3, 4, 5, 6) &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This code prints</p>
+<pre>
+3
+3.5
+</pre>
+<p>As you can see, this function takes a variable number of parameters!  Now, let&#8217;s take a look at the components that make up this example.</p>
+<p>First, we have to include the cstdarg header.  This header defines va_list, va_start, and va_end, which are macros that we need to use to access the parameters that are part of the ellipses.</p>
+<p>We then declare our function that uses the ellipse.  Remember that the argument list must be one or more fixed parameters.  In this case, we&#8217;re passing in a single integer that tells us how many numbers to average.  The ellipses always comes last.</p>
+<p>Note that the ellipses parameter has no name!  Instead, we access the values in the ellipses through a special type known as va_list.  It is conceptually useful to think of va_list as a pointer that points to the ellipses array.  First, we declare a va_list, which we&#8217;ve called &#8220;list&#8221; for simplicity.</p>
+<p>The next thing we need to do is make list point to our ellipses parameters.  We do this by calling va_start().  va_start() takes two parameters: the va_list itself, and the name of the last non-ellipse parameter in the function.  Once va_start() has been called, va_list points to the first parameter in the ellipses.</p>
+<p>To get the value of the parameter that va_list currently points to, we use va_arg().  va_arg() also takes two parameters: the va_list itself, and the type of the parameter we&#8217;re trying to access.  Note that va_arg() also moves the va_list to the next parameter in the ellipses!</p>
+<p>Finally, to clean up when we are done, we call va_end(), with va_list as the parameter.</p>
+<p><strong>Why ellipses are dangerous</strong></p>
+<p>Ellipses offer the programmer a lot of flexibility to implement functions that can take a variable number of parameters.  However, this flexibility comes with some very dangerous downsides.  </p>
+<p>With regular function parameters, the compiler uses type checking to ensure the types of the function arguments match the types of the function parameters (or can be implicitly converted so they match).  This helps ensure you don&#8217;t pass a function an integer when it was expecting a string, or vice versa.  However, note that ellipses parameters have no type declarations.  When using ellipses, the compiler completely suspends type checking for ellipses parameters.  This means it is possible to send arguments of any type to the ellipses!  However, the downside is that the compiler will no longer be able to warn you if you call the function with ellipses arguments that do not make sense.  When using the ellipses, it is completely up to the caller to ensure the function is called with ellipses arguments that the function can handle.  Obviously that leaves quite a bit of room for error (especially if the caller wasn&#8217;t the one who wrote the function).</p>
+<p>Lets look at an example of a mistake that is pretty subtle:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    cout &lt;&lt; FindAverage(6, 1.0, 2, 3, 4, 5, 6) &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Although this may look harmless enough at first glance, note that the second argument (the first ellipse argument) is a double instead of an integer.  This compiles fine, and produces a somewhat surprising result:</p>
+<pre>
+1.78782e+008
+</pre>
+<p>which is a REALLY big number.  How did this happen?  </p>
+<p>As you have learned in previous lessons, a computer stores all data as a sequence of bits.  A variable&#8217;s type tells the computer how to translate that sequence of bits into a meaningful value.  However, you just learned that the ellipses throw away the variable&#8217;s type!  Consequently, the only way to get a meaningful value back from the ellipses is to manually tell va_arg() what the expected type of the next parameter is.  This is what the second parameter of va_arg() does.  If the actual parameter type doesn&#8217;t match the expected parameter type, bad things will usually happen.</p>
+<p>In the above FindAverage program, we told va_arg() that our variables are all expected to have a type of int.  Consequently, each call to va_arg() will return the next sequence of bits translated as an integer.</p>
+<p>In this case, the problem is that the double we passed in as the first ellipse argument is 8 bytes, whereas va_arg(list, int) will only return 4 bytes of data with each call.  Consequently, the first call to va_arg will only read the first 4 types of the double (producing a garbage result), and the second call to va_arg will read the second 4 bytes of the double (producing another garbage result).  Thus, our overall result is garbage.</p>
+<p>Because type checking is suspended, the compiler won&#8217;t even complain if we do something completely ridiculous, like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    int nValue = 7;
+    cout &lt;&lt; FindAverage(6, 1.0, 2, &quot;Hello, world!&quot;, 'G', &amp;nValue, &amp;FindAverage) &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Believe it or not, this actually compiles just fine, and produces the following result on the author&#8217;s machine:</p>
+<pre>
+1.79766e+008
+</pre>
+<p>This result epitomizes the phrase, &#8220;Garbage in, garbage out&#8221;, which is a popular computer science phrase &#8220;used primarily to call attention to the fact that computers, unlike humans, will unquestioningly process the most nonsensical of input data and produce nonsensical output&#8221; (<a href="http://en.wikipedia.org/wiki/Garbage_in,_garbage_out">wikipedia</a>).</p>
+<p>So, in summary, type checking on the parameters is suspended, and we have to trust the caller to pass in the right type of parameters.  If they don&#8217;t, the compiler won&#8217;t complain &#8212; our program will just produce garbage (or maybe crash).</p>
+<p>As if that wasn&#8217;t dangerous enough, we run into a second potential problem.  Not only do the ellipses throw away the <em>type</em> of the parameters, it also throws away the <em>number</em> of parameters in the ellipses!  This means we have to devise our own solution for keeping track of the number of parameters passed into the ellipses.  Typically, this is done in one of two ways:</p>
+<ol>
+<li>One of the fixed parameters is used as a parameter count (this is the solution we use in the FindAverage example above)
+<li>The ellipse parameters are processed until a sentinel value is reached.  A <strong>sentinel</strong> is a special value that is used to terminate a loop when it is encountered.  For example, we could pick a sentinel value of 0, and continually process ellipse parameters until we find a 0 (which should be the last value).  Sentinel values only work well if you can find a sentinel value that is not a legal data value.
+</ol>
+<p>However, even here we run into trouble.  For example, consider the following call:</p>
+<p>For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    cout &lt;&lt; FindAverage(6, 1, 2, 3, 4, 5) &lt;&lt; endl;
+</pre></td></tr></table>
+<p>On the authors machine at the time of writing, this produced the result:</p>
+<pre>
+699773
+</pre>
+<p>What happened?  We told FindAverage() we were going to give it 6 values, but we only gave it 5.  Consequently, the first five values that va_arg() returns were the ones we passed in.  The 6th value it returns was a garbage value somewhere in the stack.  Consequently, we got a garbage answer.</p>
+<p>When using a sentinel value, if the caller forgets to include the sentinel, the loop will run continuously until it runs into garbage that matches the sentinel (or crashes).</p>
+<p><strong>Recommendations for safer use of ellipses</strong></p>
+<p>First, if possible, do not use ellipses at all!  Oftentimes, other reasonable solutions are available, even if they require slightly more work.  For example, in our FindAverage() program, we could have passed in a dynamically sized array of integers instead.  This would have provided both strong type checking (to make sure the caller doesn&#8217;t try to do something nonsensical) while preserving the ability to pass a variable number of integers to be averaged.</p>
+<p>Second, if you do use ellipses, do not mix expected argument types within your ellipses if possible.  Doing so vastly increases the possibility of the caller inadvertently passing in data of the wrong type and va_arg() producing a garbage result.</p>
+<p>Third, using a count parameter as part of the argument list is generally safer than using a sentinel as an ellipses parameter.  This forces the user to pick an appropriate value for the count parameter, which ensures the ellipses loop will terminate after a reasonable number of iterations even if it produces a garbage value.</p>

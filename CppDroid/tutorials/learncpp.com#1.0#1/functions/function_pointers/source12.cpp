@@ -1,0 +1,1 @@
+bool (*pComparison)(int, int);

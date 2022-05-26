@@ -1,0 +1,2 @@
+if (pnValue)
+    delete pnValue;

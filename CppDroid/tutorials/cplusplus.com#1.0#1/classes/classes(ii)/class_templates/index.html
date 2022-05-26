@@ -1,0 +1,68 @@
+
+<h3>Class templates</h3>
+Just like we can create function templates, we can also create class templates, allowing classes to have members that use template parameters as types. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br></code></pre></td>
+<td class="source"><pre><code><var>template</var> &lt;<var>class</var> T&gt;
+<var>class</var> mypair {
+    T values [2];
+  <var>public</var>:
+    mypair (T first, T second)
+    {
+      values[0]=first; values[1]=second;
+    }
+};</code></pre></td></tr></table></div>
+<br>
+<br>
+The class that we have just defined serves to store two elements of any valid type. For example, if we wanted to declare an object of this class to store two integer values of type <code>int</code> with the values 115 and 36 we would write:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>mypair&lt;<var>int</var>&gt; myobject (115, 36);</code></pre></td></tr></table></div>
+<br>
+<br>
+This same class could also be used to create an object to store any other type, such as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code>mypair&lt;<var>double</var>&gt; myfloats (3.0, 2.18); </code></pre></td></tr></table></div>
+<br>
+<br>
+The constructor is the only member function in the previous class template and it has been defined inline within the class definition itself. In case that a member function is defined outside the defintion of the class template, it shall be preceded with the <code>template &lt;...&gt;</code> prefix:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br></code></pre></td>
+<td class="source"><pre><code><cite>// class templates</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>template</var> &lt;<var>class</var> T&gt;
+<var>class</var> mypair {
+    T a, b;
+  <var>public</var>:
+    mypair (T first, T second)
+      {a=first; b=second;}
+    T getmax ();
+};
+
+<var>template</var> &lt;<var>class</var> T&gt;
+T mypair&lt;T&gt;::getmax ()
+{
+  T retval;
+  retval = a&gt;b? a : b;
+  <var>return</var> retval;
+}
+
+<var>int</var> main () {
+  mypair &lt;<var>int</var>&gt; myobject (100, 75);
+  cout &lt;&lt; myobject.getmax();
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>100</samp></pre></td></tr></table></div>
+<br>
+<br>
+Notice the syntax of the definition of member function <code>getmax</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>template</var> &lt;<var>class</var> T&gt;
+T mypair&lt;T&gt;::getmax () </code></pre></td></tr></table></div>
+<br>
+<br>
+Confused by so many <code>T</code>'s? There are three <code>T</code>'s in this declaration: The first one is the template parameter. The second <code>T</code> refers to the type returned by the function. And the third <code>T</code> (the one between angle brackets) is also a requirement: It specifies that this function's template parameter is also the class template parameter.<br>

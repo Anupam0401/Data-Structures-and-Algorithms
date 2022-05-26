@@ -1,0 +1,48 @@
+
+<p>The <b>continue</b> statement in C programming language works somewhat like the <b>break</b> statement. Instead of forcing termination, however, continue forces the next iteration of the loop to take place, skipping any code in between.</p>
+<p>For the <b>for</b> loop, <b>continue</b> statement causes the conditional test and increment portions of the loop to execute. For the <b>while</b> and <b>do...while</b> loops, <b>continue</b> statement causes the program control passes to the conditional tests.</p>
+<h2>Syntax:</h2>
+<p>The syntax for a <b>continue </b> statement in C is as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+continue;
+</pre></td></tr></table>
+<h2>Flow Diagram:</h2>
+<img src="{path}/cpp_continue_statement.jpg" alt="C continue statement" />
+<h2>Example:</h2>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+ 
+int main ()
+{
+   /* local variable definition */
+   int a = 10;
+
+   /* do loop execution */
+   do
+   {
+      if( a == 15)
+      {
+         /* skip the iteration */
+         a = a + 1;
+         continue;
+      }
+      printf("value of a: %d\n", a);
+      a++;
+     
+   }while( a &lt; 20 );
+ 
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+value of a: 10
+value of a: 11
+value of a: 12
+value of a: 13
+value of a: 14
+value of a: 16
+value of a: 17
+value of a: 18
+value of a: 19
+</pre></td></tr></table>

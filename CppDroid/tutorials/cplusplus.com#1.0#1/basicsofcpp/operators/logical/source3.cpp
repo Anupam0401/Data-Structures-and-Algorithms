@@ -1,0 +1,1 @@
+if ( (i<10) && (++i<n) ) { /*...*/ }   // note that the condition increments i 

@@ -1,0 +1,199 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>When writing programs, it is almost inevitable that you will make mistakes.  In this section, we will talk about the different kinds of errors that are made, and how they are commonly handled.</p>
+<p>Errors fall into two categories: syntax and semantic errors.</p>
+<p><strong>Syntax errors</strong></p>
+<p>A syntax error occurs when you write a statement that is not valid according to the grammar of the C++ language.  For example:</p>
+<pre>
+if 5 &gt; 6 then write &quot;not equal&quot;;
+</pre>
+<p>Although this statement is understandable by humans, it is not valid according to C++ syntax.  The correct C++ statement would be:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+if (5 &gt; 6)
+    std::cout &lt;&lt; &quot;not equal&quot;;
+</pre></td></tr></table>
+<p>Syntax errors are almost always caught by the compiler and are usually easy to fix.  Consequently, we typically don&#8217;t worry about them too much.</p>
+<p><strong>Semantic errors</strong></p>
+<p>A semantic error occurs when a statement is syntactically valid, but does not do what the programmer intended.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+for (int nCount=0; nCount&lt;=3; nCount++)
+    std::cout &lt;&lt; nCount &lt;&lt; &quot; &quot;;
+</pre></td></tr></table>
+<p>The programmer may have intended this statement to print <code>0 1 2</code>, but it actually prints <code>0 1 2 3</code>.</p>
+<p>Semantic errors are not caught by the compiler, and can have any number of effects: they may not show up at all, cause the program to produce the wrong output, cause erratic behavior, corrupt data, or cause the program to crash.</p>
+<p>It is largely the semantic errors that we are concerned with.</p>
+<p>Semantic errors can occur in a number of ways.  One of the most common semantic errors is a logic error.  A <strong>logic error</strong> occurs when the programmer incorrectly codes the logic of a statement.  The above for statement example is a logic error.  Here is another example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+if (x &gt;= 5)
+    std::cout &lt;&lt; &quot;x is greater than 5&quot;;
+</pre></td></tr></table>
+<p>What happens when x is exactly 5?  The conditional expression evaluates to true, and the program prints &#8220;x is greater than 5&#8243;.  Logic errors can be easy or hard to locate, depending on the nature of the problem.</p>
+<p>Another common semantic error is the violated assumption.  A <strong>violated assumption</strong> occurs when the programmer assumes that something will be either true or false, and it isn&#8217;t.  For example:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char strHello[] = &quot;Hello, world!&quot;;
+std::cout &lt;&lt; &quot;Enter an index: &quot;;
+
+int nIndex;
+std::cin &gt;&gt; nIndex;
+
+std::cout &lt;&lt; &quot;Letter #&quot; &lt;&lt; nIndex &lt;&lt; &quot; is &quot; &lt;&lt; strHello[nIndex] &lt;&lt; std::endl;
+</pre></td></tr></table></td></tr></table>
+<p>See the potential problem here?  The programmer has assumed that the user will enter a value between 0 and the length of &#8220;Hello, world!&#8221;.  If the user enters a negative number, or a large number, the array index nIndex will be out of bounds.  In this case, since we are just reading a value, the program will probably print a garbage letter.  But in other cases, the program might corrupt other variables, the stack, or crash.</p>
+<p><strong>Defensive programming</strong> is a form of program design that involves trying to identify areas where assumptions may be violated, and writing code that detects and handles any violation of those assumptions so that the program reacts in a predictable way when those violations do occur.</p>
+<p><strong>Detecting assumption errors</strong></p>
+<p>As it turns out, we can catch almost all assumptions that need to be checked in one of three locations:</p>
+<ul>
+<li>When a function has been called, the user may have passed the function parameters that are semantically meaningless.
+<li>When a function returns, the return value may indicate that an error has occured.
+<li>When program receives input (either from the user, or a file), the input may not be in the correct format.
+</ul>
+<p>Consequently, the following rules should be used when programming defensively:</p>
+<ul>
+<li>At the top of each function, check to make sure any parameters have appropriate values.
+<li>After a function is called, check it&#8217;s return value (if any), and any other error reporting mechanisms, to see if an error occured.
+<li>Validate any user input to make sure it meets the expected formatting or range criteria.
+</ul>
+<p>Let&#8217;s take a look at examples of each of these.</p>
+<p>Problem: When a function is called, the user may have passed the function parameters that are semantically meaningless.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintString(char *strString)
+{
+    std::cout &lt;&lt; strString;
+}
+</pre></td></tr></table>
+<p>Can you identify the assumption that may be violated?  The answer is that the user might pass in a NULL pointer instead of a valid C-style string.  If that happens, the program will crash.  Here&#8217;s the function again with code that checks to make sure the function parameter is non-NULL:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintString(char *strString)
+{
+    // Only print if strString is non-null
+    if (strString)
+        std::cout &lt;&lt; strString;
+}
+</pre></td></tr></table></td></tr></table>
+<p>Problem: When a function returns, the return value may indicate that an error has occured.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// Declare an array of 10 integers
+int *panData = new int[10];
+panData[5] = 3;
+</pre></td></tr></table>
+<p>Can you identify the assumption that may be violated?  The answer is that operator new (which actually calls a function to do the allocation) could fail if the user runs out of memory.  If that happens, panData will be set to NULL, and when we use the subscript operator on panData, the program will crash.  Here&#8217;s a new version with error checking:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// Delcare an array of 10 integers
+int *panData = new int[10];
+// If something went wrong
+if (!panData)
+    exit(2); // exit the program with error code 2
+panData[5] = 3;
+</pre></td></tr></table>
+<p>Problem: When program receives input (either from the user, or a file), the input may not be in the correct format.  Here&#8217;s the sample program you saw previously:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char strHello[] = &quot;Hello, world!&quot;;
+std::cout &lt;&lt; &quot;Enter an index: &quot;;
+
+int nIndex;
+std::cin &gt;&gt; nIndex;
+
+std::cout &lt;&lt; &quot;Letter #&quot; &lt;&lt; nIndex &lt;&lt; &quot; is &quot; &lt;&lt; strHello[nIndex] &lt;&lt; std::endl;
+</pre></td></tr></table></td></tr></table>
+<p>And here&#8217;s the version that checks the user input to make sure it is valid:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char strHello[] = &quot;Hello, world!&quot;;
+
+int nIndex;
+do
+{
+    std::cout &lt;&lt; &quot;Enter an index: &quot;;
+    std::cin &gt;&gt; nIndex;
+} while (nIndex &lt; 0 || nIndex &gt;= strlen(strHello));
+
+std::cout &lt;&lt; &quot;Letter #&quot; &lt;&lt; nIndex &lt;&lt; &quot; is &quot; &lt;&lt; strHello[nIndex] &lt;&lt; std::endl;
+</pre></td></tr></table></td></tr></table>
+<p><strong>Handling assumption errors</strong></p>
+<p>Now that you know where assumption errors typically occur, let&#8217;s finish up by talking about different ways to handle them when they do occur.  There is no best way to handle an error &#8212; it really depends on the nature of the problem.</p>
+<p>Here are some typical responses:</p>
+<p>1) Quietly skip the code that depends on the assumption being valid:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintString(char *strString)
+{
+    // Only print if strString is non-null
+    if (strString)
+        std::cout &lt;&lt; strString;
+}
+</pre></td></tr></table></td></tr></table>
+<p>In the above example, if strString is null, we don&#8217;t print anything.  We have skipped the code that depends on strString being non-null.</p>
+<p>2) If we are in a function, return an error code back to the caller and let the caller deal with the problem.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int g_anArray[10]; // a global array of 10 characters
+
+int GetArrayValue(int nIndex)
+{
+    // use if statement to detect violated assumption
+    if (nIndex &lt; 0 || nIndex &gt; 9)
+       return -1; // return error code to caller
+
+    return g_anArray[nIndex];
+}
+</pre></td></tr></table>
+<p>In this case, the function returns -1 if the user passes in an invalid index.</p>
+<p>3) If we want to terminate the program immediately, the <b>exit</b> function can be used to return an error code to the operating system:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int g_anArray[10]; // a global array of 10 characters
+
+int GetArrayValue(int nIndex)
+{
+    // use if statement to detect violated assumption
+    if (nIndex &lt; 0 || nIndex &gt; 9)
+       exit(2); // terminate program and return error number 2 to OS
+
+    return g_anArray[nIndex];
+}
+</pre></td></tr></table>
+<p>If the user enters an invalid index, this program will terminate immediately (with no error message) and pass error code 2 to the operating system.</p>
+<p>4) If the user has entered invalid input, ask the user to enter the input again.</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char strHello[] = &quot;Hello, world!&quot;;
+
+int nIndex;
+do
+{
+    std::cout &lt;&lt; &quot;Enter an index: &quot;;
+    std::cin &gt;&gt; nIndex;
+} while (nIndex &lt; 0 || nIndex &gt;= strlen(strHello));
+
+std::cout &lt;&lt; &quot;Letter #&quot; &lt;&lt; nIndex &lt;&lt; &quot; is &quot; &lt;&lt; strHello[nIndex] &lt;&lt; std::endl;
+</pre></td></tr></table></td></tr></table>
+<p>5) cerr is another mechanism that is meant specifically for printing error messages.  <strong>cerr</strong> is an output stream (just like cout) that is also defined in iostream.h.  Typically, cerr writes the error messages on the screen (just like cout), but it can also be individually redirected to a file.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void PrintString(char *strString)
+{
+    // Only print if strString is non-null
+    if (strString)
+        std::cout &lt;&lt; strString;
+    else
+        std::cerr &lt;&lt; &quot;PrintString received a null parameter&quot;;
+}
+</pre></td></tr></table>
+<p>6) If working in some kind of graphical environment (eg. MFC or SDL), it is common to pop up a message box with an error code and then terminate the program.</p>
+<p><strong>Assert</strong></p>
+<p>Using a conditional statement to detect a violated assumption, along with printing an error message and terminating the program is such a common response to problems that C++ provides a shortcut method for doing this.  This shortcut is called an assert.</p>
+<p>An <strong>assert statement</strong> is a preprocessor macro that evaluates a conditional expression.  If the conditional expression is true, the assert statement does nothing.  If the conditional expression evaluates to false, an error message is displayed and the program is terminated.  This error message contains the conditional expression that failed, along with the name of the code file and the line number of the assert.  This makes it very easy to tell not only what the problem was, but where in the code the problem occurred.  This can help with debugging efforts immensely.</p>
+<p>The assert functionality lives in the cassert header, and is often used both to check that the parameters passed to a function are valid, and to check that the return value of a function call is valid.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int g_anArray[10]; // a global array of 10 characters
+
+#include &lt;cassert&gt; // for assert()
+int GetArrayValue(int nIndex)
+{
+    // we're asserting that nIndex is between 0 and 9
+    assert(nIndex &gt;= 0 &amp;&amp; nIndex &lt;= 9); // this is line 7 in Test.cpp
+
+    return g_anArray[nIndex];
+}
+</pre></td></tr></table>
+<p>If the user calls GetValue(-3), the program prints the following message:</p>
+<pre>
+Assertion failed: nIndex &gt;= 0 &amp;&amp; nIndex &lt;=9, file C:\VCProjects\Test.cpp, line 7
+</pre>
+<p>We strongly encourage you to use assert statements liberally throughout your code.</p>
+<p><strong>Exceptions</strong></p>
+<p>C++ provides one more method for detecting and handling errors known as exception handling.  The basic idea is that when an error occurs, it is &#8220;thrown&#8221;.  If the current function does not &#8220;catch&#8221; the error, the caller of the function has a chance to catch the error.  If the caller does not catch the error, the caller&#8217;s caller has a chance to catch the error.  The error progressively moves up the stack until it is either caught and handled, or until main() fails to handle the error.  If nobody handles the error, the program typically terminates with an exception error.</p>
+<p>Exception handling is an advanced C++ topic, and we cover it in much detail in chapter 15 of this tutorial.</p>

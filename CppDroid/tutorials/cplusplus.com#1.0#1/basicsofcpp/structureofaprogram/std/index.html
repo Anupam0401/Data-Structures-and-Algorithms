@@ -1,0 +1,31 @@
+
+<h3>Using namespace std</h3>
+If you have seen C++ code before, you may have seen <code>cout</code> being used instead of <code>std::cout</code>. Both name the same object: the first one uses its <i>unqualified name</i> (<code>cout</code>), while the second qualifies it directly within the <i>namespace</i> <code>std</code> (as <code>std::cout</code>).<br>
+<br>
+<code>cout</code> is part of the standard library, and all the elements in the standard C++ library are declared within what is a called a <i>namespace</i>: the namespace <code>std</code>.<br>
+<br>
+In order to refer to the elements in the <code>std</code> namespace a program shall either qualify each and every use of elements of the library (as we have done by prefixing <code>cout</code> with <code>std::</code>), or introduce visibility of its components. The most typical way to introduce visibility of these components is by means of <i>using declarations</i>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>using</var> <var>namespace</var> std;</code></pre></td></tr></table></div>
+<br>
+<br>
+The above declaration allows all elements in the <code>std</code> namespace to be accessed in an <i>unqualified</i> manner (without the <code>std::</code> prefix).<br>
+<br>
+With this in mind, the last example can be rewritten to make unqualified uses of <code>cout</code> as:<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br></code></pre></td>
+<td class="source"><pre><code><cite>// my second program in C++</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>int</var> main ()
+{
+  cout &lt;&lt; <kbd>"Hello World! "</kbd>;
+  cout &lt;&lt; <kbd>"I'm a C++ program"</kbd>;
+}</code></pre></td>
+<td class="output"><pre><samp>Hello World! I'm a C++ program</samp></pre></td></tr></table></div>
+<br>
+<br>
+Both ways of accessing the elements of the <code>std</code> namespace (explicit qualification and <i>using</i> declarations) are valid in C++ and produce the exact same behavior. For simplicity, and to improve readability, the examples in these tutorials will more often use this latter approach with <i>using</i> declarations, although note that <i>explicit qualification</i> is the only way to guarantee that name collisions never happen.<br>
+<br>
+Namespaces are explained in more detail in a later chapter.<br>

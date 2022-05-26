@@ -1,0 +1,174 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Integers are great for counting whole numbers, but sometimes we need to store very large numbers, or numbers with a fractional component.  A <strong>floating point</strong> type variable is a variable that can hold a real number, such as 4.0, 2.5, 3.33, or 0.1226.  There are three different floating point data types: <strong>float</strong>, <strong>double</strong>, and <strong>long double</strong>.  A float is usually 4 bytes and a double 8 bytes, but these are not strict requirements, so sizes may vary.  Long doubles were added to the language after it&#8217;s release for architectures that support even larger floating point numbers.  But typically, they are also 8 bytes, equivalent to a double.  Floating point data types are always signed (can hold positive and negative values).</p>
+<p>Here are some declarations of floating point numbers:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+float fValue;
+double dValue;
+long double dValue2;
+</pre></td></tr></table>
+<p>The <em>floating</em> part of the name <em>floating point</em> refers to the fact that a floating point number can have a variable number of decimal places.  For example, 2.5 has 1 decimal place, whereas 0.1226 has 4 decimal places.  </p>
+<p>When we assign numbers to floating point numbers, it is convention to use at least one decimal place.  This helps distinguish floating point values from integer values.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5; // 5 means integer
+float fValue = 5.0; // 5.0 means floating point
+</pre></td></tr></table>
+<p>How floating point variables store information is beyond the scope of this tutorial, but it is very similar to how numbers are written in scientific notation.  <strong>Scientific notation</strong> is a useful shorthand for writing lengthy numbers in a concise manner.  In scientific notation, a number has two parts: the significand, and a power of 10 called an exponent.  The letter &#8216;e&#8217; or &#8216;E&#8217; is used to separate the two parts.  Thus, a number such as 5e2 is equivalent to 5 * 10^2, or 500.  The number 5e-2 is equivalent to 5 * 10^-2, or 0.05.</p>
+<p>In fact, we can use scientific notation to assign values to floating point variables.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+double dValue1 = 500.0;
+double dValue2 = 5e2; // another way to assign 500
+
+double dValue3 = 0.05;
+double dValue4 = 5e-2; // another way to assign 0.05
+</pre></td></tr></table>
+<p>Furthermore, if we output a number that is large enough, or has enough decimal places, it will be printed in scientific notation:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int main()
+{
+    using namespace std;
+
+    double dValue = 1000000.0;
+    cout &lt;&lt; dValue &lt;&lt; endl;
+    dValue = 0.00001;
+    cout &lt;&lt; dValue &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>Outputs:</p>
+<pre>
+1e+006
+1e-005
+</pre>
+<p><strong>Precision</strong></p>
+<p>Consider the fraction 1/3.  The decimal representation of this number is 0.33333333333333&#8230; with 3&#8242;s going out to infinity.  An infinite length number would require infinite memory, and we typically only have 4 or 8 bytes.  Floating point numbers can only store a certain number of digits, and the rest are lost.  The <strong>precision</strong> of a floating point number is how many digits it can represent without information loss.</p>
+<p>When outputting floating point numbers, cout has a default precision of 6 &#8212; that is, it assumes all variables are only significant to 6 digits, and hence it will truncate anything after that.</p>
+<p>The following program shows cout truncating to 6 digits:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int main()
+{
+    using namespace std;
+    float fValue;
+    fValue = 1.222222222222222f;
+    cout &lt;&lt; fValue &lt;&lt; endl;
+    fValue = 111.22222222222222f;
+    cout &lt;&lt; fValue &lt;&lt; endl;
+    fValue = 111111.222222222222f;
+    cout &lt;&lt; fValue &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program outputs:</p>
+<pre>
+1.22222
+111.222
+111111
+</pre>
+<p>Note that each of these is only 6 digits.</p>
+<p>However, we can override the default precision that cout shows by using the setprecision() function that is defined in a header file called iomanip.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt; // for setprecision()
+int main()
+{
+    using namespace std;
+
+    cout &lt;&lt; setprecision(16); // show 16 digits
+    float fValue = 3.33333333333333333333333333333333333333f;
+    cout &lt;&lt; fValue &lt;&lt; endl;
+    double dValue = 3.3333333333333333333333333333333333333;
+    cout &lt;&lt; dValue &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Outputs:</p>
+<pre>
+3.333333253860474
+3.333333333333334
+</pre>
+<p>Because we set the precision to 16 digits, each of the above numbers has 16 digits.  But, as you can see, the numbers certainly aren&#8217;t precise to 16 digits!  </p>
+<p>Variables of type float typically have a precision of about 7 significant digits (which is why everything after that many digits in our answer above is junk).  Variables of type double typically have a precision of about 16 significant digits.  Variables of type double are named so because they offer approximately double the precision of a float.</p>
+<p>Now let&#8217;s consider a really big number:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    float fValue = 123456789.0f;
+    cout &lt;&lt; fValue &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+1.23457e+008
+</pre>
+<p>1.23457e+008 is 1.23457 * 10^8, which is 123457000.  Note that we have lost precision here too!</p>
+<p>Consequently, one has to be careful when using floating point numbers that require more precision than the variables can hold.</p>
+<p><strong>Rounding errors</strong></p>
+<p>One of the reasons floating point numbers can be tricky is due to non-obvious differences between binary and decimal (base 10) numbers.  In normal decimal numbers, the fraction 1/3rd is the infinite decimal sequence: 0.333333333&#8230;  Similarly, consider the fraction 1/10.  In decimal, this is easy represented as 0.1, and we are used to thinking of 0.1 as an easily representable number.  However, in binary, 0.1 is represented by the infinite sequence: 0.00011001100110011&#8230;</p>
+<p>You can see the effects of this in the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iomanip&gt;
+int main()
+{
+	using namespace std;
+	cout &lt;&lt; setprecision(17);
+	double dValue = 0.1;
+	cout &lt;&lt; dValue &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This outputs:</p>
+<pre>
+0.10000000000000001
+</pre>
+<p>Not quite 0.1!  This is because the double had to truncate the approximation due to it&#8217;s limited memory, which resulted in a number that is not exactly 0.1.  This is called a <strong>rounding error</strong>.</p>
+<p>Rounding errors can play havoc with math-intense programs, as mathematical operations can compound the error.  In the following program, we use 9 addition operations.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+int main()
+{
+	using namespace std;
+	cout &lt;&lt; setprecision(17);
+	double dValue;
+	dValue = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
+	cout &lt;&lt; dValue &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This program should output 1, but it actually outputs:</p>
+<pre>
+0.99999999999999989
+</pre>
+<p>Note that the error is no longer in the last column like in the previous example!  It has propagated to the second to last column.  As you continue to do mathematical operations, this error can propagate further, causing the actual number to drift farther and farther from the number the user would expect.</p>
+<p><strong>Comparison of floating point numbers</strong></p>
+<p>One of the things that programmers like to do with numbers and variables is see whether two numbers or variables are equal to each other.  C++ provides an operator called the equality operator (==) precisely for this purpose.  For example, we could write a code snippet like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int x = 5; // integers have no precision issues
+if (x==5)
+    cout &lt;&lt; &quot;x is 5&quot; &lt;&lt; endl;
+else
+    cout &lt;&lt; &quot;x is not 5&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>This program would print &#8220;x is 5&#8243;.</p>
+<p>However, when using floating point numbers, you can get some unexpected results if the two numbers being compared are very close.  Consider:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+float fValue1 = 1.345f;
+float fValue2 = 1.123f;
+float fTotal = fValue1 + fValue2; // should be 2.468
+
+if (fTotal == 2.468)
+    cout &lt;&lt; &quot;fTotal is 2.468&quot;;
+else
+    cout &lt;&lt; &quot;fTotal is not 2.468&quot;;
+</pre></td></tr></table>
+<p>This program prints:</p>
+<pre>
+fTotal is not 2.468
+</pre>
+<p>This result is due to rounding error.  fTotal is actually being stored as 2.4679999, which is not 2.468!</p>
+<p>For the same reason, the comparison operators >, >=, <, and <= may produce the wrong result when comparing two floating point numbers that are very close.</p>
+<p><strong>Conclusion</strong></p>
+<p>To summarize, the two things you should remember about floating point numbers:</p>
+<p>1) Floating point numbers offer limited precision.  Floats typically offer about 7 significant digits worth of precision, and doubles offer about 16 significant digits.  Trying to use more significant digits will result in a loss of precision.  (Note: placeholder zeros do not count as significant digits, so a number like 22,000,000,000, or 0.00000033 only counts for 2 digits).</p>
+<p>2) Floating point numbers often have small rounding errors.  Many times these go unnoticed because they are so small, and because the numbers are truncated for output before the error propagates into the part that is not truncated.  Regardless, comparisons on floating point numbers may not give the expected results when two numbers are close.</p>
+<p>The section on <a href="http://www.learncpp.com/cpp-tutorial/35-relational-operators-comparisons/">relational operators</a> has more detail on comparing floating point numbers.</p>

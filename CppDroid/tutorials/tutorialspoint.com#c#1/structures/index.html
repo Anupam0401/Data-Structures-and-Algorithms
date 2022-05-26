@@ -1,0 +1,238 @@
+
+<p>C arrays allow you to define type of variables that can hold several data items of the same kind but <b>structure</b> is another user defined data type available in C programming, which allows you to combine data items of different kinds.</p>
+<p>Structures are used to represent a record, Suppose you want to keep track of your books in a library. You might want to track the following attributes about each book:</p>
+<ul class="list">
+<li><p>Title</p> </li>
+<li><p>Author</p></li>
+<li><p>Subject</p> </li>
+<li><p>Book ID</p></li>
+</ul>
+<h2>Defining a Structure</h2>
+<p>To define a structure, you must use the <b>struct</b> statement. The struct statement defines a new data type, with more than one member for your program. The format of the struct statement is this:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct [structure tag]
+{
+   member definition;
+   member definition;
+   ...
+   member definition;
+} [one or more structure variables];  
+</pre></td></tr></table>
+<p>The <b>structure tag</b> is optional and each member definition is a normal variable definition, such as int i; or float f; or any other valid variable definition. At the end of the structure's definition, before the final semicolon, you can specify one or more structure variables but it is optional. Here is the way you would declare the Book structure:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct Books
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+} book;  
+</pre></td></tr></table>
+<h2>Accessing Structure Members</h2>
+<p>To access any member of a structure, we use the <b>member access operator (.)</b>. The member access operator is coded as a period between the structure variable name and the structure member that we wish to access. You would use <b>struct</b> keyword to define variables of structure type. Following is the example to explain usage of structure:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+ 
+struct Books
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+};
+ 
+int main( )
+{
+   struct Books Book1;        /* Declare Book1 of type Book */
+   struct Books Book2;        /* Declare Book2 of type Book */
+ 
+   /* book 1 specification */
+   strcpy( Book1.title, "C Programming");
+   strcpy( Book1.author, "Nuha Ali"); 
+   strcpy( Book1.subject, "C Programming Tutorial");
+   Book1.book_id = 6495407;
+
+   /* book 2 specification */
+   strcpy( Book2.title, "Telecom Billing");
+   strcpy( Book2.author, "Zara Ali");
+   strcpy( Book2.subject, "Telecom Billing Tutorial");
+   Book2.book_id = 6495700;
+ 
+   /* print Book1 info */
+   printf( "Book 1 title : %s\n", Book1.title);
+   printf( "Book 1 author : %s\n", Book1.author);
+   printf( "Book 1 subject : %s\n", Book1.subject);
+   printf( "Book 1 book_id : %d\n", Book1.book_id);
+
+   /* print Book2 info */
+   printf( "Book 2 title : %s\n", Book2.title);
+   printf( "Book 2 author : %s\n", Book2.author);
+   printf( "Book 2 subject : %s\n", Book2.subject);
+   printf( "Book 2 book_id : %d\n", Book2.book_id);
+
+   return 0;
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+Book 1 title : C Programming
+Book 1 author : Nuha Ali
+Book 1 subject : C Programming Tutorial
+Book 1 book_id : 6495407
+Book 2 title : Telecom Billing
+Book 2 author : Zara Ali
+Book 2 subject : Telecom Billing Tutorial
+Book 2 book_id : 6495700
+</pre></td></tr></table>
+<h2>Structures as Function Arguments</h2>
+<p>You can pass a structure as a function argument in very similar way as you pass any other variable or pointer. You would access structure variables in the similar way as you have accessed in the above example:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+ 
+struct Books
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+};
+
+/* function declaration */
+void printBook( struct Books book );
+int main( )
+{
+   struct Books Book1;        /* Declare Book1 of type Book */
+   struct Books Book2;        /* Declare Book2 of type Book */
+ 
+   /* book 1 specification */
+   strcpy( Book1.title, "C Programming");
+   strcpy( Book1.author, "Nuha Ali"); 
+   strcpy( Book1.subject, "C Programming Tutorial");
+   Book1.book_id = 6495407;
+
+   /* book 2 specification */
+   strcpy( Book2.title, "Telecom Billing");
+   strcpy( Book2.author, "Zara Ali");
+   strcpy( Book2.subject, "Telecom Billing Tutorial");
+   Book2.book_id = 6495700;
+ 
+   /* print Book1 info */
+   printBook( Book1 );
+
+   /* Print Book2 info */
+   printBook( Book2 );
+
+   return 0;
+}
+void printBook( struct Books book )
+{
+   printf( "Book title : %s\n", book.title);
+   printf( "Book author : %s\n", book.author);
+   printf( "Book subject : %s\n", book.subject);
+   printf( "Book book_id : %d\n", book.book_id);
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="result">
+Book title : C Programming
+Book author : Nuha Ali
+Book subject : C Programming Tutorial
+Book book_id : 6495407
+Book title : Telecom Billing
+Book author : Zara Ali
+Book subject : Telecom Billing Tutorial
+Book book_id : 6495700
+</pre></td></tr></table></td></tr></table>
+<h2>Pointers to Structures</h2>
+<p>You can define pointers to structures in very similar way as you define pointer to any other variable as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct Books *struct_pointer;
+</pre></td></tr></table>
+<p>Now, you can store the address of a structure variable in the above defined pointer variable. To find the address of a structure variable, place the &amp; operator before the structure's name as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct_pointer = &amp;Book1;
+</pre></td></tr></table>
+<p>To access the members of a structure using a pointer to that structure, you must use the -&gt; operator as follows:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct_pointer-&gt;title;
+</pre></td></tr></table>
+<p>Let us re-write above example using structure pointer, hope this will be easy for you to understand the concept:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+ 
+struct Books
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+};
+
+/* function declaration */
+void printBook( struct Books *book );
+int main( )
+{
+   struct Books Book1;        /* Declare Book1 of type Book */
+   struct Books Book2;        /* Declare Book2 of type Book */
+ 
+   /* book 1 specification */
+   strcpy( Book1.title, "C Programming");
+   strcpy( Book1.author, "Nuha Ali"); 
+   strcpy( Book1.subject, "C Programming Tutorial");
+   Book1.book_id = 6495407;
+
+   /* book 2 specification */
+   strcpy( Book2.title, "Telecom Billing");
+   strcpy( Book2.author, "Zara Ali");
+   strcpy( Book2.subject, "Telecom Billing Tutorial");
+   Book2.book_id = 6495700;
+ 
+   /* print Book1 info by passing address of Book1 */
+   printBook( &amp;Book1 );
+
+   /* print Book2 info by passing address of Book2 */
+   printBook( &amp;Book2 );
+
+   return 0;
+}
+void printBook( struct Books *book )
+{
+   printf( "Book title : %s\n", book-&gt;title);
+   printf( "Book author : %s\n", book-&gt;author);
+   printf( "Book subject : %s\n", book-&gt;subject);
+   printf( "Book book_id : %d\n", book-&gt;book_id);
+}
+</pre></td></tr></table>
+<p>When the above code is compiled and executed, it produces the following result:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="result">
+Book title : C Programming
+Book author : Nuha Ali
+Book subject : C Programming Tutorial
+Book book_id : 6495407
+Book title : Telecom Billing
+Book author : Zara Ali
+Book subject : Telecom Billing Tutorial
+Book book_id : 6495700
+</pre></td></tr></table></td></tr></table>
+<h2>Bit Fields</h2>
+<p>Bit Fields allow the packing of data in a structure. This is especially useful when memory or data storage is at a premium. Typical examples:</p>
+<ul class="list">
+<li><p>Packing several objects into a machine word. e.g. 1 bit flags can be compacted.</p></li>
+<li><p>Reading external file formats -- non-standard file formats could be read in. E.g. 9 bit integers.</p></li>
+</ul>
+<p>C allows us do this in a structure definition by putting :bit length after the variable. For example:</p>
+<table><tr><td class="source"><pre class="prettyprint">
+struct packed_struct {
+  unsigned int f1:1;
+  unsigned int f2:1;
+  unsigned int f3:1;
+  unsigned int f4:1;
+  unsigned int type:4;
+  unsigned int my_int:9;
+} pack;
+</pre></td></tr></table>
+<p>Here, the packed_struct contains 6 members: Four 1 bit flags f1..f3, a 4 bit type and a 9 bit my_int.</p>
+<p>C automatically packs the above bit fields as compactly as possible, provided that the maximum length of the field is less than or equal to the integer word length of the computer. If this is not the case then some compilers may allow memory overlap for the fields whilst other would store the next field in the next word.</p>

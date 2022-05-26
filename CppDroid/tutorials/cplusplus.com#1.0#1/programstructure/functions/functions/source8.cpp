@@ -1,0 +1,1 @@
+cout << "The second result is " << 5;

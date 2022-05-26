@@ -1,0 +1,120 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Pass by reference</strong></p>
+<p>When passing arguments by value, the only way to return a value back to the caller is via the function&#8217;s return value.  While this is suitable in many cases, there are a few cases where better options are available.  One such case is when writing a function that needs to modify the values of an array (eg. sorting an array).  In this case, it is more efficient and more clear to have the function modify the actual array passed to it, rather than trying to return something back to the caller.</p>
+<p>One way to allow functions to modify the value of argument is by using pass by reference.  In <strong>pass by reference</strong>, we declare the function parameters as references rather than normal variables:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void AddOne(int &amp;y) // y is a reference variable
+{
+    y = y + 1;
+}
+</pre></td></tr></table>
+<p>When the function is called, y will become a reference to the argument.  Since a reference to a variable is treated exactly the same as the variable itself, any changes made to the reference are passed through to the argument!</p>
+<p>The following example shows this in action:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void foo(int &amp;y) // y is now a reference
+{
+    using namespace std;
+    cout &lt;&lt; &quot;y = &quot; &lt;&lt; y &lt;&lt; endl;
+    y = 6;
+    cout &lt;&lt; &quot;y = &quot; &lt;&lt; y &lt;&lt; endl;
+} // y is destroyed here
+
+int main()
+{
+    int x = 5;
+    cout &lt;&lt; &quot;x = &quot; &lt;&lt; x &lt;&lt; endl;
+    foo(x);
+    cout &lt;&lt; &quot;x = &quot; &lt;&lt; x &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program is the same as the one we used for the pass by value example, except foo&#8217;s parameter is now a reference instead of a normal variable.  When we call foo(x), y becomes a reference to x.  This snippet produces the output:</p>
+<pre>
+x = 5
+y = 5
+y = 6
+x = 6
+</pre>
+<p>Note that the value of x was changed by the function!</p>
+<p>Here is another example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void AddOne(int &amp;y)
+{
+    y++;
+}
+
+int main()
+{
+    int x = 5;
+
+    cout &lt;&lt; &quot;x = &quot; &lt;&lt; x &lt;&lt; endl;
+    AddOne(x);
+    cout &lt;&lt; &quot;x = &quot; &lt;&lt; x &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This example prints:</p>
+<pre>
+x = 5;
+x = 6;
+</pre>
+<p>As you can see, the function was able to change the value of the argument.</p>
+<p>Sometimes we need a function to return multiple values.  However, functions can only have one return value.  One way to return multiple values is using reference parameters:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;math.h&gt;    // for sin() and cos()
+
+void GetSinCos(double dX, double &amp;dSin, double &amp;dCos)
+{
+    dSin = sin(dX);
+    dCos = cos(dX);
+}
+
+int main()
+{
+    double dSin = 0.0;
+    double dCos = 0.0;
+
+    // GetSinCos will return the sin and cos in dSin and dCos
+    GetSinCos(30.0, dSin, dCos);
+
+    std::cout &lt;&lt; &quot;The sin is &quot; &lt;&lt; dSin &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;The cos is &quot; &lt;&lt; dCos &lt;&lt; std::endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This function takes one parameter (by value) as input, and &#8220;returns&#8221; two parameters (by reference) as output.</p>
+<p><strong>Pass by const reference</strong></p>
+<p>One of the major disadvantages of pass by value is that all arguments passed by value are copied to the parameters.  When the arguments are large structs or classes, this can take a lot of time.  References provide a way to avoid this penalty.  When an argument is passed by reference, a reference is created to the actual argument (which takes minimal time) and no copying of values takes place.  This allows us to pass large structs and classes with a minimum performance penalty.</p>
+<p>However, this also opens us up to potential trouble.  References allow the function to change the value of the argument, which in many cases is undesirable.  If we know that a function should not change the value of an argument, but don&#8217;t want to pass by value, the best solution is to pass by const reference.</p>
+<p>You already know that a const reference is a reference that does not allow the variable being referenced to be changed.  Consequently, if we use a const reference as a parameter, we guarantee to the caller that the function will not (and can not) change the argument!</p>
+<p>The following function will produce a compiler error:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void foo(const int &amp;x)
+{
+    x = 6;  // x is a const reference and can not be changed!
+}
+</pre></td></tr></table>
+<p>Using const is useful for several reasons:</p>
+<ul>
+<li>It enlists the compilers help in ensuring values that shouldn&#8217;t be changed aren&#8217;t changed.
+<li>It tells the coder whether they need to worry about the function changing the value of the argument
+<li>It helps the coder debug incorrect values by telling the coder whether the function might be at fault or not
+</ul>
+<p><em>Rule: Always pass by const reference unless you need to change the value of the argument</em></p>
+<p><strong>Summary</strong></p>
+<p>Advantages of passing by reference:</p>
+<ul>
+<li>It allows us to have the function change the value of the argument, which is sometimes useful.
+<li>Because a copy of the argument is not made, it is fast, even when used with large structs or classes.
+<li>We can pass by const reference to avoid unintentional changes.
+<li>We can return multiple values from a function.
+</ul>
+<p>Disadvantages of passing by reference:</p>
+<ul>
+<li>Because a non-const reference can not be made to a literal or an expression, reference arguments must be normal variables.
+<li>It can be hard to tell whether a parameter passed by reference is meant to be input, output, or both.
+<li>It&#8217;s impossible to tell from the function call that the argument may change.  An argument passed by value and passed by reference looks the same.  We can only tell whether an argument is passed by value or reference by looking at the function declaration.  This can lead to situations where the programmer does not realize a function will change the value of the argument.
+<li>Because references are typically implemented by C++ using pointers, and dereferencing a pointer is slower than accessing it directly, accessing values passed by reference is slower than accessing values passed by value.
+</ul>

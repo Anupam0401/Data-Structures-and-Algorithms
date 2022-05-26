@@ -1,0 +1,11 @@
+
+<h3>Error directive (#error)</h3>
+This directive aborts the compilation process when it is found, generating a compilation error that can be specified as its parameter:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><dfn>#ifndef __cplusplus</dfn>
+<dfn>#error A C++ compiler is required!</dfn>
+<dfn>#endif </dfn></code></pre></td></tr></table></div>
+<br>
+<br>
+This example aborts the compilation process if the macro name <code>__cplusplus</code> is not defined (this macro name is defined by default in all C++ compilers).<br>

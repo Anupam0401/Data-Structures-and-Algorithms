@@ -1,0 +1,166 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>String assignment</strong></p>
+<p>The easiest way to assign a value to a string is to the use the overloaded operator= function.  There is also an assign() member function that duplicates some of this functionality.</p>
+<table border=1 cellspacing=0 cellpadding=3 width=100%>
+<tr>
+<td>
+<b>string&#038; string::operator= (const string&#038; str)</b><br />
+<b>string&#038; string::assign (const string&#038; str)</b><br />
+<b>string&#038; string::operator= (const char* str)</b><br />
+<b>string&#038; string::assign (const char* str)</b><br />
+<b>string&#038; string::operator= (char c)</b><br />
+</p>
+<ul>
+<li>These functions assign values of various types to the string.
+<li>These functions return *this so they can be &#8220;chained&#8221;.
+<li>Note that there is no assign() function that takes a single char.
+</ul>
+<p>Sample code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+string sString;
+
+// Assign a string value
+sString = string(&quot;One&quot;);
+cout &lt;&lt; sString &lt;&lt; endl;
+
+const string sTwo(&quot;Two&quot;);
+sString.assign(sTwo);
+cout &lt;&lt; sString &lt;&lt; endl;
+
+// Assign a C-style string
+sString = &quot;Three&quot;;
+cout &lt;&lt; sString &lt;&lt; endl;
+
+sString.assign(&quot;Four&quot;);
+cout &lt;&lt; sString &lt;&lt; endl;
+
+// Assign a char
+sString = '5';
+cout &lt;&lt; sString &lt;&lt; endl;
+
+// Chain assignment
+string sOther;
+sString = sOther = &quot;Six&quot;;
+cout &lt;&lt; sString &lt;&lt; &quot; &quot; &lt;&lt; sOther &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+One
+Two
+Three
+Four
+5
+Six Six
+</pre>
+</td>
+</tr>
+</table>
+<p></p>
+<p>The assign() member function also comes in a few other flavors:</p>
+<table border=1 cellspacing=0 cellpadding=3 width=100%>
+<tr>
+<td>
+<b>string&#038; string::assign (const string&#038; str, size_type index, size_type len)</b></p>
+<ul>
+<li>Assigns a substring of str, starting from index, and of length len
+<li>Throws an out_of_range exception if the index is out of bounds
+<li>Returns *this so it can be &#8220;chained&#8221;.
+</ul>
+<p>Sample code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+const string sSource(&quot;abcdefg&quot;);
+string sDest;
+
+sDest.assign(sSource, 2, 4); // assign a substring of source from index 2 of length 4
+cout &lt;&lt; sDest &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+cdef
+</pre>
+</td>
+</tr>
+</table>
+<p></p>
+<table border=1 cellspacing=0 cellpadding=3 width=100%>
+<tr>
+<td>
+<b>string&#038; string::assign (const char* chars, size_type len)</b></p>
+<ul>
+<li>Assigns len characters from the C-style array chars
+<li>Ignores special characters (including &#8216;\0&#8242;)
+<li>Throws an length_error exception if the result exceeds the maximum number of characters
+<li>Returns *this so it can be &#8220;chained&#8221;.
+</ul>
+<p>Sample code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+string sDest;
+
+sDest.assign(&quot;abcdefg&quot;, 4);
+cout &lt;&lt; sDest &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+abcd
+</pre>
+<p>This function is potentially dangerous and it&#8217;s use is not recommended.</p>
+</td>
+</tr>
+</table>
+<p></p>
+<table border=1 cellspacing=0 cellpadding=3 width=100%>
+<tr>
+<td>
+<b>string&#038; string::assign (size_type len, char c)</b></p>
+<ul>
+<li>Assigns len occurrences of the character c
+<li>Throws an length_error exception if the result exceeds the maximum number of characters
+<li>Returns *this so it can be &#8220;chained&#8221;.
+</ul>
+<p>Sample code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+string sDest;
+
+sDest.assign(4, 'g');
+cout &lt;&lt; sDest &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+gggg
+</pre>
+</td>
+</tr>
+</table>
+<p></p>
+<p><strong>Swapping</strong></p>
+<p>If you have two strings and want to swap their values, there are two functions both named swap() that you can use.</p>
+<table border=1 cellspacing=0 cellpadding=3 width=100%>
+<tr>
+<td>
+<b>void string::swap (string &#038;str)</b><br />
+<b>void swap (string &#038;str1, string &#038;str2)</b></p>
+<ul>
+<li>Both functions swap the value of the two strings.  The member function swaps *this and str, the global function swaps str1 and str2.
+<li>These functions are efficient and should be used instead of assignments to perform a string swap.
+</ul>
+<p>Sample code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+string sStr1(&quot;red&quot;);
+string sStr2(&quot;blue);
+
+cout &lt;&lt; sStr1 &lt;&lt; &quot; &quot; &lt;&lt; sStr2 &lt;&lt; endl;
+swap(sStr1, sStr2);
+cout &lt;&lt; sStr1 &lt;&lt; &quot; &quot; &lt;&lt; sStr2 &lt;&lt; endl;
+sStr1.swap(sStr2);
+cout &lt;&lt; sStr1 &lt;&lt; &quot; &quot; &lt;&lt; sStr2 &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Output:</p>
+<pre>
+red blue
+blue red
+red blue
+</pre>
+</td>
+</tr>
+</table>
+<p></p>

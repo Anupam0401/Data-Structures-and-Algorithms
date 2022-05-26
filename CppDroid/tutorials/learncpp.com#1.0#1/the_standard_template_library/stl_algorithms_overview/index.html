@@ -1,0 +1,97 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In addition to container classes and iterators, STL also provides a number of generic algorithms for working with the elements of the container classes.  These allow you to do things like search, sort, insert, reorder, remove, and copy elements of the container class.</p>
+<p>Note that algorithms are implemented as global functions that operate using iterators.  This means that each algorithm only needs to be implemented once, and it will generally automatically work for all containers that provides a set of iterators (including your custom container classes).  While this is very powerful and can lead to the ability to write complex code very quickly, it&#8217;s also got a dark side: some combination of algorithms and container types may not work, may cause infinite loops, or may work but be extremely poor performing.  So use these at your risk.</p>
+<p>STL provides quite a few algorithms &#8212; we will only touch on some of the more common and easy to use ones here.  The rest (and the full details) will be saved for a chapter on STL algorithms.</p>
+<p>To use any of the STL algorithms, simply include the algorithm header file.</p>
+<p><strong>min_element and max_element</strong></p>
+<p>The min_element and max_element algorithms find the min and max element in a container class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;list&gt;
+#include &lt;algorithm&gt;
+int main()
+{
+    using namespace std;
+
+    list&lt;int&gt; li;
+    for (int nCount=0; nCount &lt; 6; nCount++)
+        li.push_back(nCount);
+
+    list&lt;int&gt;::const_iterator it; // declare an iterator
+    it = min_element(li.begin(), li.end());
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+    it = max_element(li.begin(), li.end());
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Prints:</p>
+<p>0 5</p>
+<p><strong>find (and list::insert)</strong></p>
+<p>In this example, we&#8217;ll use the find() algorithm to find a value in the list class, and then use the list::insert() function to add a new value into the list at that point.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;list&gt;
+#include &lt;algorithm&gt;
+int main()
+{
+    using namespace std;
+
+    list&lt;int&gt; li;
+    for (int nCount=0; nCount &lt; 6; nCount++)
+        li.push_back(nCount);
+
+    list&lt;int&gt;::const_iterator it; // declare an iterator
+    it = find(li.begin(), li.end(), 3); // find the value 3 in the list
+    li.insert(it, 8); // use list::insert to insert the value 8 before it
+
+    for (it = li.begin(); it != li.end(); it++) // for loop with iterators
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This prints the value</p>
+<p>0 1 2 8 3 4 5</p>
+<p><strong>sort and reverse</strong></p>
+<p>In this example, we&#8217;ll sort a vector and then reverse it.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+int main()
+{
+    using namespace std;
+
+    vector&lt;int&gt; vect;
+    vect.push_back(7);
+    vect.push_back(-3);
+    vect.push_back(6);
+    vect.push_back(2);
+    vect.push_back(-5);
+    vect.push_back(0);
+    vect.push_back(4);
+
+    sort(vect.begin(), vect.end()); // sort the list
+
+    vector&lt;int&gt;::const_iterator it; // declare an iterator
+    for (it = vect.begin(); it != vect.end(); it++) // for loop with iterators
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+
+    reverse(vect.begin(), vect.end()); // reverse the list
+
+    for (it = vect.begin(); it != vect.end(); it++) // for loop with iterators
+        cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+
+    cout &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<p>-5 -3 0 2 4 6 7<br />
+7 6 4 2 0 -3 -5</p>
+<p>Note that sort() doesn&#8217;t work on list container classes &#8212; the list class provides it&#8217;s own sort() member function, which is much more efficient than the generic version would be.</p>
+<p><strong>Conclusion</strong></p>
+<p>Although this is just a taste of the algorithms that STL provides, it should suffice to show how easy these are to use in conjunction with iterators and the basic container classes.  There are enough other algorithms to fill up a whole chapter!</p>

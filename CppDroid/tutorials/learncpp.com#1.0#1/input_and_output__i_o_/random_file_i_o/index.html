@@ -1,0 +1,170 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>The file pointer</strong></p>
+<p>Each file stream class contains a file pointer that is used to keep track of the current read/write position within the file.  When something is read from or written to a file, the reading/writing happens at the file pointer&#8217;s current location.  By default, when opening a file for reading or writing, the file pointer is set to the beginning of the file.  However, if a file is opened in append mode, the file pointer is moved to the end of the file, so that writing does not overwrite any of the current contents of the file.</p>
+<p><strong>Random file access with seekg() and seekp()</strong></p>
+<p>So far, all of the file access we&#8217;ve done has been sequential &#8212; that is, we&#8217;ve read or written the file contents in order.  However, it is also possible to do random file access &#8212; that is, skip around to various points in the file to read it&#8217;s contents.  This can be useful when your file is full of records, and you wish to retrieve a specific record.  Rather than reading all of the records until you get to the one you want, you can skip directly to the record you wish to retrieve.</p>
+<p>Random file access is done by manipulating the file pointer using the seekg() function (for input) and seekp() function (for output).  In case you are wondering, the g stands for &#8220;get&#8221; and the p for &#8220;put&#8221;.</p>
+<p>The seekg() and seekp() functions take two parameters.  The first parameter is an offset that determines how many bytes to move the file pointer.  The second parameter is an Ios flag that specifies what the offset parameter should be offset from.</p>
+<table cellpadding=3 border=1>
+<tr>
+<th>Ios seek flag</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td>beg</td>
+<td>The offset is relative to the beginning of the file (default)</td>
+</tr>
+<tr>
+<td>cur</td>
+<td>The offset is relative to the current location of the file pointer</td>
+</tr>
+<tr>
+<td>end</td>
+<td>The offset is relative to the end of the file</td>
+</tr>
+</table>
+<p>A positive offset means move the file pointer towards the end of the file, whereas a negative offset means move the file pointer towards the beginning of the file.</p>
+<p>Here are some examples:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+inf.seekg(14, ios::cur); // move forward 14 bytes
+inf.seekg(-18, ios::cur); // move backwards 18 bytes
+inf.seekg(22, ios::beg); // move to 22nd byte in file
+inf.seekg(24); // move to 24th byte in file
+inf.seekg(-28, ios::end); // move to the 28th byte before end of the file
+</pre></td></tr></table>
+<p>Moving to the beginning or end of the file is easy:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+inf.seekg(0, ios::beg); // move to beginning of file
+inf.seekg(0, ios::end); // move to end of file
+</pre></td></tr></table>
+<p>Let&#8217;s do an example using seekg() and the input file we created in the last lesson.  That input file looks like this:</p>
+<pre>
+This is line 1
+This is line 2
+This is line 3
+This is line 4
+</pre>
+<p>Heres the example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+
+    ifstream inf(&quot;Sample.dat&quot;);
+
+    // If we couldn't open the input file stream for reading
+    if (!inf)
+    {
+        // Print an error and exit
+        cerr &lt;&lt; &quot;Uh oh, Sample.dat could not be opened for reading!&quot; &lt;&lt; endl;
+        exit(1);
+    }
+
+    string strData;
+
+    inf.seekg(5); // move to 5th character
+    // Get the rest of the line and print it
+    getline(inf, strData);
+    cout &lt;&lt; strData &lt;&lt; endl;
+
+    inf.seekg(8, ios::cur); // move 8 more bytes into file
+    // Get rest of the line and print it
+    getline(inf, strData);
+    cout &lt;&lt; strData &lt;&lt; endl;
+
+    inf.seekg(-15, ios::end); // move 15 bytes before end of file
+    // Get rest of the line and print it
+    getline(inf, strData);
+    cout &lt;&lt; strData &lt;&lt; endl;
+
+	return 0;
+}
+</pre></td></tr></table>
+<p>This produces the result:</p>
+<pre>
+is line 1
+line 2
+his is line 4
+</pre>
+<p>Two other useful functions are tellg() and tellp(), which return the absolute position of the file pointer.  This can be used to determine the size of a file:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+ifstream inf(&quot;Sample.dat&quot;);
+inf.seekg(0, ios::end); // move to end of file
+cout &lt;&lt; inf.tellg();
+</pre></td></tr></table>
+<p>This prints:</p>
+<pre>
+64
+</pre>
+<p>which is how long sample.dat is in bytes (assuming a carriage return after the last line).</p>
+<p><strong>Reading and writing a file at the same time using fstream</strong></p>
+<p>The fstream class is capable of both reading and writing a file at the same time &#8212; almost!  The big caveat here is that it is not possible to switch between reading and writing arbitrarily.  Once a read or write has taken place, the only way to switch between the two is to perform a seek operation.  If you don&#8217;t actually want to move the file pointer, you can always seek to the current position:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+iofile.seekg(iofile.tellg(), ios::beg); // seek to current file position
+</pre></td></tr></table>
+<p>If you do not do this, any number of strange and bizarre things may occur.</p>
+<p>(Note: Although it may seem that <code>inf.seekg(0, ios::cur)</code> would also work, it appears some compilers may optimize this away.)</p>
+<p>One other bit of trickiness: Unlike istream, where we could say <code>while (inf)</code> to determine if there was more to read, this will not work with fstream.</p>
+<p>Let&#8217;s do a file I/O example using fstream.  We&#8217;re going to write a program that opens a file, reads it&#8217;s contents, and changes the any vowels it finds to a &#8216;#&#8217; symbol.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+
+	// Note we have to specify both in and out because we're using fstream
+    fstream iofile(&quot;Sample.dat&quot;, ios::in | ios::out);
+
+    // If we couldn't open iofile, print an error
+    if (!iofile)
+    {
+        // Print an error and exit
+        cerr &lt;&lt; &quot;Uh oh, Sample.dat could not be opened!&quot; &lt;&lt; endl;
+        exit(1);
+    }
+
+    char chChar; // we're going to do this character by character
+
+    // While there's still data to process
+    while (iofile.get(chChar))
+    {
+        switch (chChar)
+        {
+            // If we find a vowel
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            case 'A':
+            case 'E':
+            case 'I':
+            case 'O':
+            case 'U':
+
+                // Back up one character
+                iofile.seekg(-1, ios::cur);
+
+                // Because we did a seek, we can now safely do a write, so
+                // let's write a # over the vowel
+                iofile &lt;&lt; '#';
+
+                // Now we want to go back to read mode so the next call
+                // to get() will perform correctly.  We'll seekg() to the current
+                // location because we don't want to move the file pointer.
+                iofile.seekg(iofile.tellg(), ios::beg);
+
+                break;
+        }
+    }
+
+    return 0;
+}
+</pre></td></tr></table>
+<p><strong>Other useful file functions</strong></p>
+<p>To delete a file, simply use the remove() function.</p>
+<p>Also, the is_open() function will return true if the stream is currently open, and false otherwise.</p>
+<p><strong>A warning about writing pointers to disk</strong></p>
+<p>While streaming variables to a file is quite easy, things become more complicated when you&#8217;re dealing with pointers.  Remember that a pointer simply holds the address of the variable it is pointing to.  Although it is possible to read and write addresses to disk, it is extremely dangerous to do so.  This is because a variable&#8217;s address may differ from execution to execution.  Consequently, although a variable may have lived at address 0x0012FF7C when you wrote that address to disk, it may not live there any more when you read that address back in!</p>
+<p>For example, let&#8217;s say you had an integer named nValue that lived at address 0x0012FF7C.  You assigned nValue the value 5.  You also declared a pointer named *pnValue that points to nValue.  pnValue holds nValue&#8217;s address of 0x0012FF7C.  You want to save these for later, so you write the value 5 and the address 0x0012FF7C to disk.</p>
+<p>A few weeks later, you run the program again and read these values back from disk.  You read the value 5 into another variable named nValue, which lives at 0x0012FF78.  You read the address 0x0012FF7C into a new pointer named *pnValue.   Because pnValue now points to 0x0012FF7C when the nValue lives at 0x0012FF78, pnValue is no longer pointing to nValue, and trying to access pnValue will lead you into trouble.</p>
+<p><em>Rule: Do not write addresses to files.  The variables that were originally at those addresses may be at different addresses when you read their values back in from disk, and the addresses will be invalid.</em></p>

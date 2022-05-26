@@ -1,0 +1,1 @@
+int nValue(5); // implicit assignment

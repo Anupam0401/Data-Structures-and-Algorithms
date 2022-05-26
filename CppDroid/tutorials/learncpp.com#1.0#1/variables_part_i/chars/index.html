@@ -1,0 +1,142 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Even though the <em>char</em> data type is an integer (and thus follows all of the normal integer rules), we typically work with chars in a different way than normal integers.  Characters can hold either a small number, or a letter from the ASCII character set.  <strong>ASCII</strong> stands for American Standard Code for Information Interchange, and it defines a mapping between the keys on an American keyboard and a number between 1 and 127 (called a code).  For instance, the character &#8216;a&#8217; is mapped to code 97.  &#8216;b&#8217; is code 98.  Characters are always placed between single quotes.</p>
+<p>The following two assignments do the same thing:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char chValue = 'a';
+char chValue2 = 97;
+</pre></td></tr></table>
+<p>cout outputs char type variables as characters instead of numbers.</p>
+<p>The following snippet outputs &#8216;a&#8217; rather than 97:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char chChar = 97; // assign char with ASCII code 97
+cout &lt;&lt; chChar; // will output 'a'
+</pre></td></tr></table>
+<p>If we want to print a char as a number instead of a character, we have to tell cout to print the char as if it were an integer.  We do this by using a <em>cast</em> to have the compiler convert the char into an int before it is sent to cout:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char chChar = 97;
+cout &lt;&lt; (int)chChar; // will output 97, not 'a'
+</pre></td></tr></table>
+<p>The <em>(int)</em> cast tells the compiler to convert chChar into an int, and cout prints ints as their actual values.  We will talk more about casting in a few lessons.</p>
+<p>The following program asks the user to input a character, then prints out both the character and it&#8217;s ASCII code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;iostream&quot;;
+
+int main()
+{
+    using namespace std;
+    char chChar;
+    cout &lt;&lt; &quot;Input a keyboard character: &quot;;
+    cin &gt;&gt; chChar;
+    cout &lt;&lt; chChar &lt;&lt; &quot; has ASCII code &quot; &lt;&lt; (int)chChar &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Note that even though cin will let you enter multiple characters, chChar will only hold 1 character.  Consequently, only the first character is used.</p>
+<p>One word of caution: be careful not to mix up character (keyboard) numbers with actual numbers.  The following two assignments are not the same</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char chValue = '5'; // assigns 53 (ASCII code for '5')
+char chValue2 = 5; // assigns 5
+</pre></td></tr></table>
+<p><strong>Escape sequences</strong></p>
+<p>C and C++ have some characters that have special meaning.  These characters are called <strong>escape sequences</strong>.  An escape sequence starts with a \, and then a following letter or number.</p>
+<p>The most common escape sequence is &#8216;\n&#8217;, which can be used to embed a newline in a string of text:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;First line\nSecond line&quot; &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This outputs:</p>
+<pre>
+First line
+Second line
+</pre>
+<p>Another commonly used escape sequence is &#8216;\t&#8217;, which embeds a tab:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+	using namespace std;
+	cout &lt;&lt; &quot;First part\tSecond part&quot;;
+}
+</pre></td></tr></table>
+<p>Which outputs:</p>
+<pre>
+First part        Second part
+</pre>
+<p>Three other notable escape sequences are:<br />
+\&#8217;, which prints a single quote<br />
+\&#8221;, which prints a double quote<br />
+\\, which prints a backslash</p>
+<p>Here&#8217;s a table of all of the escape sequences:</p>
+<table border=1 cellspacing=0 cellpadding=5>
+<tr>
+<th>Name</th>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td>Alert</td>
+<td>\a</td>
+<td>Makes an alert, such as a beep</td>
+</tr>
+<tr>
+<td>Backspace</td>
+<td>\b</td>
+<td>Moves the cursor back one space</td>
+</tr>
+<tr>
+<td>Formfeed</td>
+<td>\f</td>
+<td>Moves the cursor to next logical page</td>
+</tr>
+<tr>
+<td>Newline</td>
+<td>\n</td>
+<td>Moves cursor to next line</td>
+</tr>
+<tr>
+<td>Carriage return</td>
+<td>\r</td>
+<td>Moves cursor to beginning of line</td>
+</tr>
+<tr>
+<td>Horizontal tab</td>
+<td>\t</td>
+<td>Prints a horizontal tab</td>
+</tr>
+<tr>
+<td>Vertical tab</td>
+<td>\v</td>
+<td>Prints a vertical tab</td>
+</tr>
+<tr>
+<td>Single quote</td>
+<td>\&#8217;</td>
+<td>Prints a single quote</td>
+</tr>
+<tr>
+<td>Double quote</td>
+<td>\&#8221;</td>
+<td>Prints a double quote</td>
+</tr>
+<tr>
+<td>Backslash</td>
+<td>\\</td>
+<td>Prints a backslash</td>
+</tr>
+<tr>
+<td>Question mark</td>
+<td>\?</td>
+<td>Prints a question mark</td>
+</tr>
+<tr>
+<td>Octal/hex number</td>
+<td>\(number)</td>
+<td>Translates into char represented by octal/hex number</td>
+</tr>
+</table>

@@ -1,0 +1,29 @@
+
+<h3>Invalid pointers and null pointers</h3>
+In principle, pointers are meant to point to valid addresses, such as the address of a variable or the address of an element in an array. But pointers can actually point to any address, including addresses that do not refer to any valid element. Typical examples of this are <i>uninitialized pointers</i> and pointers to nonexistent elements of an array:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> * p;               <cite>// uninitialized pointer (local variable)</cite>
+
+<var>int</var> myarray[10];
+<var>int</var> * q = myarray+20;  <cite>// element out of bounds </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+Neither <code>p</code> nor <code>q</Code> point to addresses known to contain a value, but none of the above statements causes an error. In C++, pointers are allowed to take any address value, no matter whether there actually is something at that address or not. What can cause an error is to dereference such a pointer (i.e., actually accessing the value they point to). Accessing such a pointer causes undefined behavior, ranging from an error during runtime to accessing some random value.<br>
+<br>
+But, sometimes, a pointer really needs to explicitly point to nowhere, and not just an invalid address. For such cases, there exists a special value that any pointer type can take: the <i>null pointer value</i>. This value can be expressed in C++ in two ways: either with an integer value of zero, or with the <code>nullptr</code> keyword:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> * p = 0;
+<var>int</var> * q = <var>nullptr</var>;</code></pre></td></tr></table></div>
+<br>
+<br>
+Here, both <code>p</code> and <code>q</code> are <i>null pointers</i>, meaning that they explicitly point to nowhere, and they both actually compare equal: all <i>null pointers</i> compare equal to other <i>null pointers</i>. It is also quite usual to see the defined constant <code>NULL</code> be used in older code to refer to the <i>null pointer</i> value:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> * r = NULL;</code></pre></td></tr></table></div>
+<br>
+<br>
+<code>NULL</code> is defined in several headers of the standard library, and is defined as an alias of some <i>null pointer</i> constant value (such as <code>0</code> or <code>nullptr</code>).<br>
+<br>
+Do not confuse <i>null pointers</i> with <code>void</code> pointers! A <i>null pointer</i> is a value that any pointer can take to represent that it is pointing to "nowhere", while a <code>void</code> pointer is a type of pointer that can point to somewhere without a specific type. One refers to the value stored in the pointer, and the other to the type of data it points to.<br>

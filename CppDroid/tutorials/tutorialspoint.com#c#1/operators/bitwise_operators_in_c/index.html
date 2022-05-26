@@ -1,0 +1,51 @@
+
+<p>The Bitwise operators supported by C language are listed in the following table. Assume variable A holds 60 and variable B holds 13, then:</p>
+<table class="src">
+<tr><th style="width:10%">Operator</th><th style="width:55%;">Description</th><th>Example</th></tr>
+<tr><td>&amp;</td><td> Binary AND Operator copies a bit to the result if it exists in both operands. </td><td> (A &amp; B) will give 12 which is 0000 1100</td></tr>
+<tr><td>|</td><td> Binary OR Operator copies a bit if it exists in either operand. </td><td> (A | B) will give 61 which is 0011 1101</td></tr>
+<tr><td>^</td><td> Binary XOR Operator copies the bit if it is set in one operand but not both. </td><td> (A ^ B) will give 49 which is 0011 0001</td></tr>
+<tr><td>~</td><td> Binary Ones Complement Operator is unary and has the effect of 'flipping' bits. </td><td> (~A ) will give -61 which is 1100 0011 in 2's complement form due to a signed binary number.</td></tr>
+<tr><td>&lt;&lt;</td><td> Binary Left Shift Operator. The left operands value is moved left by the number of bits specified by the right operand. </td><td> A &lt;&lt; 2 will give 240 which is 1111 0000</td></tr>
+<tr><td>&gt;&gt;</td><td> Binary Right Shift Operator. The left operands value is moved right by the number of bits specified by the right operand. </td><td> A &gt;&gt; 2 will give 15 which is 0000 1111</td></tr>
+</table>
+<h2>Example</h2>
+<p>Try the following example to understand all the bitwise operators available in C programming language:</p>
+<table><tr><td class="source"><pre class="prettyprint tryit">
+#include &lt;stdio.h&gt;
+
+main()
+{
+
+   unsigned int a = 60;	/* 60 = 0011 1100 */  
+   unsigned int b = 13;	/* 13 = 0000 1101 */
+   int c = 0;           
+
+   c = a &amp; b;       /* 12 = 0000 1100 */ 
+   printf("Line 1 - Value of c is %d\n", c );
+
+   c = a | b;       /* 61 = 0011 1101 */
+   printf("Line 2 - Value of c is %d\n", c );
+
+   c = a ^ b;       /* 49 = 0011 0001 */
+   printf("Line 3 - Value of c is %d\n", c );
+
+   c = ~a;          /*-61 = 1100 0011 */
+   printf("Line 4 - Value of c is %d\n", c );
+
+   c = a &lt;&lt; 2;     /* 240 = 1111 0000 */
+   printf("Line 5 - Value of c is %d\n", c );
+
+   c = a &gt;&gt; 2;     /* 15 = 0000 1111 */
+   printf("Line 6 - Value of c is %d\n", c );
+}
+</pre></td></tr></table>
+<p>When you compile and execute the above program it produces the following result:</p>
+<table><tr><td class="source"><pre class="result">
+Line 1 - Value of c is 12
+Line 2 - Value of c is 61
+Line 3 - Value of c is 49
+Line 4 - Value of c is -61
+Line 5 - Value of c is 240
+Line 6 - Value of c is 15
+</pre></td></tr></table>

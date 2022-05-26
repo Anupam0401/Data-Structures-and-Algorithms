@@ -1,0 +1,79 @@
+
+<h3>Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)</h3>
+<br>
+These directives allow to include or discard part of the code of a program if a certain condition is met.<br>
+<br>
+<code>#ifdef</code> allows a section of a program to be compiled only if the macro that is specified as the parameter has been defined, no matter which its value is. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><dfn>#ifdef TABLE_SIZE</dfn>
+<var>int</var> table[TABLE_SIZE];
+<dfn>#endif  </dfn></code></pre></td></tr></table></div>
+<br>
+<br>
+In this case, the line of code <code>int table[TABLE_SIZE];</code> is only compiled if <code>TABLE_SIZE</code> was previously defined with <code>#define</code>, independently of its value. If it was not defined, that line will not be included in the program compilation.<br>
+<br>
+<code>#ifndef</code> serves for the exact opposite: the code between <code>#ifndef</code> and <code>#endif</code> directives is only compiled if the specified identifier has not been previously defined. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br></code></pre></td>
+<td class="source"><pre><code><dfn>#ifndef TABLE_SIZE</dfn>
+<dfn>#define TABLE_SIZE 100</dfn>
+<dfn>#endif</dfn>
+<var>int</var> table[TABLE_SIZE];</code></pre></td></tr></table></div>
+<br>
+<br>
+In this case, if when arriving at this piece of code, the <code>TABLE_SIZE</code> macro has not been defined yet, it would be defined to a value of 100. If it already existed it would keep its previous value since the <code>#define</code> directive would not be executed.<br>
+<br>
+The <code>#if</code>, <code>#else</code> and <code>#elif</code> (i.e., "else if") directives serve to specify some condition to be met in order for the portion of code they surround to be compiled. The condition that follows <code>#if</code> or <code>#elif</code> can only evaluate constant expressions, including macro expressions. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br></code></pre></td>
+<td class="source"><pre><code><dfn>#if TABLE_SIZE&gt;200</dfn>
+<dfn>#undef TABLE_SIZE</dfn>
+<dfn>#define TABLE_SIZE 200</dfn>
+ 
+<dfn>#elif TABLE_SIZE&lt;50</dfn>
+<dfn>#undef TABLE_SIZE</dfn>
+<dfn>#define TABLE_SIZE 50</dfn>
+ 
+<dfn>#else</dfn>
+<dfn>#undef TABLE_SIZE</dfn>
+<dfn>#define TABLE_SIZE 100</dfn>
+<dfn>#endif</dfn>
+ 
+<var>int</var> table[TABLE_SIZE]; </code></pre></td></tr></table></div>
+<br>
+<br>
+Notice how the entire structure of <code>#if</code>, <code>#elif</code> and <code>#else</code> chained directives ends with <code>#endif</code>.<br>
+<br>
+The behavior of <code>#ifdef</code> and <code>#ifndef</code> can also be achieved by using the special operators <code>defined</code> and <code>!defined</code> respectively in any <code>#if</code> or <code>#elif</code> directive:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code><dfn>#if !defined TABLE_SIZE</dfn>
+<dfn>#define TABLE_SIZE 100</dfn>
+<dfn>#elif defined ARRAY_SIZE</dfn>
+<dfn>#define TABLE_SIZE ARRAY_SIZE</dfn>
+<var>int</var> table[TABLE_SIZE];
+<dfn>#endif </dfn></code></pre></td></tr></table></div>
+<br>
+<section>
+<br>
+<section id="line_control">
+<h3>Line control (#line)</h3>
+When we compile a program and some error happens during the compiling process, the compiler shows an error message with references to the name of the file where the error happened and a line number, so it is easier to find the code generating the error.<br>
+<br>
+The <code>#line</code> directive allows us to control both things, the line numbers within the code files as well as the file name that we want that appears when an error takes place. Its format is: <br>
+<br>
+<code>
+#line number "filename"<br>
+</code>
+<br>
+Where <code>number</code> is the new line number that will be assigned to the next code line. The line numbers of successive lines will be increased one by one from this point on.<br>
+<br>
+<code>"filename"</code> is an optional parameter that allows to redefine the file name that will be shown. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><dfn>#line 20 "assigning variable"</dfn>
+<var>int</var> a?;</code></pre></td></tr></table></div>
+<br>
+<br>
+This code will generate an error that will be shown as error in file <code>"assigning variable"</code>, line 20.<br>

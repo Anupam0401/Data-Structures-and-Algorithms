@@ -1,0 +1,35 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In this section, we&#8217;ll address some of the common issues that new programmers seem to run across with fairly high probability.  This is not meant to be a comprehensive list of compilation or execution problems, but rather a pragmatic list of solutions to very basic issues.  If you have any suggestions for other issues that might be added to this list, post them in the comments section below.</p>
+<p><a name="Q1"></a><strong>Problem 1: When executing a program from the IDE, the console window blinks and then closes immediately.</strong></p>
+<p><strong>Answer 1:</strong> Some compilers (eg. Bloodshed&#8217;s Dev C++) don&#8217;t automatically pause the console screen after the program has finished executing.  If this is the case with your compiler, the following two steps will fix your problem:</p>
+<p>First, add the following line near the top of your program:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+</pre></td></tr></table></td></tr></table>
+<p>Second, add the following code at the end of the main() function (right before the return statement):</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+cin.clear();
+cin.ignore(255, '\n');
+cin.get();
+</pre></td></tr></table>
+<p>This will cause your program to wait for you to press a key before continuing, which will give you time to examine your program&#8217;s output before your compiler closes the console window.</p>
+<p>Other solutions, such as the commonly suggested system(&#8220;pause&#8221;) solution may only work on certain operating systems.</p>
+<p><a name="Q2"></a><strong>Problem 2: When compiling with Microsoft Visual C++, you get the following error: &#8220;c:\vcprojects\test.cpp(263) :fatal error C1010: unexpected end of file while looking for precompiled header directive&#8221;</strong></p>
+<p><strong>Answer 2:</strong> This error occurs when the Microsoft Visual C++ compiler is set to use precompiled headers but one of your C++ code files does not include the stdafx header as the first line.  To fix this problem, simply locate the file producing the error (in the above error, test.cpp is the culprit), and add the following line at the very top of the file:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;stdafx.h&quot;
+</pre></td></tr></table>
+<p>Alternatively, you can turn off precompiled headers.</p>
+<p><a name="Q3"></a><strong>Problem 3: When trying to use cin or cout, the compiler says cin or cout is an &#8220;undeclared identifier&#8221;</strong></p>
+<p><strong>Answer 3:</strong> First, make sure you have included the following line near the top of your file:</p>
+<table><tr><td class="source"><table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+</pre></td></tr></table></td></tr></table>
+<p>In any function where you use use cin or cout, include the following line:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+using namespace std;
+</pre></td></tr></table>
+<p><a name="Q4"></a><strong>Problem 4: When trying to use endl to end a printed line, the compiler says end1 is an &#8220;undeclared identifier&#8221;</strong></p>
+<p>Make sure you do not mistake the letter l (lower case L) in endl for the number 1.  endl is all letters.  I recommend using a font that makes it clear the differences between the letter lower case L, upper case i, and the number 1.  Also the letter capital o and the number zero can easily be confused in many fonts.  There is a huge list of programming fonts <a href="http://keithdevens.com/wiki/ProgrammerFonts">here</a>.</p>
+<p><a name="Q4"></a><strong>Problem 4: My program compiles but it isn&#8217;t working correctly.  What do I do?</strong></p>
+<p><strong>Answer 4:</strong> Debug it!  You can find information on how to debug programs in appendix A, specifically sections <a href="http://www.learncpp.com/cpp-tutorial/a4-debugging-your-program-stepping-and-breakpoints/">A.4</a> and <a href="http://www.learncpp.com/cpp-tutorial/a5-debugging-your-program-watching-variables-and-the-call-stack/">A.5</a>.  You will probably find the debugging sections more comprehensible after reading a few more chapters, but I wanted to make you aware of their existence now for future reference.</p>

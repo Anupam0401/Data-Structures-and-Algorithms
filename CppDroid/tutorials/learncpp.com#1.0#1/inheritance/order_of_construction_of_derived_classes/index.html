@@ -1,0 +1,174 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the <a href="http://www.learncpp.com/cpp-tutorial/112-basic-inheritance-in-c/">previous lesson on basic inheritance in C++</a>, you learned that classes can inherit members and functions from other classes.  In this lesson, we&#8217;re going to take a closer look at the order of construction that happens when a derived class is instantiated.</p>
+<p>First, let&#8217;s introduce some new classes that will help us illustrate some important points.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+public:
+    int m_nValue;
+
+    Base(int nValue=0)
+        : m_nValue(nValue)
+    {
+    }
+};
+
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0)
+        : m_dValue(dValue)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>In this example, Derived is derived from Base.  Because Derived inherits functions and variables from Base, it is convenient to think of Derived as a two part class: one part Derived, and one part Base.</p>
+<p><img src="{path}/DerivedBase.gif"></p>
+<p>You&#8217;ve already seen plenty examples of what happens when we instantiate a normal (non-derived) class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Base cBase;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Base is a non-derived class because it does not inherit from anybody.  C++ allocates memory for Base, then calls Base&#8217;s default constructor to do the initialization.  </p>
+<p>Now let&#8217;s take a look at what happens when we instantiate a derived class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Derived cDerived;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>If you were to try this yourself, you wouldn&#8217;t notice any difference from the previous example where we instantiate the non-derived class.  But behind the scenes, things are slightly different.  As mentioned, Derived is really two parts: a Base part, and a Derived part.  When C++ constructs derived objects, it does so in pieces, starting with the base portion of the class.  Once that is complete, it then walks through the inheritance tree and constructs each derived portion of the class.</p>
+<p>So what actually happens in this example is that the Base portion of Derived is constructed first.  Once the Base portion is finished, the Derived portion is constructed.  At this point, there are no more derived classes, so we are done.</p>
+<p>This process is actually easy to illustrate.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+using namespace std;
+
+class Base
+{
+public:
+    int m_nValue;
+
+    Base(int nValue=0)
+        : m_nValue(nValue)
+    {
+        cout &lt;&lt; &quot;Base&quot; &lt;&lt; endl;
+    }
+};
+
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0)
+        : m_dValue(dValue)
+    {
+        cout &lt;&lt; &quot;Derived&quot; &lt;&lt; endl;
+    }
+};
+
+int main()
+{
+    cout &lt;&lt; &quot;Instantiating Base&quot; &lt;&lt; endl;
+    Base cBase;
+
+    cout &lt;&lt; &quot;Instantiating Derived&quot; &lt;&lt; endl;
+    Derived cDerived;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This program produces the following result:</p>
+<pre>
+Instantiating Base
+Base
+Instantiating Derived
+Base
+Derived
+</pre>
+<p>As you can see, when we constructed Derived, the Base portion of Derived got constructed first.  This makes sense: logically, a child can not exist without a parent.  It&#8217;s also the safe way to do things: the child class often uses variables and functions from the parent, but the parent class knows nothing about the child.  Instantiating the parent class first ensures those variables are already initialized by the time the derived class is created and ready to use them.</p>
+<p><strong>Order of construction for inheritance chains</strong></p>
+<p>It is sometimes the case that classes are derived from other classes, which are themselves derived from other classes.  For example:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class A
+{
+public:
+    A()
+    {
+        cout &lt;&lt; &quot;A&quot; &lt;&lt; endl;
+    }
+};
+
+class B: public A
+{
+public:
+    B()
+    {
+        cout &lt;&lt; &quot;B&quot; &lt;&lt; endl;
+    }
+};
+
+class C: public B
+{
+public:
+    C()
+    {
+        cout &lt;&lt; &quot;C&quot; &lt;&lt; endl;
+    }
+};
+
+class D: public C
+{
+public:
+    D()
+    {
+        cout &lt;&lt; &quot;D&quot; &lt;&lt; endl;
+    }
+};
+</pre></td></tr></table>
+<p>Remember that C++ always constructs the &#8220;first&#8221; or &#8220;most base&#8221; class first.  It then walks through the inheritance tree in order and constructs each successive derived class.  </p>
+<p>Here&#8217;s a short program that illustrates the order of creation all along the inheritance chain.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    cout &lt;&lt; &quot;Constructing A: &quot; &lt;&lt; endl;
+    A cA;
+
+    cout &lt;&lt; &quot;Constructing B: &quot; &lt;&lt; endl;
+    B cB;
+
+    cout &lt;&lt; &quot;Constructing C: &quot; &lt;&lt; endl;
+    C cC;
+
+    cout &lt;&lt; &quot;Constructing D: &quot; &lt;&lt; endl;
+    D cD;
+}
+</pre></td></tr></table>
+<p>This code prints the following:</p>
+<pre>
+Constructing A:
+A
+Constructing B:
+A
+B
+Constructing C:
+A
+B
+C
+Constructing D:
+A
+B
+C
+D
+</pre>
+<p><strong>Conclusion</strong></p>
+<p>You will note that our example classes in this section have all used default constructors.  In the next lesson, we will take a closer look at the special role of constructors in the process of constructing derived classes.</p>

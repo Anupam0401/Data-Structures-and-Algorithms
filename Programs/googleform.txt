@@ -1,0 +1,24 @@
+function onFormSubmission(obj)
+{
+  var name = obj.namedValues['Name'][0];
+  var email = obj.namedValues['Email Address'][0];
+  var roll = obj.namedValues['Roll number'][0];
+  var district = obj.namedValues['District'][0];
+  var state = obj.namedValues['State'][0];
+  var country = obj.namedValues['Country'][0];
+  var pin = obj.namedValues['Pin code'][0];
+  var doc = DocumentApp.create('General details for ' + name).addEditor(email);
+  var body = doc.getBody();
+  var table = [['Name', 'Roll Number', 'Email-ID', 'District', 'State', 'Country', 'Pincode']];
+  table.push([name,roll,email,district,state,country,pin]);
+  body.insertParagraph(0, doc.getName())
+      .setHeading(DocumentApp.ParagraphHeading.HEADING1);
+  table = body.appendTable(table);
+  table.getRow(0).editAsText().setBold(true);
+  doc.saveAndClose();
+  MailApp.sendEmail({
+    to: email,
+    subject: 'General information form response for ' +name,
+    body: 'Thanks for filling out the form! Here\'s your response: ' + doc.getUrl()
+  });
+}

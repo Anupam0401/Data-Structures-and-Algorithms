@@ -1,0 +1,129 @@
+
+<dfn>Classes</dfn> are an expanded concept of <i>data structures</i>: like data structures, they can contain data members, but they can also contain functions as members.<br>
+<br>
+An <dfn>object</dfn> is an instantiation of a class. In terms of variables, a class would be the type, and an object would be the variable.<br>
+<br>
+Classes are defined using either keyword <code>class</code> or keyword <code>struct</code>, with the following syntax:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="output"><pre><samp>class class_name {
+  access_specifier_1:
+    member1;
+  access_specifier_2:
+    member2;
+  ...
+} object_names;
+</samp></pre></td></tr></table></div>
+<br>
+Where <code>class_name</code> is a valid identifier for the class, <code>object_names</code> is an optional list of names for objects of this class. The body of the declaration can contain <i>members</i>, which can either be data or function declarations, and optionally <i>access specifiers</i>.<br>
+<br>
+The format is the same as for plain <i>data structures</i>, except that they can also include functions, and have this new things called access specifiers. An <i>access specifier</i> is one of the following three keywords: <code>private</code>, <code>public</code> or <code>protected</code>. These specifiers modify the access rights for the members that follow them:<br>
+<br>
+<ul>
+<li><code>private</code> members of a class are accessible only from within other members of the same class (or from their <i>"friends"</i>).</li>
+<li><code>protected</code> members are accessible from other members of the same class (or from their <i>"friends"</i>), but also from members of their derived classes.</li>
+<li>Finally, <code>public</code> members are accessible from anywhere where the object is visible.</li>
+</ul>
+<br>
+By default, all members of a class declared with the <code>class</code> keyword have private access for all its members. Therefore, any member that is declared before any other <i>access specifier</i> has private access automatically. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code><var>class</var> Rectangle {
+    <var>int</var> width, height;
+  <var>public</var>:
+    <var>void</var> set_values (<var>int</var>,<var>int</var>);
+    <var>int</var> area (<var>void</var>);
+} rect;</code></pre></td></tr></table></div>
+<br>
+<br>
+Declares a class (i.e., a type) called <code>Rectangle</code> and an object (i.e., a variable) of this class, called <code>rect</code>. This class contains four members: two data members of type <code>int</code> (member <code>width</code> and member <code>height</code>) with <i>private access</i> (because private is the default access level) and two member functions with <i>public access</i>: the functions <code>set_values</code> and <code>area</code>, of which for now we have only included their declaration, but not their definition.<br>
+<br>
+Notice the difference between the <i>class name</i> and the <i>object name</i>: In the previous example, <code>Rectangle</code> was the <i>class name</i> (i.e., the type), whereas <code>rect</code> was an object of type <code>Rectangle</code>. It is the same relationship <code>int</code> and <code>a</code> have in the following declaration:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> a;</code></pre></td></tr></table></div>
+<br>
+<br>
+where <code>int</code> is the type name (the class) and <code>a</code> is the variable name (the object). <br>
+<br>
+After the declarations of <code>Rectangle</code> and <code>rect</code>, any of the public members of object <code>rect</code> can be accessed as if they were normal functions or normal variables, by simply inserting a dot (<code>.</code>) between <i>object name</i> and <i>member name</i>. This follows the same syntax as accessing the members of plain data structures. For example: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code>rect.set_values (3,4);
+myarea = rect.area(); </code></pre></td></tr></table></div>
+<br>
+<br>
+The only members of <code>rect</code> that cannot be accessed from outside the class are <code>width</code> and <code>height</code>, since they have private access and they can only be referred to from within other members of that same class.<br>
+<br>
+Here is the complete example of class Rectangle:<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br></code></pre></td>
+<td class="source"><pre><code><cite>// classes example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Rectangle {
+    <var>int</var> width, height;
+  <var>public</var>:
+    <var>void</var> set_values (<var>int</var>,<var>int</var>);
+    <var>int</var> area() {<var>return</var> width*height;}
+};
+
+<var>void</var> Rectangle::set_values (<var>int</var> x, <var>int</var> y) {
+  width = x;
+  height = y;
+}
+
+<var>int</var> main () {
+  Rectangle rect;
+  rect.set_values (3,4);
+  cout &lt;&lt; <kbd>"area: "</kbd> &lt;&lt; rect.area();
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>area: 12</samp></pre></td></tr></table></div>
+<br>
+<br>
+This example reintroduces the <i>scope operator</i> (<code>::</code>, two colons), seen in earlier chapters in relation to namespaces. Here it is used in the definition of function <code>set_values</code> to define a member of a class outside the class itself.<br>
+<br>
+Notice that the definition of the member function <code>area</code> has been included directly within the definition of class <code>Rectangle</code> given its extreme simplicity. Conversely, <code>set_values</code> it is merely declared with its prototype within the class, but its definition is outside it. In this outside definition, the operator of scope (<code>::</code>) is used to specify that the function being defined is a member of the class <code>Rectangle</code> and not a regular non-member function.<br>
+<br>
+The scope operator (<code>::</code>) specifies the class to which the member being declared belongs, granting exactly the same scope properties as if this function definition was directly included within the class definition. For example, the function <code>set_values</code> in the previous example has access to the variables <code>width</code> and <code>height</code>, which are private members of class <code>Rectangle</code>, and thus only accessible from other members of the class, such as this.<br>
+<br>
+The only difference between defining a member function completely within the class definition or to just include its declaration in the function and define it later outside the class, is that in the first case the function is automatically considered an <i>inline</i> member function by the compiler, while in the second it is a normal (not-inline) class member function. This causes no differences in behavior, but only on possible compiler optimizations.<br>
+<br>
+Members <code>width</code> and <code>height</code> have private access (remember that if nothing else is specified, all members of a class defined with keyword <code>class</code> have private access). By declaring them private, access from outside the class is not allowed. This makes sense, since we have already defined a member function to set values for those members within the object: the member function <code>set_values</code>. Therefore, the rest of the program does not need to have direct access to them. Perhaps in a so simple example as this, it is difficult to see how restricting access to these variables may be useful, but in greater projects it may be very important that values cannot be modified in an unexpected way (unexpected from the point of view of the object).<br>
+<br>
+The most important property of a class is that it is a type, and as such, we can declare multiple objects of it. For example, following with the previous example of class <code>Rectangle</code>, we could have declared the object <code>rectb</code> in addition to object <code>rect</code>:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br></code></pre></td>
+<td class="source"><pre><code><cite>// example: one class, two objects</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Rectangle {
+    <var>int</var> width, height;
+  <var>public</var>:
+    <var>void</var> set_values (<var>int</var>,<var>int</var>);
+    <var>int</var> area () {<var>return</var> width*height;}
+};
+
+<var>void</var> Rectangle::set_values (<var>int</var> x, <var>int</var> y) {
+  width = x;
+  height = y;
+}
+
+<var>int</var> main () {
+  Rectangle rect, rectb;
+  rect.set_values (3,4);
+  rectb.set_values (5,6);
+  cout &lt;&lt; <kbd>"rect area: "</kbd> &lt;&lt; rect.area() &lt;&lt; endl;
+  cout &lt;&lt; <kbd>"rectb area: "</kbd> &lt;&lt; rectb.area() &lt;&lt; endl;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>rect area: 12
+rectb area: 30  </samp></pre></td></tr></table></div>
+<br>
+<br>
+In this particular case, the class (type of the objects) is <code>Rectangle</code>, of which there are two instances (i.e., objects): <code>rect</code> and <code>rectb</code>. Each one of them has its own member variables and member functions.<br>
+<br>
+Notice that the call to <code>rect.area()</code> does not give the same result as the call to <code>rectb.area()</code>. This is because each object of class <code>Rectangle</code> has its own variables <code>width</code> and <code>height</code>, as they -in some way- have also their own function members <code>set_value</code> and <code>area</code> that operate on the object's own member variables.<br>
+<br>
+Classes allow programming using object-oriented paradigms: Data and functions are both members of the object, reducing the need to pass and carry handlers or other state variables as arguments to functions, because they are part of the object whose member is called. Notice that no arguments were passed on the calls to <code>rect.area</code> or <code>rectb.area</code>. Those member functions directly used the data members of their respective objects <code>rect</code> and <code>rectb</code>.<br>

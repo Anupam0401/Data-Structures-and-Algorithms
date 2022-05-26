@@ -1,0 +1,1 @@
+int DoSomething() throw(double); // may throw a double

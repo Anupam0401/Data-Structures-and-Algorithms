@@ -1,0 +1,79 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Overloading the comparison operators is simple once you&#8217;ve learned how to <a href="http://www.learncpp.com/cpp-tutorial/92-overloading-the-arithmetic-operators/">overload the arithmetic operators</a>.</p>
+<p>Because the comparison operators are all binary operators that do not modify their operands, we will make our overloaded comparison operators friend functions.</p>
+<p>Here&#8217;s an example Point class from the previous lesson with an overloaded operator== and operator!=.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Point
+{
+private:
+    double m_dX, m_dY, m_dZ;
+
+public:
+    Point(double dX=0.0, double dY=0.0, double dZ=0.0)
+    {
+    m_dX = dX;
+    m_dY = dY;
+    m_dZ = dZ;
+    }
+
+    friend bool operator== (Point &amp;cP1, Point &amp;cP2);
+    friend bool operator!= (Point &amp;cP1, Point &amp;cP2);
+
+    double GetX() { return m_dX; }
+    double GetY() { return m_dY; }
+    double GetZ() { return m_dZ; }
+};
+
+bool operator== (Point &amp;cP1, Point &amp;cP2)
+{
+    return (cP1.m_dX == cP2.m_dX &amp;&amp;
+            cP1.m_dY == cP2.m_dY &amp;&amp;
+            cP1.m_dZ == cP2.m_dZ);
+}
+
+bool operator!= (Point &amp;cP1, Point &amp;cP2)
+{
+    return !(cP1 == cP2);
+}
+</pre></td></tr></table>
+<p>The code here should be straightforward.  Because the result of operator!= is the opposite of operator==, we define operator!= in terms of operator==, which helps keep things simpler, more error free, and reduces the amount of code we have to write.</p>
+<p>It doesn&#8217;t really make sense to overload operator> or operator< for the Point class.  What does it mean for a 3d point to be greater or less than another point?  Greater than or less than isn't a concept we normally apply to 3d points, so it's better not to include those operators in the Point class, because the results of the operators (whatever you define them to be) would not be intuitive.</p>
+<p>Here's a different example with an overloaded operator>, operator<, operator>=, and operator<=:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Cents
+{
+private:
+    int m_nCents;
+
+public:
+    Cents(int nCents) { m_nCents = nCents; }
+
+    friend bool operator&gt; (Cents &amp;cC1, Cents &amp;cC2);
+    friend bool operator&lt;= (Cents &amp;cC1, Cents &amp;cC2);
+
+    friend bool operator&lt; (Cents &amp;cC1, Cents &amp;cC2);
+    friend bool operator&gt;= (Cents &amp;cC1, Cents &amp;cC2);
+};
+
+bool operator&gt; (Cents &amp;cC1, Cents &amp;cC2)
+{
+    return cC1.m_nCents &gt; cC2.m_nCents;
+}
+
+bool operator&lt;= (Cents &amp;cC1, Cents &amp;cC2)
+{
+    return cC1.m_nCents &lt;= cC2.m_nCents;
+}
+
+bool operator&lt; (Cents &amp;cC1, Cents &amp;cC2)
+{
+    return cC1.m_nCents &lt; cC2.m_nCents;
+}
+
+bool operator&gt;= (Cents &amp;cC1, Cents &amp;cC2)
+{
+    return cC1.m_nCents &gt;= cC2.m_nCents;
+}
+</pre></td></tr></table>
+<p>This is also pretty straightforward.</p>
+<p>Note that there is some redundancy here as well.  operator> and operator<= are logical opposites, so one could be defined in terms of the other.  operator< and operator>= are also logical opposites, and one could be defined in terms of the other.  In this case, I chose not to do so because the function definitions are so simple, and the comparison operator in the function name line up nicely with the comparison operator in the return statement.</p>

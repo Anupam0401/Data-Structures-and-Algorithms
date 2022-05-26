@@ -1,0 +1,107 @@
+
+<h3>Inheritance between classes</h3>
+Classes in C++ can be extended, creating new classes which retain characteristics of the base class. This process, known as inheritance, involves a <i>base class</i> and a <i>derived class</i>: The <i>derived class</i> inherits the members of the <i>base class</i>, on top of which it can adds its own members.<br>
+<br>
+For example, let's imagine a series of classes to describe two kinds of polygons: rectangles and triangles. These two polygons have certain common properties, such as the values needed to calculate their areas: they both can be described simply with a height and a width (or base).<br>
+<br>
+This could be represented in the world of classes with a class <code>Polygon</code> from which we would derive the two other ones: <code>Rectangle</code> and <code>Triangle</code>:<br>
+<br>
+<img src="inheritance.png" alt="">
+<br>
+The <code>Polygon</code> class would contain members that are common for both types of polygon. In our case: <code>width</code> and <code>height</code>. And <code>Rectangle</code> and <code>Triangle</code> would be its derived classes, with specific features that are different from one type of polygon to the other.<br>
+<br>
+Classes that are derived from others inherit all the accessible members of the base class. That means that if a base class includes a member <code>A</code> and we derive a class from it with another member called <code>B</code>, the derived class will contain both member <code>A</code> and member <code>B</code>.<br>
+<br>
+The inheritance relationship of two classes is declared in the derived class. Derived classes definitions use the following syntax:<br>
+<br>
+<code>
+class derived_class_name: public base_class_name<br>
+{ /*...*/ };<br>
+</code>
+<br>
+Where <code>derived_class_name</code> is the name of the derived class and <code>base_class_name</code> is the name of the class on which it is based. The <code>public</code> access specifier may be replaced by any one of the other access specifiers (<code>protected</code> or <code>private</code>). This access specifier limits the most accessible level for the members inherited from the base class: The members with a more accessible level are inherited with this level instead, while the members with an equal or more restrictive access level keep their restrictive level in the derived class.<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br></code></pre></td>
+<td class="source"><pre><code><cite>// derived classes</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>class</var> Polygon {
+  <var>protected</var>:
+    <var>int</var> width, height;
+  <var>public</var>:
+    <var>void</var> set_values (<var>int</var> a, <var>int</var> b)
+      { width=a; height=b;}
+ };
+
+<var>class</var> Rectangle: <var>public</var> Polygon {
+  <var>public</var>:
+    <var>int</var> area ()
+      { <var>return</var> width * height; }
+ };
+
+<var>class</var> Triangle: <var>public</var> Polygon {
+  <var>public</var>:
+    <var>int</var> area ()
+      { <var>return</var> width * height / 2; }
+  };
+  
+<var>int</var> main () {
+  Rectangle rect;
+  Triangle trgl;
+  rect.set_values (4,5);
+  trgl.set_values (4,5);
+  cout &lt;&lt; rect.area() &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; trgl.area() &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>20
+10</samp></pre></td></tr></table></div>
+<br>
+<br>
+The objects of the classes <code>Rectangle</code> and <code>Triangle</code> each contain members inherited from <code>Polygon</code>. These are: <code>width</code>, <code>height</code> and <code>set_values</code>.<br>
+<br>
+The <code>protected</code> access specifier used in class <code>Polygon</code> is similar to <code>private</code>. Its only difference occurs in fact with inheritance: When a class inherits another one, the members of the derived class can access the protected members inherited from the base class, but not its private members.<br>
+<br>
+By declaring <code>width</code> and <code>height</code> as <code>protected</code> instead of <code>private</code>, these members are also accessible from the derived classes <code>Rectangle</code> and <code>Triangle</code>, instead of just from members of <code>Polygon</code>. If they were public, they could be access just from anywhere.<br>
+ <br>
+We can summarize the different access types according to which functions can access them in the following way: <br>
+<br>
+<table class="boxed">
+<tr><th>Access</th><th><code>public</code></th><th><code>protected</code></th><th><code>private</code></th></tr>
+<tr><td>members of the same class</td><td class="yes">yes</td><td class="yes">yes</td><td class="yes">yes</td></tr>
+<tr><td>members of derived class</td><td class="yes">yes</td><td class="yes">yes</td><td class="no">no</td></tr>
+<tr><td>not members</td><td class="yes">yes</td><td class="no">no</td><td class="no">no</td></tr>
+</table>
+<br>
+Where "not members" represents any access from outside the class, such as from <code>main</code>, from another class or from a function.<br>
+<br>
+In the example above, the members inherited by <code>Rectangle</code> and <code>Triangle</code> have the same access permissions as they had in their base class <code>Polygon</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br></code></pre></td>
+<td class="source"><pre><code>Polygon::width           <cite>// protected access</cite>
+Rectangle::width         <cite>// protected access</cite>
+
+Polygon::set_values()    <cite>// public access</cite>
+Rectangle::set_values()  <cite>// public access  </cite></code></pre></td></tr></table></div>
+<br>
+<br>
+This is because the inheritance relation has been declared using the <code>public</Code> keyword on each of the derived classes:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>class</var> Rectangle: <var>public</var> Polygon { <cite>/* ... */</cite> }</code></pre></td></tr></table></div>
+<br>
+<br>
+This <code>public</code> keyword after the colon (<code>:</code>) denotes the most accessible level the members inherited from the class that follows it (in this case <code>Polygon</code>) will have from the derived class (in this case <code>Rectangle</code>). Since <code>public</code> is the most accessible level, by specifying this keyword the derived class will inherit all the members with the same levels they had in the base class.<br>
+<br>
+With <code>protected</code>, all public members of the base class are inherited as <code>protected</code> in the derived class. Conversely, if the most restricting access level is specified (<code>private</code>), all the base class members are inherited as <code>private</code> and thus cannot be accessed from the derived class.<br>
+<br>
+For example, if daughter were a class derived from mother that we defined as:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>class</var> Daughter: <var>protected</var> Mother;</code></pre></td></tr></table></div>
+<br>
+<br>
+This would set <code>protected</code> as the less restrictive access level for the members of <code>Daughter</code> that it inherited from mother. That is, all members that were <code>public</code> in <code>Mother</code> would become <code>protected</code> in <code>Daughter</code>. Of course, this would not restrict <code>Daughter</code> from declaring its own public members. That <i>less restrictive access level</i> is only set for the members inherited from <code>Mother</code>.<br>
+<br>
+If no access level is specified for the inheritance, the compiler assumes private for classes declared with keyword <code>class</code> and public for those declared with <code>struct</code>.<br>

@@ -1,0 +1,2 @@
+myword = "Bye";
+myword[] = "Bye"; 

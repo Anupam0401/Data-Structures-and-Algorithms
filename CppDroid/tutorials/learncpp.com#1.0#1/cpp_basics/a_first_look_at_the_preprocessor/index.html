@@ -1,0 +1,148 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>The preprocessor is perhaps best thought of as a separate program that runs before the compiler when you compile your program.  It&#8217;s purpose is to process <strong>directives</strong>.  Directives are specific instructions that start with a # symbol and end with a newline (NOT a semicolon).  There are several different types of directives, which we will cover below.  The preprocessor is not smart &#8212; it does not understand C++ syntax; rather, it manipulates text before the compiler gets to it.</p>
+<p><strong>Includes</strong></p>
+<p>You&#8217;ve already seen the #include directive in action.  #Include tells the preprocessor to insert the contents of the included file into the current file at the point of the #include directive.  This is useful when you have information that needs to be included in multiple places (as forward declarations often are).</p>
+<p>The #include command has two forms:<br />
+<code>#include &lt;filename&gt;</code> tells the compiler to look for the file in a special place defined by the operating system where header files for the runtime library are held.<br />
+<code>#include &quot;filename&quot;</code> tells the compiler to look for the file in directory containing the source file doing the #include.  If that fails, it will act identically to the angled brackets case.</p>
+<p><strong>Macro defines</strong></p>
+<p>Macro defines take the form:</p>
+<pre>
+#define identifier replacement
+</pre>
+<p>Whenever the preprocessor encounters this directive, any further occurrence of &#8216;identifier&#8217; is replaced by &#8216;replacement&#8217;.  The identifier is traditionally typed in all capital letters, using underscores to represent spaces.</p>
+<p>For example, consider the following snippet:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define MY_NAME  &quot;Alex&quot;
+
+cout &lt;&lt; &quot;Hello, &quot; &lt;&lt; MY_NAME &lt;&lt; endl;
+</pre></td></tr></table>
+<p>The preprocessor converts this into the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define MY_NAME  &quot;Alex&quot;
+
+cout &lt;&lt; &quot;Hello, &quot; &lt;&lt; &quot;Alex&quot; &lt;&lt; endl;
+</pre></td></tr></table>
+<p>Which, when run, prints the output <code>Hello, Alex</code>.</p>
+<p>#defines used in this manner have two important properties.  First, they allow you to give a descriptive name to something, such as a number.</p>
+<p>For example, consider the following snippet:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nYen = nDollars * 122;
+</pre></td></tr></table>
+<p>A number such as the 122 in the program above is called a magic number.  A <strong>magic number</strong> is a hard-coded number in the middle of the code that does not have any context &#8212; what does 122 mean?  Is it a conversion rate?  Is it something else?  It&#8217;s not really clear.  In more complex programs, it is often impossible to tell what a hard-coded number represents.</p>
+<p>This snippet is clearer:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define YEN_PER_DOLLAR  122
+int nYen = nDollars * YEN_PER_DOLLAR;
+</pre></td></tr></table>
+<p>Second, #defined numbers can make programs easier to change.  Assume the exchange rate changed from 122 to 123, and our program needed to reflect that.  Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nYen1 = nDollars1 * 122;
+int nYen2 = nDollars2 * 122;
+int nYen3 = nDollars3 * 122;
+int nYen4 = nDollars4 * 122;
+SetWidthTo(122);
+</pre></td></tr></table>
+<p>To update our program to use the new exchange rate, we&#8217;d have to update the first four statements from 122 to 123.  But what about the 5th statement?  Does that 122 have the same meaning as the other 122s?  If so, it should be updated.  If not, it should be left alone, or we might break our program somewhere else.  </p>
+<p>Now consider the same program with #defined values:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define YEN_PER_DOLLAR  122
+#define COLUMNS_PER_PAGE  122
+
+int nYen1 = nDollars1 * YEN_PER_DOLLAR;
+int nYen2 = nDollars2 * YEN_PER_DOLLAR;
+int nYen3 = nDollars3 * YEN_PER_DOLLAR;
+int nYen4 = nDollars4 * YEN_PER_DOLLAR;
+SetWidthTo(COLUMNS_PER_PAGE);
+</pre></td></tr></table>
+<p>To change the exchange rate, all we have to do is make one change:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define YEN_PER_DOLLAR  123
+#define COLUMNS_PER_PAGE  122
+
+int nYen1 = nDollars1 * YEN_PER_DOLLAR;
+int nYen2 = nDollars2 * YEN_PER_DOLLAR;
+int nYen3 = nDollars3 * YEN_PER_DOLLAR;
+int nYen4 = nDollars4 * YEN_PER_DOLLAR;
+SetWidthTo(COLUMNS_PER_PAGE);
+</pre></td></tr></table>
+<p>Now we&#8217;ve updated our yen conversions, and don&#8217;t have to worry about inadvertently changing the number of columns per page.</p>
+<p>While #define values are a huge improvement over magic numbers, they have some issues of their own, which we will talk more about later when we get into variables and scoping issues.</p>
+<p>You can undefine a previously defined value by using the #undef preprocessor directive.</p>
+<p>Consider the following snippet:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define MY_NAME &quot;Alex&quot;
+cout &lt;&lt; &quot;My name is &quot; &lt;&lt; MY_NAME &lt;&lt; endl;
+#undef MY_NAME
+cout &lt;&lt; &quot;My name is &quot; &lt;&lt; MY_NAME &lt;&lt; endl;
+</pre></td></tr></table>
+<p>The last line of the program causes a compile error because MY_NAME has been undefined.</p>
+<p><strong>Conditional compilation</strong></p>
+<p>The conditional compilation preprocessor directives allow you to specify under what conditions something will or won&#8217;t compile.  The only conditional compilation directives we are going to cover in this section are #ifdef, #ifndef, and #endif.</p>
+<p>The #ifdef preprocessor directive allow the preprocessor to check whether a value has been previously #defined.  If so, the code between the #ifdef and corresponding #endif is compiled.  If not, the code is ignored.</p>
+<p>Consider the following snippet of code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#define PRINT_JOE
+
+#ifdef PRINT_JOE
+cout &lt;&lt; &quot;Joe&quot; &lt;&lt; endl;
+#endif
+
+#ifdef PRINT_BOB
+cout &lt;&lt; &quot;Bob&quot; &lt;&lt; endl;
+#endif
+</pre></td></tr></table>
+<p>Because PRINT_JOE has been #defined, the line <code>cout &lt;&lt; &quot;Joe&quot; &lt;&lt; endl;</code> will be compiled.  Because PRINT_BOB has not been #defined, the line <code>cout &lt;&lt; &quot;Bob&quot; &lt;&lt; endl;</code> will not be compiled.</p>
+<p>#ifndef is the opposite of #ifdef, in that it allows you to check whether a name has NOT been defined yet.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef PRINT_BOB
+cout &lt;&lt; &quot;Bob&quot; &lt;&lt; endl;
+#endif
+</pre></td></tr></table>
+<p>This program prints &#8220;Bob&#8221;, because PRINT_BOB was never #defined.</p>
+<p><strong>Header guards</strong></p>
+<p>Because header files can include other header files, it is possible to end up in the situation where a header file gets included multiple times.  For example, consider the following program:</p>
+<p>add.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;mymath.h&quot;
+int add(int x, int y);
+</pre></td></tr></table>
+<p>subtract.h:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;mymath.h&quot;
+int subtract(int x, int y);
+</pre></td></tr></table>
+<p>main.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;add.h&quot;
+#include &quot;subtract.h&quot;
+</pre></td></tr></table>
+<p>When we include add.h, it brings in both mymath.h and the prototype for add().  When we include subtract.h, it brings in both mymath.h (again) and the prototype for subtract().  Consequently, all the contents of mymath.h will have been included twice, which will cause the compiler to complain.</p>
+<p>To prevent this from happening, we use header guards, which are conditional compilation directives that take the following form:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef SOME_UNIQUE_NAME_HERE
+#define SOME_UNIQUE_NAME_HERE
+
+// your declarations here
+
+#endif
+</pre></td></tr></table>
+<p>When this header is included, the first thing it does is check whether SOME_UNIQUE_NAME_HERE has been previous defined.  If this is the first time we&#8217;ve included the header, SOME_UNIQUE_NAME_HERE will not have been defined.  Consequently, it #defines SOME_UNIQUE_NAME_HERE and includes the contents of the file.  If this is not the first time we&#8217;ve included the header, SOME_UNIQUE_NAME_HERE will already have been defined from the first time the contents of the header were included.  Consequently, the entire header will be ignored.</p>
+<p>All of your header files should have header guards on them.  SOME_UNIQUE_NAME_HERE can be any name you want, but typically the name of the header file with a _H appended to it is used.  For example, add.h would have the header guard:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef ADD_H
+#define ADD_H
+
+// your declarations here
+
+#endif
+</pre></td></tr></table>
+<p>Even the standard library includes use header guards.  If you were to take a look at the iostream header file from Visual Studio 2005 Express, you would see:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifndef _IOSTREAM_
+#define _IOSTREAM_
+
+// content here
+
+#endif
+</pre></td></tr></table>

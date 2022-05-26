@@ -1,0 +1,161 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Blocks (compound statements)</strong></p>
+<p>A block of statements, also called a <strong>compound statement</strong>, is a group of statements that is treated by the compiler as if it were a single statement.  Blocks begin with a { symbol, end with a } symbol, and the statements to be executed are placed in between.  Blocks can be used any place where a single statement is allowed.</p>
+<p>You have already seen an example of a block when writing the function main():</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{ // start a block
+
+    // multiple statements
+    int nValue = 0;
+    return 0;
+
+} // end a block
+</pre></td></tr></table>
+<p>Blocks can be nested inside of other blocks.  As you have seen, the <em>if statement</em> executes a single statement if the condition is true.  However, because blocks can be used anywhere a single statement can, we can instead use a block of statements to make the <em>if statement</em> execute multiple statements if the condition is true!</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int nValue;
+    cin &gt;&gt; nValue;
+
+    if (nValue &gt; 0)
+    { // start of nested block
+        cout &lt;&lt; nValue &lt;&lt; &quot; is a positive number&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;Double this number is &quot; &lt;&lt; nValue * 2 &lt;&lt; endl;
+    } // end of nested block
+}
+</pre></td></tr></table>
+<p>If the users enters the number 3, this program prints:</p>
+<pre>
+3 is a positive number
+Double this number is 6
+</pre>
+<p>Note that both statements inside the nested block executed when the if statement is true!</p>
+<p>It is even possible to put blocks inside of blocks inside of blocks:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int nValue;
+    cin &gt;&gt; nValue;
+
+    if (nValue &gt; 0)
+    {
+        if (nValue &lt; 10)
+        {
+            cout &lt;&lt; nValue &lt;&lt; &quot; is between 0 and 10&quot; &lt;&lt; endl;
+        }
+    }
+}
+</pre></td></tr></table>
+<p>There is no practical limit to how many nested blocks you can have.  However, it is generally a good idea to try to keep the number of nested blocks to at most 3 (maybe 4) blocks deep.  If your function has a need for more, it&#8217;s probably time to break your function into multiple smaller functions!</p>
+<p><strong>Local variables</strong></p>
+<p>A variable&#8217;s <strong>scope</strong> determines who can see the variable, and how long it lives for.  Variables declared inside a block are called <strong>local variables</strong>, and local variables have <strong>block scope</strong> (also called local scope).  Variables with block scope can be accessed only within the block that they are declared in, and are destroyed as soon as the block ends.  Consider this simple function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{ // start main block
+
+    int nValue = 5; // nValue created here
+
+    double dValue = 4.0; // dValue created here
+
+    return 0;
+
+} // nValue and dValue destroyed here
+</pre></td></tr></table>
+<p>Because nValue and dValue were declared inside the block that defines the main function, they are both destroyed when main() is finished executing.</p>
+<p>Variables declared inside a block can only be seen within that block.  Because each function has it&#8217;s own block, variables in one function can not be seen from another function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void someFunction()
+{
+    int nValue;
+}
+
+int main()
+{
+    // nValue can not be seen inside this function.
+
+    someFunction();
+
+    // nValue still can not be seen inside this function.
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Variables declared inside nested blocks are destroyed as soon as the inner block ends:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    int nValue = 5;
+
+    { // begin nested block
+        double dValue = 4.0;
+    } // dValue destroyed here
+
+    // dValue can not be used here because it was already destroyed!
+
+    return 0;
+} // nValue destroyed here
+</pre></td></tr></table>
+<p>Nested blocks are considered part of the outer block in which they are defined.  Consequently, variables declared in the outer block can be seen inside a nested block:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{ // start outer block
+    using namespace std;
+
+    int x = 5;
+
+    { // start nested block
+        int y = 7;
+        // we can see both x and y from here
+        cout &lt;&lt; x &lt;&lt; &quot; + &quot; &lt;&lt; y &lt;&lt; &quot; = &quot; &lt;&lt; x + y;
+    } // y destroyed here
+
+    // y can not be used here because it was already destroyed!
+
+    return 0;
+} // x is destroyed here
+</pre></td></tr></table>
+<p>Note that variables inside nested blocks can have the same name as variable inside outer blocks.  When this happens, the nested variable &#8220;hides&#8221; the outer variable:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{ // outer block
+    int nValue = 5;
+
+    if (nValue &gt;= 5)
+    { // nested block
+        int nValue = 10;
+        // nValue now refers to the nested block nValue.
+        // the outer block nValue is hidden
+    } // nested nValue destroyed
+
+    // nValue now refers to the outer block nValue
+
+    return 0;
+} // outer nValue destroyed
+</pre></td></tr></table>
+<p>This is generally something that should be avoided, as it is quite confusing!</p>
+<p>Variables should be declared in the most limited scope in which they are used.  For example, if a variable is only used within a nested block, it should be declared inside that nested block:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // do not declare y here
+    {
+        // y is only used inside this block, so declare it here
+        int y = 5;
+        cout &lt;&lt; y;
+    }
+    // otherwise y could still be used here
+}
+</pre></td></tr></table>
+<p>By limiting the scope of a variable, you reduce the complexity of the program because the number of active variables is reduced.  Further, it makes it easier to see where variables are used.  A variable declared inside a block can only be used within that block (or nested sub-blocks).  This can make the program easier to understand.</p>
+<p><strong>Summary</strong></p>
+<p>Blocks allow multiple statements to be used wherever a single statement can normally be used.</p>
+<p>Variables declared inside blocks are called local variables.  These variables can only be accessed inside the block in which they are defined (or in a nested sub-block), and they are destroyed as soon as the block ends.</p>
+<p>If a variable is only used in a single block, declare it within that block.</p>

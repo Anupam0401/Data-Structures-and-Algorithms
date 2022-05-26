@@ -1,0 +1,108 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>A <strong>destructor</strong> is another special kind of class member function that is executed when an object of that class is destroyed.  They are the counterpart to constructors.  When a variable goes out of scope, or a dynamically allocated variable is explicitly deleted using the delete keyword, the class destructor is called (if it exists) to help clean up the class before it is removed from memory.  For simple classes, a destructor is not needed because C++ will automatically clean up the memory for you.  However, if you have dynamically allocated memory, or if you need to do some kind of maintenance before the class is destroyed (eg. closing a file), the destructor is the perfect place to do so.</p>
+<p>Like constructors, destructors have specific naming rules:<br />
+1) The destructor must have the same name as the class, preceded by a tilde (~).<br />
+2) The destructor can not take arguments.<br />
+3) The destructor has no return type.</p>
+<p>Note that rule 2 implies that only one destructor may exist per class, as there is no way to overload destructors since they can not be differentiated from each other based on arguments.</p>
+<p>Let&#8217;s take a look at a simple string class that uses a destructor:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class MyString
+{
+private:
+    char *m_pchString;
+    int m_nLength;
+
+public:
+    MyString(const char *pchString=&quot;&quot;)
+    {
+        // Find the length of the string
+        // Plus one character for a terminator
+        m_nLength = strlen(pchString) + 1;
+
+        // Allocate a buffer equal to this length
+        m_pchString = new char[m_nLength];
+
+        // Copy the parameter into our internal buffer
+        strncpy(m_pchString, pchString, m_nLength);
+
+        // Make sure the string is terminated
+        m_pchString[m_nLength-1] = '\0';
+    }
+
+    ~MyString() // destructor
+    {
+        // We need to deallocate our buffer
+        delete[] m_pchString;
+
+        // Set m_pchString to null just in case
+        m_pchString = 0;
+    }
+
+    char* GetString() { return m_pchString; }
+    int GetLength() { return m_nLength; }
+};
+</pre></td></tr></table>
+<p>Let&#8217;s take a look at how this class is used:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    MyString cMyName(&quot;Alex&quot;);
+    std::cout &lt;&lt; &quot;My name is: &quot; &lt;&lt; cMyName.GetString() &lt;&lt; std::endl;
+    return 0;
+} // cMyName destructor called here!
+</pre></td></tr></table>
+<p>This program produces the result:</p>
+<pre>
+My name is: Alex
+</pre>
+<p>On the first line, we instantiate a new MyString class and pass in the C-style string &#8220;Alex&#8221;.  This calls the constructor, which dynamically allocates memory to hold the string being passed in.  We must use dynamic allocation here because we do not know in advance how long of a string the user is going to pass in.</p>
+<p>At the end of main(), cMyName goes out of scope.  This causes the ~MyString() destructor to be called, which deletes the buffer that we allocated in the constructor!</p>
+<p><strong>Constructor and destructor timing</strong></p>
+<p>As mentioned previously, the constructor is called when an object is created, and the destructor is called when an object is destroyed.  In the following example, we use cout statements inside the constructor and destructor to show this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Simple
+{
+private:
+    int m_nID;
+
+public:
+    Simple(int nID)
+    {
+        std::cout &lt;&lt; &quot;Constructing Simple &quot; &lt;&lt; nID&lt;&lt; std::endl;
+        m_nID = nID;
+    }
+
+    ~Simple()
+    {
+        std::cout &lt;&lt; &quot;Destructing Simple&quot; &lt;&lt; m_nID &lt;&lt; std::endl;
+    }
+
+    int GetID() { return m_nID; }
+};
+
+int main()
+{
+    // Allocate a Simple on the stack
+    Simple cSimple(1);
+    std::cout &lt;&lt; cSimple.GetID() &lt;&lt; std::endl;
+
+    // Allocate a Simple dynamically
+    Simple *pSimple = new Simple(2);
+    std::cout &lt;&lt; pSimple-&gt;GetID() &lt;&lt; std::endl;
+    delete pSimple;
+
+    return 0;
+} // cSimple goes out of scope here
+</pre></td></tr></table>
+<p>This program produces the following result:</p>
+<pre>
+Constructing Simple 1
+1
+Constructing Simple 2
+2
+Destructing Simple 2
+Destructing Simple 1
+</pre>
+<p>Note that &#8220;Simple 1&#8243; is destroyed after &#8220;Simple 2&#8243; because we deleted pSimple before the end of the function, whereas cSimple was not destroyed until the end of main().</p>
+<p>As you can see, when constructors and destructors are used together, your classes can initialize and clean up after themselves without the programmer having to do any special work!  This reduces the probability of making an error, and makes classes easy to use.</p>

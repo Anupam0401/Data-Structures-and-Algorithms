@@ -1,0 +1,273 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the past two lessons,we&#8217;ve looked at some basics about inheritance in C++ and explored the order that derived classes are initialized.  In this lesson, we&#8217;ll take a closer look at the role of constructors in the initialization of derived classes.  To do so, we will continue to use the simple Base and Derived class we developed in the previous lesson:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Base
+{
+public:
+    int m_nValue;
+
+    Base(int nValue=0)
+        : m_nValue(nValue)
+    {
+    }
+};
+
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0)
+        : m_dValue(dValue)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>With non-derived classes, constructors only have to worry about their own members.  For example, consider Base.  We can create a Base object like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Base cBase(5); // use Base(int) constructor
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Here&#8217;s what actually happens when cBase is instantiated:</p>
+<ol>
+<li>Memory for cBase is set aside
+<li>The appropriate Base constructor is called
+<li>The initialization list initializes variables
+<li>The body of the constructor executes
+<li>Control is returned to the caller
+</ol>
+<p>This is pretty straightforward.  With derived classes, things are slightly more complex:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Derived cDerived(1.3); // use Derived(double) constructor
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Here&#8217;s what actually happens when cDerived is instantiated:</p>
+<ol>
+<li>Memory for cDerived is set aside (enough for both the Base and Derived portions).
+<li>The appropriate Derived constructor is called
+<li><b>The Base object is constructed first using the appropriate Base constructor</b>
+<li>The initialization list initializes variables
+<li>The body of the constructor executes
+<li>Control is returned to the caller
+</ol>
+<p>The only real difference between this case and the non-inherited case is that before the Derived constructor can do anything substantial, the Base constructor is called first.  The Base constructor sets up the Base portion of the object, control is returned to the Derived constructor, and the Derived constructor is allowed to finish up it&#8217;s job.</p>
+<p><strong>Initializing base class members</strong></p>
+<p>One of the current shortcomings of our Derived class as written is that there is no way to initialize m_nValue when we create a Derived object.  What if we want to set both m_dValue (from the Derived potion of the object) and m_nValue (from the Base portion of the object) when we create a Derived object?  </p>
+<p>New programmers often attempt to solve this problem as follows:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0, int nValue=0)
+        // does not work
+        : m_dValue(dValue), m_nValue(nValue)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>This is a good attempt, and is almost the right idea.  We definitely need to add another parameter to our constructor, otherwise C++ will have no way of knowing what value we want to initialize m_nValue to.</p>
+<p>However, C++ prevents classes from initializing inherited member variables in the initialization list of a constructor.  In other words, the value of a variable can only be set in an initialization list of a constructor belonging to the same class as the variable.</p>
+<p>Why does C++ do this?  The answer has to do with const and reference variables.  Consider what would happen if m_nValue were const.  Because const variables must be initialized with a value at the time of creation, the base class constructor must set it&#8217;s value when the variable is created.  However, when the base class constructor finishes, the derived class constructors initialization lists are then executed.  Each derived class would then have the opportunity to initialize that variable, potentially changing it&#8217;s value!  By restricting the initialization of variables to the constructor of the class those variables belong to, C++ ensures that all variables are initialized only once.</p>
+<p>The end result is that the above example does not work because m_nValue was inherited from Base, and only non-inherited variables can be changed in the initialization list.</p>
+<p>However, inherited variables can still have their values changed in the body of the constructor using an assignment.  Consequently, new programmers often also try this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0, int nValue=0)
+        : m_dValue(dValue)
+    {
+        m_nValue = nValue;
+    }
+};
+</pre></td></tr></table>
+<p>While this actually works in this case, it wouldn&#8217;t work if m_nValue were a const or a reference (because const values and references have to be initialized in the initialization list of the constructor).  It&#8217;s also inefficient because m_nValue gets assigned a value twice: once in the initialization list of the Base class constructor, and then again in the body of the Derived class constructor.</p>
+<p>So how do we properly initialize m_nValue when creating a Derived class object?</p>
+<p>In all of the examples so far, when we instantiate a Derived class object, the Base class portion has been created using the default Base constructor.  Why does it always use the default Base constructor?  Because we never told it to do otherwise!</p>
+<p>Fortunately, C++ gives us the ability to explicitly choose which Base class constructor will be called!  To do this, simply add a call to the base class Constructor in the initialization list of the derived class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Derived: public Base
+{
+public:
+    double m_dValue;
+
+    Derived(double dValue=0.0, int nValue=0)
+        : Base(nValue), // Call Base(int) constructor with value nValue!
+            m_dValue(dValue)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>Now, when we execute this code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Derived cDerived(1.3, 5); // use Derived(double) constructor
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>The base class constructor Base(int) will be used to initialize m_nValue to 5, and the derived class constructor will be used to initialize m_dValue to 1.3!</p>
+<p>In more detail, here&#8217;s what happens:</p>
+<ol>
+<li>Memory for cDerived is allocated.
+<li>The Derived(double, int) constructor is called, where dValue = 1.3, and nValue = 5
+<li>The compiler looks to see if we&#8217;ve asked for a particular Base class constructor.  We have!  So it calls Base(int) with nValue = 5.
+<li>The base class constructor initialization list sets m_nValue to 5
+<li>The base class constructor body executes
+<li>The base class constructor returns
+<li>The derived class constuctor initialization list sets m_dValue to 1.3
+<li>The derived class constructor body executes
+<li>The derived class constructor returns
+</ol>
+<p>This may seem somewhat complex, but it&#8217;s actually very simple.  All that&#8217;s happening is that the Derived constructor is calling a specific Base constructor to initialize the Base portion of the object.  Because m_nValue lives in the Base portion of the object, the Base constructor is the only constructor that can initialize it&#8217;s value.</p>
+<p><strong>Another example</strong></p>
+<p>Let&#8217;s take a look at another pair of class we&#8217;ve previously worked with:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;string&gt;
+class Person
+{
+public:
+    std::string m_strName;
+    int m_nAge;
+    bool m_bIsMale;
+
+    std::string GetName() { return m_strName; }
+    int GetAge() { return m_nAge; }
+    bool IsMale() { return m_bIsMale; }
+
+    Person(std::string strName = &quot;&quot;, int nAge = 0, bool bIsMale = false)
+        : m_strName(strName), m_nAge(nAge), m_bIsMale(bIsMale)
+    {
+    }
+};
+
+// BaseballPlayer publicly inheriting Person
+class BaseballPlayer : public Person
+{
+public:
+    double m_dBattingAverage;
+    int m_nHomeRuns;
+
+    BaseballPlayer(double dBattingAverage = 0.0, int nHomeRuns = 0)
+       : m_dBattingAverage(dBattingAverage), m_nHomeRuns(nHomeRuns)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>As we&#8217;d previously written it, BaseballPlayer only initializes it&#8217;s own members and does not specify a Person constructor to use.  The means every BaseballPlayer we create is going to use the default Person constructor, which will initialize the name to blank and age to 0.  Because it makes sense to give our BaseballPlayer a name and age when we create them, we should modify this constructor to add those parameters.</p>
+<p>Here&#8217;s our new BaseballPlayer class with a constructor that calls the Person constructor to initialize the inherited Person member variables.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// BaseballPlayer publicly inheriting Person
+class BaseballPlayer : public Person
+{
+public:
+    double m_dBattingAverage;
+    int m_nHomeRuns;
+
+    BaseballPlayer(std::string strName = &quot;&quot;, int nAge = 0, bool bIsMale = false,
+        double dBattingAverage = 0.0, int nHomeRuns = 0)
+        : Person(strName, nAge, bIsMale), // call Person(std::string, int, bool) to initialize these fields
+            m_dBattingAverage(dBattingAverage), m_nHomeRuns(nHomeRuns)
+    {
+    }
+};
+</pre></td></tr></table>
+<p>Now we can create baseball players like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    BaseballPlayer cPlayer(&quot;Pedro Cerrano&quot;, 32, true, 0.342, 42);
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>To prove that it works:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    BaseballPlayer cPlayer(&quot;Pedro Cerrano&quot;, 32, true, 0.342, 42);
+
+    using namespace std;
+    cout &lt;&lt; cPlayer.m_strName &lt;&lt; endl;
+    cout &lt;&lt; cPlayer.m_nAge &lt;&lt; endl;
+    cout &lt;&lt; cPlayer.m_nHomeRuns;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>This outputs:</p>
+<pre>
+Pedro Cerrano
+32
+42
+</pre>
+<p>As you can see, the name and age in the base class were properly initialized, as was the number of home runs in the derived class.</p>
+<p><strong>Inheritance chains</strong></p>
+<p>Classes in an inheritance chain work in exactly the same way.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+using namespace std;
+
+class A
+{
+public:
+    A(int nValue)
+    {
+        cout &lt;&lt; &quot;A: &quot; &lt;&lt; nValue &lt;&lt; endl;
+    }
+};
+
+class B: public A
+{
+public:
+    B(int nValue, double dValue)
+    : A(nValue)
+    {
+        cout &lt;&lt; &quot;B: &quot; &lt;&lt; dValue &lt;&lt; endl;
+    }
+};
+
+class C: public B
+{
+public:
+    C(int nValue, double dValue, char chValue)
+    : B(nValue, dValue)
+    {
+        cout &lt;&lt; &quot;C: &quot; &lt;&lt; chValue &lt;&lt; endl;
+    }
+};
+
+int main()
+{
+    C cClass(5, 4.3, 'R');
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>In this example, class C is derived from class B, which is derived from class A.  So what happens when we instantiate an object of class C?</p>
+<p>First, main() calls C(int, double, char).  The C constructor calls B(int, double).  The B constructor calls A(int).  Because A is not inherited, this is the first class we&#8217;ll construct.  A is constructed, prints the value 5, and returns control to B.  B is constructed, prints the value 4.3, and returns control to C.  C is constructed, prints the value &#8216;R&#8217;, and returns control to main().  And we&#8217;re done!</p>
+<p>Thus, this program prints:</p>
+<pre>
+A: 5
+B: 4.3
+C: R
+</pre>
+<p>It is worth mentioning that constructors can only call constructors from their immediate parent/base class.  Consequently, the C constructor could not call or pass parameters to the A constructor directly.  The C constructor can only call the B constructor (which has the responsibility of calling the A constructor).</p>
+<p><strong>Destructors</strong></p>
+<p>When a derived class is destroyed, each destructor is called in the reverse order of construction.  In the above example, when cClass is destroyed, the C destructor is called first, then the B destructor, then the A destructor.</p>
+<p><strong>Summary</strong></p>
+<p>Although it is true that the most base class is initialized first, this actually only happens after each constructor has called the parent constructor in turn.  This gives us the opportunity to specify which of the parent&#8217;s constructors we want to use to initialize inherited members.  Once the base constructor has finished constructing the base portion of the class, control returns to the derived constructor and it executes as normal.</p>
+<p>One of the primary advantages of using a base class constructor to initialize the base class members is that if the base class constructor is ever changed, both the base class and all inherited classes will automatically use the changes!  This helps keep maintenance and duplicate code down.</p>

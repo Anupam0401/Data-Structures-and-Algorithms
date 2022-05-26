@@ -1,0 +1,88 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Quick Review</strong></p>
+<p>Integers are used for holding whole numbers.  When using integers, keep an eye out for overflow and integer division problems.</p>
+<p>Floating point numbers are used for holding real numbers (which can have fractional components).  When using floating point numbers, keep an eye out for precision issues, rounding errors, and comparison issues.</p>
+<p>Boolean values hold only true and false.  They do not have any major issues.</p>
+<p>Char values are integers that can be interpreted as an ASCII value.  When using chars, be careful not to mix up ASCII code values and numbers, and watch for overflow and integer division problems.</p>
+<p>Use the const keyword to declare symbolic constants instead of #define.  It&#8217;s safer.</p>
+<p><strong>Comprehensive quiz</strong></p>
+<p>1) Why are symbolic constants usually a better choice than literal constants?  Why are const symbolic constants usually a better choice than #defined symbolic constants?</p>
+<p>2) Pick the appropriate data type for a variable in each of the following situations.  Be as specific as possible.  If the answer is an integer, pick a specific integer type (eg. short) based on range.  If the variable should be unsigned or const, say so.</p>
+<p>a) The age of the user (in years)<br />
+b) Whether the user wants color or not<br />
+c) pi (3.14159265)<br />
+d) The number of pages in a textbook<br />
+e) The price of a stock in dollars (to 2 decimal places)<br />
+f) How many times you&#8217;ve blinked since you were born (note: answer is in the millions)<br />
+g) A user selecting an option from a menu by letter<br />
+h) The year someone was born</p>
+<p>3) Declare each of the above using Caste Hungarian Notation.  Pick a good variable name.  Don&#8217;t forget to assign values to any const variables.</p>
+<p>4) Write the following program: The user is asked to enter 2 floating point numbers (use doubles).  The user is then asked to enter one of the following mathematical symbols: +, -, *, or /.  The program computes the answer on the two numbers the user entered and prints the results.  If the user enters an invalid symbol, the program should print nothing.</p>
+<p>Example of program:</p>
+<pre>
+Enter a value: 7
+Enter a second value: 5
+Enter one of the following: +, -, *, or /: *
+7 * 5 is 35
+</pre>
+<p>Hint: You can check if the user has entered a plus symbol using an if statement (briefly covered in section 2.6) and the equality operator (used to compare two values for equality): <code>if (chUserInput == '+') // fill in rest of code here</code></p>
+<p><strong>Solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1509474400'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1509474400" style="display:none">
+Using literal constants (aka. magic numbers) in your program makes your program harder to understand and harder to modify.  Symbolic constants help document what the numbers actually represent, and changing a symbolic constant at it&#8217;s declaration changes the value everywhere it is used.  #define constants do not show up in the debugger and are more likely to have naming conflicts.
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1922913323'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1922913323" style="display:none">
+a) Since the oldest person alive is about 120 years old, a signed char would probably be okay.  But since it&#8217;s possible that someone could live to be older than 127 (though not likely), an unsigned char would be even better.<br />
+b) bool<br />
+c) const double<br />
+d) Since books can not have negative pages, an unsigned short is best<br />
+e) float<br />
+f) an unsigned long<br />
+g) char<br />
+h) a signed short.  You can use positive numbers to represent AD birthdates, and negative numbers to represent BC birthdates.
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1409305036'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1409305036" style="display:none">
+a) unsigned char unAgeInYears;<br />
+b) bool bColor;<br />
+c) const double dPi = 3.14159265;<br />
+d) unsigned short unPages;<br />
+e) float fStockPrice;<br />
+f) unsigned long nBlinks;<br />
+g) char chSelection;<br />
+h) short nBirthYear;
+</div>
+<p>4) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id148656285'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id148656285" style="display:none">
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a value: &quot;;
+    double dX;
+    cin &gt;&gt; dX;
+
+    cout &lt;&lt; &quot;Enter a second value: &quot;;
+    double dY;
+    cin &gt;&gt; dY;
+
+    cout &lt;&lt; &quot;Enter one of the following: +, -, *, or /&quot;;
+    char chChoice;
+    cin &gt;&gt; chChoice;
+
+    if (chChoice == '+')
+        cout &lt;&lt; dX &lt;&lt; &quot; + &quot; &lt;&lt; dY &lt;&lt; &quot; is &quot; &lt;&lt; dX + dY &lt;&lt; endl;
+    if (chChoice == '-')
+        cout &lt;&lt; dX &lt;&lt; &quot; - &quot; &lt;&lt; dY &lt;&lt; &quot; is &quot; &lt;&lt; dX - dY &lt;&lt; endl;
+    if (chChoice == '*')
+        cout &lt;&lt; dX &lt;&lt; &quot; * &quot; &lt;&lt; dY &lt;&lt; &quot; is &quot; &lt;&lt; dX * dY &lt;&lt; endl;
+    if (chChoice == '/')
+        cout &lt;&lt; dX &lt;&lt; &quot; / &quot; &lt;&lt; dY &lt;&lt; &quot; is &quot; &lt;&lt; dX / dY &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+</div>

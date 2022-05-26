@@ -1,0 +1,2 @@
+int a;
+float mynumber;

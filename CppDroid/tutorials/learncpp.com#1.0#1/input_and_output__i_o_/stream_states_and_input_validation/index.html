@@ -1,0 +1,353 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Stream states</strong></p>
+<p>The ios_base class contains several state flags that are used to signal various conditions that may occur when using streams:</p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td>goodbit</td>
+<td>Everything is okay</td>
+</tr>
+<tr>
+<td>badbit</td>
+<td>Some kind of fatal error occurred (eg. the program tried read past the end of a file)</td>
+</tr>
+<tr>
+<td>eofbit</td>
+<td>The stream has reached the end of a file</td>
+</tr>
+<tr>
+<td>failbit</td>
+<td>A non-fatal error occurred (eg. the user entered letters when the program was expecting an integer)</td>
+</tr>
+</table>
+<p>Although these flags live in ios_base, because ios is derived from ios_base and ios takes less typing than ios_base, they are generally accessed through ios (eg. as std::ios::failbit).</p>
+<p>ios_base also provides a number of member functions in order to conveniently access these states:</p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr>
+<th>Member function</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td>good()</td>
+<td>Returns true if the goodbit is set (the stream is ok)</td>
+</tr>
+<tr>
+<td>bad()</td>
+<td>Returns true if the badbit is set (a fatal error occurred)</td>
+</tr>
+<tr>
+<td>eof()</td>
+<td>Returns true if the eofbit is set (the stream is at the end of a file)</td>
+</tr>
+<tr>
+<td>fail()</td>
+<td>Returns true if the failbit is set (a non-fatal error occurred)</td>
+</tr>
+<tr>
+<td>clear()</td>
+<td>Clears all flags and restores the stream to the goodbit state</td>
+</tr>
+<tr>
+<td>clear(state)</td>
+<td>Clears all flags and sets the state flag passed in</td>
+</tr>
+<tr>
+<td>rdstate()</td>
+<td>Returns the currently set flags</td>
+</tr>
+<tr>
+<td>setstate(state)</td>
+<td>Sets the state flag passed in</td>
+</tr>
+</table>
+<p>The most commonly dealt with bit is the failbit, which is set when the user enters invalid input.  For example, consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+cout &lt;&lt; &quot;Enter your age: &quot;;
+int nAge;
+cin &gt;&gt; nAge;
+</pre></td></tr></table>
+<p>Note that this program is expecting the user to enter an integer.  However, if the user enters non-numeric data, such as &#8220;Alex&#8221;, cin will be unable to extract anything to nAge, and the failbit will be set.</p>
+<p>If an error occurs and a stream is set to anything other than goodbit, further stream operations on that stream will be ignored.  This condition can be cleared by calling the clear() function.</p>
+<p><strong>Input validation</strong></p>
+<p><strong>Input validation</strong> is the process of checking whether the user input meets some set of criteria.  Input validation can generally be broken down into two types: string and numeric.</p>
+<p>With string validation, we accept all user input as a string, and then accept or reject that string depending on whether it is formatted appropriately.  For example, if we ask the user to enter a telephone number, we may want to ensure the data they enter has ten digits.  In most languages (especially scripting languages like Perl and PHP), this is done via regular expressions.  However, C++ does not have built-in regular expression support (it&#8217;s supposedly coming with the next revision of C++), so typically this is done by examining each character of the string to make sure it meets some criteria.</p>
+<p>With numerical validation, we are typically concerned with making sure the number the user enters is within a particular range (eg. between 0 and 20).  However, unlike with string validation, it&#8217;s possible for the user to enter things that aren&#8217;t numbers at all &#8212; and we need to handle these cases too.</p>
+<p>To help us out, C++ provides a number of useful functions that we can use to determine whether specific characters are numbers or letters.  The following functions live in the cctype header:</p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr>
+<th>Function</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td>isalnum(int)</td>
+<td>Returns non-zero if the parameter is a letter or a digit</td>
+</tr>
+<tr>
+<td>isalpha(int)</td>
+<td>Returns non-zero if the parameter is a letter</td>
+</tr>
+<tr>
+<td>iscntrl(int)</td>
+<td>Returns non-zero if the parameter is a control character</td>
+</tr>
+<tr>
+<td>isdigit(int)</td>
+<td>Returns non-zero if the parameter is a digit</td>
+</tr>
+<tr>
+<td>isgraph(int)</td>
+<td>Returns non-zero if the parameter is printable character that is not whitespace</td>
+</tr>
+<tr>
+<td>isprint(int)</td>
+<td>Returns non-zero if the parameter is printable character (including whitespace)</td>
+</tr>
+<tr>
+<td>ispunct(int)</td>
+<td>Returns non-zero if the parameter is neither alphanumeric nor whitespace</td>
+</tr>
+<tr>
+<td>isspace(int)</td>
+<td>Returns non-zero if the parameter is whitespace</td>
+</tr>
+<tr>
+<td>isxdigit(int)</td>
+<td>Returns non-zero if the parameter is a hexadecimal digit (0-9, a-f, A-F)</td>
+</tr>
+</table>
+<p><strong>String validation</strong></p>
+<p>Let&#8217;s do a simple case of string validation by asking the user to enter their name.  Our validation criteria will be that the user enters only alphabetic characters or spaces.  If anything else is encountered, the input will be rejected.</p>
+<p>When it comes to variable length inputs, the best way to validate strings (besides using a regular expression library) is to step through each character of the string and ensure it meets the validation criteria.  That&#8217;s exactly what we&#8217;ll do here.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;cctype&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+while (1)
+{
+    // Get user's name
+    cout &lt;&lt; &quot;Enter your name: &quot;;
+    string strName;
+    getline(cin, strName); // get the entire line, including spaces
+
+    bool bRejected=false; // has strName been rejected?
+
+    // Step through each character in the string until we either hit
+    // the end of the string, or we rejected a character
+    for (unsigned int nIndex=0; nIndex &lt; strName.length() &amp;&amp; !bRejected; nIndex++)
+    {
+        // If the current character is an alpha character, that's fine
+        if (isalpha(strName[nIndex]))
+            continue;
+
+        // If it's a space, that's fine too
+        if (strName[nIndex]==' ')
+            continue;
+
+        // Otherwise we're rejecting this input
+        bRejected = true;
+    }
+
+    // If the input has been accepted, exit the while loop
+    // otherwise we're going to loop again
+    if (!bRejected)
+        break;
+}
+</pre></td></tr></table>
+<p>Note that this code isn&#8217;t perfect: the user could say their name was &#8220;asf w jweo s di we ao&#8221; or some other bit of gibberish, or even worse, just a bunch of spaces.  We could address this somewhat by refining our validation criteria to only accept strings that contain at least one character and at most one space.</p>
+<p>Now let&#8217;s take a look at another example where we are going to ask the user to enter their phone number.  Unlike a user&#8217;s name, which is variable-length and where the validation criteria are the same for every character, a phone number is a fixed length but the validation criteria differ depending on the position of the character.  Consequently, we are going to take a different approach to validating our phone number input.  In this case, we&#8217;re going to write a function that will check the user&#8217;s input against a predetermined template to see whether it matches.  The template will work as follows:</p>
+<p>A # will match any digit in the user input.<br />
+A @ will match any alphabetic character in the user input.<br />
+A _ will match any whitespace.<br />
+A ? will match anything.<br />
+Otherwise, the characters in the user input and the template must match exactly.</p>
+<p>So, if we ask the function to match the template &#8220;(###) ###-####&#8221;, that means we expect the user to enter a &#8216;(&#8216; character, three numbers, a &#8216;)&#8217; character, a space, three numbers, a dash, and four more numbers.  If any of these things doesn&#8217;t match, the input will be rejected.</p>
+<p>Here is the code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool InputMatches(string strUserInput, string strTemplate)
+{
+    if (strTemplate.length() != strUserInput.length())
+        return false;
+
+    // Step through the user input to see if it matches
+    for (unsigned int nIndex=0; nIndex &lt; strTemplate.length(); nIndex++)
+    {
+        switch (strTemplate[nIndex])
+        {
+            case '#': // match a digit
+                if (!isdigit(strUserInput[nIndex]))
+                    return false;
+                break;
+            case '_': // match a whitespace
+                if (!isspace(strUserInput[nIndex]))
+                    return false;
+                break;
+            case '@': // match a letter
+                if (!isalpha(strUserInput[nIndex]))
+                    return false;
+                break;
+            case '?': // match anything
+                break;
+            default: // match the exact character
+                if (strUserInput[nIndex] != strTemplate[nIndex])
+                    return false;
+        }
+    }
+
+    return true;
+}
+
+int main()
+{
+    string strValue;
+
+    while (1)
+    {
+        cout &lt;&lt; &quot;Enter a phone number (###) ###-####: &quot;;
+        getline(cin, strValue); // get the entire line, including spaces
+        if (InputMatches(strValue, &quot;(###) ###-####&quot;))
+            break;
+    }
+
+    cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; strValue &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Using this function, we can force the user to match our specific format exactly.  However, this function is still subject to several constraints: if #, @, _, and ? are valid characters in the user input, this function won&#8217;t work, because those symbols have been given special meanings.  Also, unlike with regular expressions, there is no template symbol that means &#8220;a variable number of characters can be entered&#8221;.  Thus, such a template could not be used to ensure the user enters two words separated by a whitespace, because it can not handle the fact that the words are of variable lengths.  For such problems, the non-template approach is generally more appropriate.</p>
+<p><strong>Numeric validation</strong></p>
+<p>When dealing with numeric input, the obvious way to proceed is to use the extraction operator to extract input to a numeric type.  By checking the failbit, we can then tell whether the user entered a number or not.</p>
+<p>Let&#8217;s try this approach:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    int nAge;
+
+    while (1)
+    {
+        cout &lt;&lt; &quot;Enter your age: &quot;;
+        cin &gt;&gt; nAge;
+
+        if (cin.fail()) // no extraction took place
+        {
+            cin.clear(); // reset the state bits back to goodbit so we can use ignore()
+            cin.ignore(1000, '\n'); // clear out the bad input from the stream
+            continue; // try again
+        }
+
+        if (nAge &lt;= 0) // make sure nAge is positive
+            continue;
+
+	break;
+    }
+
+    cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; nAge &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>If the user enters a number, cin.fail() will be false, and we will hit the break statement, exiting the loop.  If the user enters input starting with a letter, cin.fail() will be true, and we will go into the conditional.</p>
+<p>However, there&#8217;s one more case we haven&#8217;t tested for, and that&#8217;s when the user enters a string that starts with numbers but then contains letters (eg. &#8220;34abcd56&#8243;).  In this case, the starting numbers (34) will be extracted into nAge, the remainder of the string (&#8220;abcd56&#8243;) will be left in the input stream, and the failbit will NOT be set.  This causes two potential problems:</p>
+<p>1) If you want this to be valid input, you now have garbage in your stream.<br />
+2) If you don&#8217;t want this to be valid input, it is not rejected (and you have garbage in your stream).</p>
+<p>Let&#8217;s fix the first problem.  This is easy:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    int nAge;
+
+    while (1)
+    {
+        cout &lt;&lt; &quot;Enter your age: &quot;;
+        cin &gt;&gt; nAge;
+
+        if (cin.fail()) // no extraction took place
+        {
+            cin.clear(); // reset the state bits back to goodbit so we can use ignore()
+            cin.ignore(1000, '\n'); // clear out the bad input from the stream
+            continue; // try again
+        }
+
+        cin.ignore(1000, '\n'); // clear out any additional input from the stream
+
+        if (nAge &lt;= 0) // make sure nAge is positive
+            continue;
+
+	break;
+    }
+
+    cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; nAge &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>If you don&#8217;t want such input to be valid, we&#8217;ll have to do a little extra work.  Fortunately, the previous solution gets us half way there.  We can use the gcount() function to determine how many characters were ignored.  If our input was valid, gcount() should return 1 (the newline character that was discarded).  If it returns more than 1, the user entered something that wasn&#8217;t extracted properly, and we should ask them for new input.  Here&#8217;s an example of this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    int nAge;
+
+    while (1)
+    {
+        cout &lt;&lt; &quot;Enter your age: &quot;;
+        cin &gt;&gt; nAge;
+
+        if (cin.fail()) // no extraction took place
+        {
+            cin.clear(); // reset the state bits back to goodbit so we can use ignore()
+            cin.ignore(1000, '\n'); // clear out the bad input from the stream
+            continue; // try again
+        }
+
+        cin.ignore(1000, '\n'); // clear out any additional input from the stream
+        if (cin.gcount() &gt; 1) // if we cleared out more than one additional character
+            continue; // we'll consider this input to be invalid
+
+        if (nAge &lt;= 0) // make sure nAge is positive
+            continue;
+
+	break;
+    }
+
+    cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; nAge &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p><strong>Numeric validation as a string</strong></p>
+<p>The above example was quite a bit of work simply to get a simple value!  Another way to process numeric input is to read it in as a string, process it as a string, and if it passes the validation, convert it to a numeric type.  The following program makes use of that methodology:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+	int nAge;
+
+    while (1)
+    {
+        cout &lt;&lt; &quot;Enter your age: &quot;;
+        string strAge;
+        cin &gt;&gt; strAge;
+
+        // Check to make sure each character is a digit
+        bool bValid = true;
+        for (unsigned int nIndex=0; nIndex &lt; strAge.length(); nIndex++)
+            if (!isdigit(strAge[nIndex]))
+            {
+                bValid = false;
+                break;
+            }
+        if (!bValid)
+            continue;
+
+        // At this point, we have something that can be converted to a number
+        // So we'll use stringstream to do that conversion
+        stringstream strStream;
+        strStream &lt;&lt; strAge;
+        strStream &gt;&gt; nAge;
+
+        if (nAge &lt;= 0) // make sure nAge is positive
+            continue;
+
+	break;
+    }
+
+    cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; nAge &lt;&lt; endl;
+}
+</pre></td></tr></table>
+<p>Whether this approach is more or less work than straight numeric extraction depends on your validation parameters and restrictions.</p>
+<p>As you can see, doing input validation in C++ is a lot of work.  Fortunately, many such tasks (eg. doing numeric validation as a string) can be easily turned into functions that can be reused in a wide variety of situations.</p>

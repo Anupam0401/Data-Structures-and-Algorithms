@@ -1,0 +1,102 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>A <strong>recursive function</strong> in C++ is a function that calls itself.  Here is an example of a poorly-written recursive function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void CountDown(int nValue)
+{
+    using namespace std;
+    cout &lt;&lt; nValue &lt;&lt; endl;
+    CountDown(nValue-1);
+}
+
+int main(void)
+{
+    CountDown(10);
+    return 0;
+}
+</pre></td></tr></table>
+<p>When CountDown(10) is called, the number 10 is printed, and CountDown(9) is called.  CountDown(9) prints 9 and calls CountDown(8).  CountDown(8) prints 8 and calls CountDown(7).  The sequence of CountDown(n) calling CountDown(n-1) is continually repeated, effectively forming the recursive equivalent of an infinite loop.</p>
+<p>In the lesson on <a href="http://www.learncpp.com/cpp-tutorial/79-the-stack-and-the-heap/">the stack and the heap</a>, you learned that every function call causes data to be placed on the call stack.  Because the CountDown() function never returns (it just calls CountDown() again), this information is never being popped off the stack!  Consequently, at some point, the computer will run out of stack memory, stack overflow will result, and the program will crash or terminate.  On the authors machine, this program counted down to -11732 before terminating!</p>
+<p>This program illustrates the most important point about recursive functions: you must include a termination condition, or they will run &#8220;forever&#8221; (or until the call stack runs out of memory).</p>
+<p>Stopping a recursive function generally involves using an if statement.  Here is our function redesigned with a termination condition:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+void CountDown(int nValue)
+{
+    using namespace std;
+    cout &lt;&lt; nValue &lt;&lt; endl;
+
+    // termination condition
+    if (nValue &gt; 0)
+        CountDown(nValue-1);
+}
+
+int main(void)
+{
+    CountDown(10);
+    return 0;
+}
+</pre></td></tr></table>
+<p>Now when we run our program, CountDown() will count down to 0 and then stop!</p>
+<p>Let&#8217;s take a look at another recursive function that is slightly more useful:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+// return the sum of 1 to nValue
+int SumTo(int nValue)
+{
+    if (nValue &lt;=1)
+        return nValue;
+    else
+        return SumTo(nValue - 1) + nValue;
+}
+</pre></td></tr></table>
+<p>Recursive programs can often be hard to figure out just by looking at them.  It&#8217;s often instructive to see what happens when we call a recursive function with a particular value.  So let&#8217;s see what happens when we call this function with nValue = 5.</p>
+<p>SumTo(5) called, 5 <= 1 is false, so we return SumTo(4) + 5.<br />
+SumTo(4) called, 4 <= 1 is false, so we return SumTo(3) + 4.<br />
+SumTo(3) called, 3 <= 1 is false, so we return SumTo(2) + 3.<br />
+SumTo(2) called, 2 <= 1 is false, so we return SumTo(1) + 2.<br />
+SumTo(1) called, 1 <= 1 is true, so we return 1.  This is the termination condition.</p>
+<p>Now we unwind the call stack (popping each function off the call stack as it returns):<br />
+SumTo(1) returns 1.<br />
+SumTo(2) returns SumTo(1) + 2, which is 1 + 2 = 3.<br />
+SumTo(3) returns SumTo(2) + 3, which is 3 + 3 = 6.<br />
+SumTo(4) returns SumTo(3) + 4, which is 6 + 4 = 10.<br />
+SumTo(5) returns SumTo(4) + 5, which is 10 + 5 = 15.</p>
+<p>Consequently, SumTo(5) returns 15.</p>
+<p>One question that is often asked about recursive functions is, "Why use a recursive function if you can do many of the same tasks iteratively (using a <em>for loop</em> or <em>while loop</em>)?&#8221;.  It turns out that you can always solve a recursive problem iteratively &#8212; however, for non-trivial problems, the recursive version is often much simpler to write (and read).</p>
+<p><strong>Fibonacci numbers</strong></p>
+<p>One of the most famous mathematical recursive algorithms is the Fibonacci sequence, as Fibonacci sequences appear in many places in nature, such as branching of trees, the spiral of shells, the fruitlets of a pineapple, an uncurling fern frond, and the arrangement of a pine cone.</p>
+<p>Here is a picture of a Fibonacci spiral:<br />
+<img src="{path}/Fibonacci.png"></p>
+<p>Each of the Fibonacci numbers is the length of the side of the square that the number appears in.</p>
+<p>Fibonacci numbers are defined mathematically as:</p>
+<table>
+<tr>
+<td>F(n) = </td>
+<td>0 if n = 0<br />1 if n = 1<br />f(n-1) + f(n-2) if n > 1</td>
+</tr>
+</table>
+<p>Consequently, it&#8217;s rather simple to write a recursive function to calculate the nth Fibonacci number:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int Fibonacci(int nNumber)
+{
+    if (nNumber == 0)
+        return 0;
+    if (nNumber == 1)
+        return 1;
+    return Fibonacci(nNumber-1) + Fibonacci(nNumber-2);
+}
+
+// And a main program to display the first 13 Fibonacci numbers
+int main(void)
+{
+    using namespace std;
+    for (int iii=0; iii &lt; 13; iii++)
+        cout &lt;&lt; Fibonacci(iii) &lt;&lt; &quot; &quot;;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Running the program produces the following result:</p>
+<pre>
+0 1 1 2 3 5 8 13 21 34 55 89 144
+</pre>
+<p>Which you will note are exactly the numbers that appear in the Fibonacci spiral diagram.</p>
+<p>While it&#8217;s possible to write the Fibonacci function iteratively, it&#8217;s much more difficult!</p>

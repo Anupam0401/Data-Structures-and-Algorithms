@@ -1,0 +1,26 @@
+
+<h3>Pointers to pointers</h3>
+C++ allows the use of pointers that point to pointers, that these, in its turn, point to data (or even to other pointers). The syntax simply requires an asterisk (<code>*</code>) for each level of indirection in the declaration of the pointer:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br></code></pre></td>
+<td class="source"><pre><code><var>char</var> a;
+<var>char</var> * b;
+<var>char</var> ** c;
+a = <kbd>'z'</kbd>;
+b = &amp;a;
+c = &amp;b;</code></pre></td></tr></table></div>
+<br>
+<br>
+This, assuming the randomly chosen memory locations for each variable of <code>7230</code>, <code>8092</code>, and <code>10502</code>, could be represented as:<br>
+<br>
+<img src="pointer_to_pointer.png" alt="">
+  <br>
+With the value of each variable represented inside its corresponding cell, and their respective addresses in memory represented by the value under them.<br>
+ <br>
+The new thing in this example is variable <code>c</code>, which is a pointer to a pointer, and can be used in three different levels of indirection, each one of them would correspond to a different value:<br>
+<br>
+<ul>
+<li><code>c</code> is of type <code>char**</code> and a value of <code>8092</code></li>
+<li><code>*c</code> is of type <code>char*</code> and a value of <code>7230</code></li>
+<li><code>**c</code> is of type <code>char</code> and a value of <code>'z'</code></li>
+</ul>

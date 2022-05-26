@@ -1,0 +1,50 @@
+
+<h3>Initializing arrays</h3>
+By default, regular arrays of <i>local scope</i> (for example, those declared within a function) are left uninitialized. This means that none of its elements are set to any particular value; their contents are undetermined at the point the array is declared.<br>
+<br>
+But the elements in an array can be explicitly initialized to specific values when it is declared, by enclosing those initial values in braces {}. For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> foo [5] = { 16, 2, 77, 40, 12071 }; </code></pre></td></tr></table></div>
+<br>
+<br>
+This statement declares an array that can be represented like this:<br>
+<br>
+<img src="arrays2.png" alt="">
+<br>
+The number of values between braces <code>{}</code> shall not be greater than the number of elements in the array. For example, in the example above, <code>foo</code> was declared having 5 elements (as specified by the number enclosed in square brackets, <code>[]</code>), and the braces <code>{}</code> contained exactly 5 values, one for each element. If declared with less, the remaining elements are set to their default values (which for fundamental types, means they are filled with zeroes). For example:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> bar [5] = { 10, 20, 30 }; </code></pre></td></tr></table></div>
+<br>
+<br>
+Will create an array like this:<br>
+<br>
+<img src="arrays3.png" alt="">
+<br>
+The initializer can even have no values, just the braces:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> baz [5] = { }; </code></pre></td></tr></table></div>
+<br>
+<br>
+This creates an array of five <code>int</code> values, each initialized with a value of zero:<br>
+<br>
+<img src="arrays4.png" alt="">
+<br>
+When an initialization of values is provided for an array, C++ allows the possibility of leaving the square brackets empty <code>[]</code>. In this case, the compiler will assume automatically a size for the array that matches the number of values included between the braces <code>{}</code>:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>int</var> foo [] = { 16, 2, 77, 40, 12071 };</code></pre></td></tr></table></div>
+<br>
+<br>
+After this declaration, array <code>foo</code> would be 5 <code>int</code> long, since we have provided 5 initialization values.<br>
+<br>
+Finally, the evolution of C++ has led to the adoption of <i>universal initialization</i> also for arrays. Therefore, there is no longer need for the equal sign between the declaration and the initializer. Both these statements are equivalent:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> foo[] = { 10, 20, 30 };
+<var>int</var> foo[] { 10, 20, 30 }; </code></pre></td></tr></table></div>
+<br>
+<br>
+Static arrays, and those declared directly in a namespace (outside any function), are always initialized. If no explicit initializer is specified, all the elements are default-initialized (with zeroes, for fundamental types).<br>

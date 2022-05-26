@@ -1,0 +1,130 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Addressing memory</strong></p>
+<p>This lesson builds directly on the material in the section &#8220;<a href="http://www.learncpp.com/?p=22">A first look at variables</a>&#8220;.</p>
+<p>In the previous lesson on variables, we talked about the fact that variables are names for a piece of memory that can be used to store information.  To recap briefly, computers have random access memory (RAM) that is available for program to use.  When a variable is declared, a piece of that memory is set aside for that variable.</p>
+<p>The smallest unit of memory is a binary digit (bit), which can hold a value of 0 or 1.  You can think of a bit as being like a traditional light switch &#8212; either the light is off (0), or it is on (1).  There is no in-between.  If you were to look at a sequential piece of memory, all you would see is &#8230;011010100101010&#8230; or some combination thereof.  Memory is organized into individual sections called <strong>addresses</strong>.  Perhaps surprisingly, in modern computers, each bit does not get it&#8217;s own address.  The smallest addressable unit of memory is a group of 8 bits known as a <strong>byte</strong>.  </p>
+<p>The following picture shows some sequential memory addresses, along with the corresponding byte of data:</p>
+<p><img src="{path}/MemoryAddresses.png" alt="Memory Addressing" /></p>
+<p>Because all data on a computer is just a sequence of bits, we use a <strong>data type</strong> to tell us how to interpret the contents of memory in some meaningful way.  You have already seen one example of a data type: the integer.  When we declare a variable as an integer, we are telling the computer &#8220;the piece of memory that this variable addresses is going to be interpreted as a whole number&#8221;.</p>
+<p>When you assign a value to a data type, the computer takes care of the details of encoding your value into the appropriate sequence of bits for that data type.  When you ask for your value back, the program &#8220;reconstitutes&#8221; your number from the sequence of bits in memory. </p>
+<p>There are many other data types in C++ besides the integer, most of which we will cover shortly.  As shorthand, we typically refer to a variable&#8217;s &#8220;data type&#8221; as it&#8217;s &#8220;type&#8221;.</p>
+<p><strong>Declaring a variable</strong></p>
+<p>In the &#8220;basic C++&#8221; section, you already learned how to declare an integer variable:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nVarName; // int is the type, nVarName is the name of the variable
+</pre></td></tr></table>
+<p>To declare variables of other data types, the idea is exactly the same:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+type varName; // type is the type (eg. int), varName is the name of the variable
+</pre></td></tr></table>
+<p>In the following example, we declare 5 different variables of 5 different types.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+bool bValue;
+char chValue;
+int nValue;
+float fValue;
+double dValue;
+</pre></td></tr></table>
+<p>It&#8217;s that simple.  (Well, almost &#8212; there are a few things you can&#8217;t name your variables, which we&#8217;ll talk about in the next section)</p>
+<p>You can also assign values to your variables upon declaration.  When we assign values to a variable using the assignment operator (equals sign), it&#8217;s called an <strong>explicit assignment</strong>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5; // explicit assignment
+</pre></td></tr></table>
+<p>You can also assign values to variables using an <strong>implicit assignment</strong>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue(5); // implicit assignment
+</pre></td></tr></table>
+<p>Even though implicit assignments look a lot like function calls, the compiler keeps track of which names are variables and which are functions so that they can be resolved properly.</p>
+<p><strong>Declaring multiple variables</strong></p>
+<p>It is possible to declare multiple variables <em>of the same type</em> in one statement by separating the names with a comma.  The following 2 snippets of code are effectively the same:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1, nValue2;
+</pre></td></tr></table>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1;
+int nValue2;
+</pre></td></tr></table>
+<p>You can also assign them values on the declaration line:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 5, nValue2 = 6;
+int nValue3(7), nValue4(8);
+</pre></td></tr></table>
+<p>Which is effectively the same as:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 5;
+int nValue2 = 6;
+int nValue3 = 7;
+int nValue4 = 8;
+</pre></td></tr></table>
+<p>There are three mistakes that new programmers tend to make when declaring multiple variables in the same statement.</p>
+<p>The first mistake is declaring each variable as int (or whatever type it is) in sequence.  This is not a bad mistake because the compiler will complain and ask you to fix it.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1, int nValue2; // wrong (compiler error)
+
+int nValue1, nValue2; // correct
+</pre></td></tr></table>
+<p>The second error is to try to declare two variables of different types on the same line, which is not allowed.  Variables of different types must be declared in separate statements.  This is also not a bad mistake because the compiler will complain and ask you to fix it.  </p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1, double dValue2; // wrong (compiler error)
+
+int nValue1; double dValue2; // correct (but not recommended)
+
+// correct and recommended (easier to read)
+int nValue1;
+double dValue2;
+</pre></td></tr></table>
+<p>The last mistake is the dangerous case.  In this case, the programmer mistakenly tries to initialize both variables by using one assignment statement:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1, nValue2 = 5; // wrong (nValue1 is uninitialized!)
+
+int nValue1 = 5, nValue2 = 5; // correct
+</pre></td></tr></table>
+<p>In the top statement, the nValue1 variable will be left uninitialized, and the compiler will NOT complain.  This is a great way to have your program intermittently crash and produce sporadic results.</p>
+<p>The best way to remember that this is wrong is consider the case of implicit initialization:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1, nValue2(5);
+</pre></td></tr></table>
+<p>This makes it seem a little more clear that the value 5 is only being assigned to nValue2.  The explicit assignment case is no different.</p>
+<p><strong>Where to declare variables</strong></p>
+<p>Older C compilers forced users to declare all of the variables in a function at the top of the function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // all variable up top
+    int x;
+    int y;
+
+    // then code
+    using namespace std;
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    cin &gt;&gt; x;
+
+    cout &lt;&lt; &quot;Enter another number: &quot;;
+    cin &gt;&gt; y;
+
+    cout &lt;&lt; &quot;The sum is: &quot; &lt;&lt; x + y &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This style is now obsolete.  C++ compilers do not require all variables to be declared at the top of a function.  The proper C++ style is to declare variables when and where they are needed:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    // then code
+    using namespace std;
+
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    int x; // we need x starting here.
+    cin &gt;&gt; x;
+
+    cout &lt;&lt; &quot;Enter another number: &quot;;
+    int y; // we don't need y until now
+    cin &gt;&gt; y;
+
+    cout &lt;&lt; &quot;The sum is: &quot; &lt;&lt; x + y &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>This has quite a few advantages.  First, variables that are declared only when needed are given context by the statements around them.  If x were declared at the top of the function, we would have no idea what it was used for until we scanned the function and found where it was used.  Declaring x amongst a bunch of input/output statements helps make it obvious that this variable is being used for input and/or output.</p>
+<p>Second, declaring a variable only where it is needed tells us that this variable does not affect anything above it, making our program easier to understand and requiring less scrolling.  Finally, it reduces the likelihood of inadvertently leaving a variable uninitialized, because we can declare and then immediately initialize it with the value we want it to have.</p>
+<p><em>Rule: Declare variables where they are needed.</em></p>

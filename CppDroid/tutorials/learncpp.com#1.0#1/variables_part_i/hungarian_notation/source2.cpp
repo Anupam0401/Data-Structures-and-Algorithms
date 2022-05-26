@@ -1,0 +1,1 @@
+float applesPerPerson = totalApples / totalPersons;

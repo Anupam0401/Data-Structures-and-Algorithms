@@ -1,0 +1,1 @@
+cout << cats << " cats" << endl;

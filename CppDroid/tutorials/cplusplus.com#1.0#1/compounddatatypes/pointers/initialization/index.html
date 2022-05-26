@@ -1,0 +1,34 @@
+
+<h3>Pointer initialization</h3>
+Pointers can be initialized to point to specific locations at the very moment they are defined:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> myvar;
+<var>int</var> * myptr = &amp;myvar;</code></pre></td></tr></table></div>
+<br>
+<br>
+The resulting state of variables after this code is the same as after:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> myvar;
+<var>int</var> * myptr;
+myptr = &amp;myvar;</code></pre></td></tr></table></div>
+<br>
+<br>
+When pointers are initialized, what is initialized is the address they point to (i.e., <code>myptr</code>), never the value being pointed (i.e., <code>*myptr</code>). Therefore, the code above shall not be confused with: <br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> myvar;
+<var>int</var> * myptr;
+*myptr = &amp;myvar;</code></pre></td></tr></table></div>
+<br>
+<br>
+The asterisk (<code>*</code>) in the pointer declaration (line 2) only indicates that it is a pointer, it is not the dereference operator (as in line 3). Both things just happen to use the same sign: <code>*</code>. As always, spaces are not relevant, and never change the meaning of an expression.<br>
+<br>
+Pointers can be initialized either to the address of a variable (such as in the case above), or to the value of another pointer (or array):<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br>3<br></code></pre></td>
+<td class="source"><pre><code><var>int</var> myvar;
+<var>int</var> *foo = &amp;myvar;
+<var>int</var> *bar = foo;</code></pre></td></tr></table></div>
+<br>

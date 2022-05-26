@@ -1,0 +1,141 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>In the previous lesson on <a href="http://www.learncpp.com/cpp-tutorial/152-basic-exception-handling/">basic exception handling</a>, we explained how throw, try, and catch work together to enable exception handling.  This lesson is dedicated to showing more examples of exception handling at work in various cases.</p>
+<p><strong>Exceptions within functions</strong></p>
+<p>In all of the examples in the previous lesson, the throw statements were placed directly within a try block.  If this were a necessity, exception handling would be of limited use.</p>
+<p>One of the most useful properties of exception handling is that the throw statements do NOT have to be placed directly inside a try block due to the way exceptions propagate when thrown.  This allows us to use exception handling in a much more modular fashion.  We&#8217;ll demonstrate this by rewriting the square root program from the previous lesson to use a modular function.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;math.h&quot; // for sqrt() function
+using namespace std;
+
+// A modular square root function
+double MySqrt(double dX)
+{
+    // If the user entered a negative number, this is an error condition
+    if (dX &lt; 0.0)
+        throw &quot;Can not take sqrt of negative number&quot;; // throw exception of type char*
+
+    return sqrt(dX);
+}
+
+int main()
+{
+    cout &lt;&lt; &quot;Enter a number: &quot;;
+    double dX;
+    cin &gt;&gt; dX;
+
+    try // Look for exceptions that occur within try block and route to attached catch block(s)
+    {
+        cout &lt;&lt; &quot;The sqrt of &quot; &lt;&lt; dX &lt;&lt; &quot; is &quot; &lt;&lt; MySqrt(dX) &lt;&lt; endl;
+    }
+    catch (char* strException) // catch exceptions of type char*
+    {
+        cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; strException &lt;&lt; endl;
+    }
+}
+</pre></td></tr></table>
+<p>In this program, we&#8217;ve taken the code that checks for an exception and calculates the square root and put it inside a modular function called MySqrt().  We&#8217;ve then called this MySqrt() function from inside a try block.  Let&#8217;s verify that it still works as expected:</p>
+<pre>
+Enter a number: -4
+Error: Can not take sqrt of negative number
+</pre>
+<p>It does!</p>
+<p>The most interesting part of this program is the MySqrt() function, which potentially raises an exception.  However, you will note that this exception is not inside of a try block!  This essentially means MySqrt is willing to say, &#8220;Hey, there&#8217;s a problem!&#8221;, but is unwilling to handle the problem itself.  It is, in essence, delegating that responsibility to its caller (the equivalent of how using a return code passes the responsibility of handling an error back to a function&#8217;s caller).</p>
+<p>Let&#8217;s revisit for a moment what happens when an exception is raised.  First, the program looks to see if the exception can be handled immediately (which means it was thrown inside a try block).  If not, it immediately terminates the current function and checks to see if the caller will handle the exception.  If not, it terminates the caller and checks the caller&#8217;s caller.  Each function is terminated in sequence until a handler for the exception is found, or until main() terminates.  This process is called <strong>unwinding the stack</strong> (see the lesson on <a href="http://www.learncpp.com/cpp-tutorial/79-the-stack-and-the-heap/">the stack and the heap</a> if you need a refresher on what the call stack is).</p>
+<p>Now, let&#8217;s take a detailed look at how that applies to this program when MySqrt(-4) is called and an exception is raised.</p>
+<p>First, the program checks to see if we&#8217;re immediately inside a try block within the function.  In this case, we are not.  Then, the stack begins to unwind.  First, MySqrt() terminates, and control returns to main().  The program now checks to see if we&#8217;re inside a try block.  We are, and there&#8217;s a char* handler, so the exception is handled by the try block within main().  To summarize, MySqrt() raised the exception, but the try/catch block in main() was the one who captured and handled the exception.</p>
+<p>At this point, some of you are probably wondering why it&#8217;s a good idea to pass errors back to the caller.  Why not just make MySqrt() handle it&#8217;s own error?  The problem is that different applications may want to handle errors in different ways.  A console application may want to print a text message.  A windows application may want to pop up an error dialog.  In one application, this may be a fatal error, and in another application it may not.  By passing the error back up the stack, each application can handle an error from MySqrt() in a way that is the most context appropriate for it!  Ultimately, this keeps MySqrt() as modular as possible, and the error handling can be placed in the less-modular parts of the code.</p>
+<p><strong>Another stack unwinding example</strong></p>
+<p>Here&#8217;s another example showing stack unwinding in practice, using a larger stack.  Although this program is long, it&#8217;s pretty simple: main() calls First(), First() calls Second(), Second() calls Third(), Third() calls Last(), and Last() throws an exception.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+using namespace std;
+
+void Last() // called by Third()
+{
+    cout &lt;&lt; &quot;Start Last&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;Last throwing int exception&quot; &lt;&lt; endl;
+    throw -1;
+    cout &lt;&lt; &quot;End Last&quot; &lt;&lt; endl;
+
+}
+
+void Third() // called by Second()
+{
+    cout &lt;&lt; &quot;Start Third&quot; &lt;&lt; endl;
+    Last();
+    cout &lt;&lt; &quot;End Third&quot; &lt;&lt; endl;
+}
+
+void Second() // called by First()
+{
+    cout &lt;&lt; &quot;Start Second&quot; &lt;&lt; endl;
+    try
+    {
+        Third();
+    }
+    catch(double)
+    {
+         cerr &lt;&lt; &quot;Second caught double exception&quot; &lt;&lt; endl;
+    }
+    cout &lt;&lt; &quot;End Second&quot; &lt;&lt; endl;
+}
+
+void First() // called by main()
+{
+    cout &lt;&lt; &quot;Start First&quot; &lt;&lt; endl;
+    try
+    {
+        Second();
+    }
+    catch (int)
+    {
+         cerr &lt;&lt; &quot;First caught int exception&quot; &lt;&lt; endl;
+    }
+    catch (double)
+    {
+         cerr &lt;&lt; &quot;First caught double exception&quot; &lt;&lt; endl;
+    }
+    cout &lt;&lt; &quot;End First&quot; &lt;&lt; endl;
+}
+
+int main()
+{
+    cout &lt;&lt; &quot;Start main&quot; &lt;&lt; endl;
+    try
+    {
+        First();
+    }
+    catch (int)
+    {
+         cerr &lt;&lt; &quot;main caught int exception&quot; &lt;&lt; endl;
+    }
+    cout &lt;&lt; &quot;End main&quot; &lt;&lt; endl;
+
+    return 0;
+}
+</pre></td></tr></table>
+<p>Take a look at this program in more detail, and see if you can figure out what gets printed and what doesn&#8217;t when it is run.  The answer follows:</p>
+<pre>
+Start main
+Start First
+Start Second
+Start Third
+Start Last
+Last throwing int exception
+First caught int exception
+End First
+End main
+</pre>
+<p>Let&#8217;s examine what happens in this case.  The printing of all the start statements is straightforward and doesn&#8217;t warrant further explanation.  Last() prints &#8220;Last throwing int exception&#8221; and then throws an int exception.  This is where things start to get interesting.</p>
+<p>Because Last() doesn&#8217;t handle the exception itself, the stack begins to unwind.  Last() terminates immediately and control returns to the caller, which is Third().</p>
+<p>Third() doesn&#8217;t handle any exceptions either, so it terminates immediately and control returns to Second().</p>
+<p>Second() has a try block, and the call to Third() is within it, so the program attempts to match the exception with an appropriate catch block.  However, there are no handlers for exceptions of type int here, so Second() terminates immediately and control returns to First().</p>
+<p>First() also has a try block, and the call to Second() is within it, so the program looks to see if there is a catch handler for int exceptions.  There is!  Consequently, First() handles the exception, and prints &#8220;First caught int exception&#8221;.</p>
+<p>Because the exception has now been handled, control continues normally at the end of the catch block within First().  This means First() prints &#8220;End First&#8221; and then terminates normally.</p>
+<p>Control returns to main().  Although main() has an exception handler for int, our exception has already been handled by First(), so the catch block within main() does not get executed.  main() simply prints &#8220;End main&#8221; and then terminates normally.</p>
+<p>There are quite a few interesting principles illustrated by this program:</p>
+<p>First, the immediate caller of a function that throws an exception doesn&#8217;t have to handle the exception if it doesn&#8217;t want to.  In this case, Third() didn&#8217;t handle the exception thrown by Last().  It delegated that responsibility to one of it&#8217;s callers up the stack.</p>
+<p>Second, if a try block doesn&#8217;t have a catch handler for the type of exception being thrown, stack unwinding occurs just as if there were no try block at all.  In this case, Second() didn&#8217;t handle the exception either because it didn&#8217;t have the right kind of catch block.</p>
+<p>Third, once an exception is handled, control flow proceeds as normal starting from the end of the catch blocks.  This was demonstrated by First() handling the error and then terminating normally.  By the time the program got back to main(), the exception had been thrown and handled already &#8212; main() had no idea there even was an exception at all!</p>
+<p>As you can see, stack unwinding provides us with some very useful behavior &#8212; if a function does not want to handle an exception, it doesn&#8217;t not have to.  The exception will propagate up the stack until it finds someone who will!  This allows us to decide where in the call stack is the most appropriate place to handle any errors that may occur.</p>
+<p>In the next lesson, we&#8217;ll take a look at what happens when you don&#8217;t capture an exception, and a method to prevent that from happening.</p>

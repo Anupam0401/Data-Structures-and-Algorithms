@@ -1,0 +1,63 @@
+
+<h3>Template specialization</h3>
+It is possible to define a different implementation for a template when a specific type is passed as template argument. This is called a <i>template specialization</i>.<br>
+<br>
+For example, let's suppose that we have a very simple class called <code>mycontainer</code> that can store one element of any type and that has just one member function called <code>increase</code>, which increases its value. But we find that when it stores an element of type <code>char</code> it would be more convenient to have a completely different implementation with a function member <code>uppercase</code>, so we decide to declare a class template specialization for that type:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br></code></pre></td>
+<td class="source"><pre><code><cite>// template specialization</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<cite>// class template:</cite>
+<var>template</var> &lt;<var>class</var> T&gt;
+<var>class</var> mycontainer {
+    T element;
+  <var>public</var>:
+    mycontainer (T arg) {element=arg;}
+    T increase () {<var>return</var> ++element;}
+};
+
+<cite>// class template specialization:</cite>
+<var>template</var> &lt;&gt;
+<var>class</var> mycontainer &lt;<var>char</var>&gt; {
+    <var>char</var> element;
+  <var>public</var>:
+    mycontainer (<var>char</var> arg) {element=arg;}
+    <var>char</var> uppercase ()
+    {
+      <var>if</var> ((element&gt;=<kbd>'a'</kbd>)&amp;&amp;(element&lt;=<kbd>'z'</kbd>))
+      element+=<kbd>'A'</kbd>-<kbd>'a'</kbd>;
+      <var>return</var> element;
+    }
+};
+
+<var>int</var> main () {
+  mycontainer&lt;<var>int</var>&gt; myint (7);
+  mycontainer&lt;<var>char</var>&gt; mychar (<kbd>'j'</kbd>);
+  cout &lt;&lt; myint.increase() &lt;&lt; endl;
+  cout &lt;&lt; mychar.uppercase() &lt;&lt; endl;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>8
+J</samp></pre></td></tr></table></div>
+<br>
+<br>
+This is the syntax used for the class template specialization:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>&nbsp;</code></pre></td>
+<td class="source"><pre><code><var>template</var> &lt;&gt; <var>class</var> mycontainer &lt;<var>char</var>&gt; { ... };</code></pre></td></tr></table></div>
+<br>
+<br>
+First of all, notice that we precede the class name with <code>template&lt;&gt;</code> , including an empty parameter list. This is because all types are known and no template arguments are required for this specialization, but still, it is the specialization of a class template, and thus it requires to be noted as such.<br>
+<br>
+But more important than this prefix, is the <code>&lt;char&gt;</code> specialization parameter after the class template name. This specialization parameter itself identifies the type for which the template class is being specialized (<code>char</code>). Notice the differences between the generic class template and the specialization:<br>
+<br>
+<div class="auto"><table class="snippet"><tr><td class="rownum"><pre><code>1<br>2<br></code></pre></td>
+<td class="source"><pre><code><var>template</var> &lt;<var>class</var> T&gt; <var>class</var> mycontainer { ... };
+<var>template</var> &lt;&gt; <var>class</var> mycontainer &lt;<var>char</var>&gt; { ... };</code></pre></td></tr></table></div>
+<br>
+<br>
+The first line is the generic template, and the second one is the specialization.<br>
+<br>
+When we declare specializations for a template class, we must also define all its members, even those identical to the generic template class, because there is no "inheritance" of members from the generic template to the specialization.<br>

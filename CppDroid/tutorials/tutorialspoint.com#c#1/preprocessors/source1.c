@@ -1,0 +1,1 @@
+#define MAX_ARRAY_LENGTH 20

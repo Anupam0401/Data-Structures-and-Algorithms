@@ -1,0 +1,177 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Pointers are one of the most powerful and confusing aspects of the C language.  A <strong>pointer</strong> is a variable that holds the address of another variable.  To declare a pointer, we use an asterisk between the data type and the variable name:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int *pnPtr; // a pointer to an integer value
+double *pdPtr; // a pointer to a double value
+
+int* pnPtr2; // also valid syntax
+int * pnPtr3; // also valid syntax
+</pre></td></tr></table>
+<p>Note that an asterisk placed between the data type and the variable name means the variable is being declared as a pointer.  In this context, the asterisk is not a multiplication.  It does not matter if the asterisk is placed next to the data type, the variable name, or in the middle &#8212; different programmers prefer different styles, and one is not inherently better than the other.</p>
+<p>Since pointers only hold addresses, when we assign a value to a pointer, the value has to be an address.  To get the address of a variable, we can use the <strong>address-of operator (&#038;)</strong>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+int *pnPtr = &amp;nValue; // assign address of nValue to pnPtr
+</pre></td></tr></table>
+<p>Conceptually, you can think of the above snippet like this:<br />
+<img src="{path}/Section6-Pointer.png"></p>
+<p>It is also easy to see using code:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+int *pnPtr = &amp;nValue; // assign address of nValue to pnPtr
+
+cout &lt;&lt; &amp;nValue &lt;&lt; endl; // print the address of variable nValue
+cout &lt;&lt; pnPtr &lt;&lt; endl; // print the address that pnPtr is holding
+</pre></td></tr></table>
+<p>On the author&#8217;s machine, this printed:</p>
+<pre>
+0012FF7C
+0012FF7C
+</pre>
+<p>The type of the pointer has to match the type of the variable being pointed to:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+double dValue = 7.0;
+
+int *pnPtr = &amp;nValue; // ok
+double *pdPtr = &amp;dValue; // ok
+pnPtr = &amp;dValue; // wrong -- int pointer can not point to double value
+pdPtr = &amp;nValue; // wrong -- double pointer can not point to int value
+</pre></td></tr></table>
+<p><strong>Dereferencing pointers</strong></p>
+<p>The other operator that is commonly used with pointers is the <strong>dereference operator (*)</strong>.  A dereferenced pointer evaluates to the <i>contents</i> of the address it is pointing to.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+cout &lt;&lt; &amp;nValue; // prints address of nValue
+cout &lt;&lt; nValue; // prints contents of nValue
+
+int *pnPtr = &amp;nValue; // pnPtr points to nValue
+cout &lt;&lt; pnPtr; // prints address held in pnPtr, which is &amp;nValue
+cout &lt;&lt; *pnPtr; // prints contents pointed to by pnPtr, which is contents of nValue
+</pre></td></tr></table>
+<p>The above program prints:</p>
+<pre>
+0012FF7C
+5
+0012FF7C
+5
+</pre>
+<p>In other words, when pnPtr is assigned to &#038;nValue:<br />
+pnPtr is the same as &#038;nValue<br />
+*pnPtr is the same as nValue</p>
+<p>Because *pnPtr is the same as nValue, you can assign values to it just as if it were nValue!  The following program prints <code>7</code>:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue = 5;
+int *pnPtr = &amp;nValue; // pnPtr points to nValue
+
+*pnPtr = 7; // *pnPtr is the same as nValue, which is assigned 7
+cout &lt;&lt; nValue; // prints 7
+</pre></td></tr></table>
+<p>Pointers can also be assigned and reassigned:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int nValue1 = 5;
+int nValue2 = 7;
+
+int *pnPtr;
+
+pnPtr = &amp;nValue1; // pnPtr points to nValue1
+cout &lt;&lt; *pnPtr; // prints 5
+
+pnPtr = &amp;nValue2; // pnPtr now points to nValue2
+cout &lt;&lt; *pnPtr; // prints 7
+</pre></td></tr></table>
+<p><strong>The null pointer</strong></p>
+<p>Sometimes it is useful to make our pointers point to nothing.  This is called a <strong>null pointer</strong>.  We assign a pointer a null value by setting it to address 0:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int *pnPtr;
+pnPtr = 0; // assign address 0 to pnPtr
+</pre></td></tr></table>
+<p>or shorthand:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int *pnPtr = 0;  // assign address 0 to pnPtr
+</pre></td></tr></table>
+<p>Note that in the last example, the * is not a dereference operator.  It is a pointer declaration.  Thus we are assigning address 0 to pnPtr, not the value 0 to the variable that pnPtr points to.</p>
+<p>C (but not C++) also defines a special preprocessor define called NULL that evaluates to 0.  Even though this is not technically part of C++, it&#8217;s usage is common enough that it will work in every C++ compiler:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int *pnPtr = NULL; // assign address 0 to pnPtr
+</pre></td></tr></table>
+<p>Because null pointers point to 0, they can be used inside conditionals:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+if (pnPtr)
+    cout &lt;&lt; &quot;pnPtr is pointing to an integer.&quot;;
+else
+    cout &lt;&lt; &quot;pnPtr is a null pointer.&quot;;
+</pre></td></tr></table>
+<p>Null pointers are mostly used with dynamic memory allocation, which we will talk about in a few lessons.</p>
+<p><strong>The size of pointers</strong></p>
+<p>The size of a pointer is dependent upon the architecture of the computer &#8212; a 32-bit computer uses 32-bit memory addresses &#8212; consequently, a pointer on a 32-bit machine is 32 bits (4 bytes).  On a 64-bit machine, a pointer would be 64 bits (8 bytes).  Note that this is true regardless of what is being pointed to:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+char *pchValue; // chars are 1 byte
+int *pnValue; // ints are usually 4 bytes
+struct Something
+{
+    int nX, nY, nZ;
+};
+Something *psValue; // Something is probably 12 bytes
+
+cout &lt;&lt; sizeof(pchValue) &lt;&lt; endl; // prints 4
+cout &lt;&lt; sizeof(pnValue) &lt;&lt; endl; // prints 4
+cout &lt;&lt; sizeof(psValue) &lt;&lt; endl; // prints 4
+</pre></td></tr></table>
+<p>As you can see, the size of the pointer is always the same.  This is because a pointer is just a memory address, and the number of bits needed to access a memory address on a given machine is always constant.</p>
+<p><strong>Quiz</strong></p>
+<p>1) What values does this program print?  Assume a short is 2 bytes, and a 32-bit machine</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+short nValue = 7; // &amp;nValue = 0012FF60
+short nOtherValue = 3; // &amp;nOtherValue = 0012FF54
+short *pnPtr = &amp;nValue;
+
+cout &lt;&lt; &amp;nValue &lt;&lt; endl;
+cout &lt;&lt; nValue &lt;&lt; endl;
+cout &lt;&lt; pnPtr &lt;&lt; endl;
+cout &lt;&lt; *pnPtr &lt;&lt; endl;
+cout &lt;&lt; endl;
+
+*pnPtr = 9;
+
+cout &lt;&lt; &amp;nValue &lt;&lt; endl;
+cout &lt;&lt; nValue &lt;&lt; endl;
+cout &lt;&lt; pnPtr &lt;&lt; endl;
+cout &lt;&lt; *pnPtr &lt;&lt; endl;
+cout &lt;&lt; endl;
+
+pnPtr = &amp;nOtherValue;
+
+cout &lt;&lt; &amp;nOtherValue &lt;&lt; endl;
+cout &lt;&lt; nOtherValue &lt;&lt; endl;
+cout &lt;&lt; pnPtr &lt;&lt; endl;
+cout &lt;&lt; *pnPtr &lt;&lt; endl;
+cout &lt;&lt; endl;
+
+cout &lt;&lt; sizeof(pnPtr) &lt;&lt; endl;
+cout &lt;&lt; sizeof(*pnPtr) &lt;&lt; endl;
+</pre></td></tr></table>
+<p><strong>Quiz solutions</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id424395661'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id424395661" style="display:none">
+<pre>
+0012FF60
+7
+0012FF60
+7
+
+0012FF60
+9
+0012FF60
+9
+
+0012FF54
+3
+0012FF54
+3
+
+4
+2
+</pre>
+<p>A short explanation about the 4 and the 2.  A 32-bit machine means that pointers will be 32 bits in length, but sizeof() always prints the size in bytes.  32 bits is 4 bytes.  Thus the sizeof(pnPtr) is 4.  Because pnPtr is a pointer to a short, *pnPtr is a short.  The size of a short in this example is 2 bytes.  Thus the sizeof(*pnPtr) is 2.
+</p></div>

@@ -1,0 +1,103 @@
+
+<h3>using</h3>
+The keyword <code>using</code> introduces a name into the current declarative region (such as a block), thus avoiding the need to qualify the name. For example:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br></code></pre></td>
+<td class="source"><pre><code><cite>// using</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>namespace</var> first
+{
+  <var>int</var> x = 5;
+  <var>int</var> y = 10;
+}
+
+<var>namespace</var> second
+{
+  <var>double</var> x = 3.1416;
+  <var>double</var> y = 2.7183;
+}
+
+<var>int</var> main () {
+  <var>using</var> first::x;
+  <var>using</var> second::y;
+  cout &lt;&lt; x &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; y &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; first::y &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; second::x &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>5
+2.7183
+10
+3.1416</samp></pre></td></tr></table></div>
+<br>
+<br>
+Notice how in <code>main</code>, the variable <code>x</code> (without any name qualifier) refers to <code>first::x</code>, whereas <code>y</code> refers to <code>second::y</code>, just as specified by the <code>using</code> declarations. The variables <code>first::y</code> and <code>second::x</code> can still be accessed, but require fully qualified names.<br>
+<br>
+The keyword <code>using</code> can also be used as a directive to introduce an entire namespace:<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br></code></pre></td>
+<td class="source"><pre><code><cite>// using</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>namespace</var> first
+{
+  <var>int</var> x = 5;
+  <var>int</var> y = 10;
+}
+
+<var>namespace</var> second
+{
+  <var>double</var> x = 3.1416;
+  <var>double</var> y = 2.7183;
+}
+
+<var>int</var> main () {
+  <var>using</var> <var>namespace</var> first;
+  cout &lt;&lt; x &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; y &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; second::x &lt;&lt; <kbd>'\n'</kbd>;
+  cout &lt;&lt; second::y &lt;&lt; <kbd>'\n'</kbd>;
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>5
+10
+3.1416
+2.7183</samp></pre></td></tr></table></div>
+<br>
+<br>
+In this case, by declaring that we were using namespace <code>first</code>, all direct uses of <code>x</code> and <code>y</code> without name qualifiers were also looked up in namespace <code>first</code>.<br>
+<br>
+<code>using</code> and <code>using namespace</code> have validity only in the same block in which they are stated or in the entire source code file if they are used directly in the global scope. For example, it would be possible to first use the objects of one namespace and then those of another one by splitting the code in different blocks:<br>
+<br>
+<div class="auto"><table class="split"><tr><td class="rownum"><pre><code>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br></code></pre></td>
+<td class="source"><pre><code><cite>// using namespace example</cite>
+<dfn>#include &lt;iostream&gt;</dfn>
+<var>using</var> <var>namespace</var> std;
+
+<var>namespace</var> first
+{
+  <var>int</var> x = 5;
+}
+
+<var>namespace</var> second
+{
+  <var>double</var> x = 3.1416;
+}
+
+<var>int</var> main () {
+  {
+    <var>using</var> <var>namespace</var> first;
+    cout &lt;&lt; x &lt;&lt; <kbd>'\n'</kbd>;
+  }
+  {
+    <var>using</var> <var>namespace</var> second;
+    cout &lt;&lt; x &lt;&lt; <kbd>'\n'</kbd>;
+  }
+  <var>return</var> 0;
+}</code></pre></td>
+<td class="output"><pre><samp>5
+3.1416</samp></pre></td></tr></table></div>
+<br>

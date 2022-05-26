@@ -1,0 +1,49 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p><strong>Typedefs</strong> allow the programmer to create an alias for a data type, and use the aliased name instead of the actual type name.  To declare a typedef, simply use the <strong>typedef</strong> keyword, followed by the type to alias, followed by the alias name:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+typedef long miles; // define miles as an alias for long
+
+// The following two statements are equivalent:
+long nDistance;
+miles nDistance;
+</pre></td></tr></table>
+<p>A typedef does not define new type, but is just another name for an existing type.  A typedef can be used anywhere a regular type can be used.</p>
+<p>Typedefs are used mainly for documentation and legibility purposes.  Data type names such as char, int, long, double, and bool are good for describing what type of variable something is, but more often we want to know what purpose a variable serves.  In the above example, <code>long nDistance</code> does not give us any clue what units nDistance is holding.  Is it inches, feet, miles, meters, or some other unit?  <code>miles nDistance</code> makes it clear what the unit of nDistance is.</p>
+<p>This is also true of function return types.  Which of the following is easier to decipher?</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+typedef int testScore;
+
+int GradeTest();
+testScore GradeTest();
+</pre></td></tr></table>
+<p>What is the first GradeTest() returning?  A grade?  The number of questions missed?  The student&#8217;s ID number?  An error code?  Who knows!  Int does not tell us anything.  Using a return type of testScore makes it obvious that the function is returning a type that represents a test score.</p>
+<p>Furthermore, typedefs allow you to change the underlying type of an object without having to change lots of code.  For example, if you were using a short to hold a student&#8217;s ID number, but then decided you needed a long instead, you&#8217;d have to comb through lots of code and replace short with long.  It would probably be difficult to figure out which shorts were being used to hold ID numbers and which were being used for other purposes.</p>
+<p>However, with a typedef, all you have to do is change <code>typedef short studentID</code> to <code>typedef long studentID</code> and you&#8217;re done.  Precaution is mandatory when changing the type of a typedef!  The new type may have comparison or integer/floating point division issues that the old type did not.</p>
+<p>Note that typedefs don&#8217;t mix particularly well with Hungarian Notation, and allow you to skirt some of the issues that using Hungarian Notation tries to prevent (such as being able to change a variable&#8217;s type without having to examine the code for areas where changing the type will be problematic).</p>
+<p>Because typedefs do not define new types, they can be intermixed like normal data types.  Even though the following does not make sense conceptually, syntactically it is valid C++:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+typedef long miles;
+typedef long speed;
+
+miles nDistance = 5;
+speed nMhz = 3200;
+
+// The following is okay, because nDistance and nMhz are both type long
+nDistance = nMhz;
+</pre></td></tr></table>
+<p><strong>Platform independent coding</strong></p>
+<p>One big advantage of typedefs is that they can be used to hide platform specific details.  On some platforms, an integer is 2 bytes, and on others, it is 4.  Thus, using int to store more than 2 bytes of information can be potentially dangerous when writing platform independent code.</p>
+<p>Because char, short, int, and long give no indication of their size, it is fairly common for cross-platform programs to use typedefs to define aliases that include the type&#8217;s size in bits.  For example, int8 would be an 8-bit integer, int16 a 16-bit integer, and int32 a 32-bit integer.  Using typedef names in this manner helps prevent mistakes and makes it more clear about what kind of assumptions have been made about the size of the variable.</p>
+<p>In order to make sure each typedef type resolves to a type of the right size, typedefs of this kind are typically used in conjunction with the preprocessor:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#ifdef INT_2_BYTES
+typedef char int8;
+typedef int int16;
+typedef long int32;
+#else
+typedef char int8;
+typedef short int16;
+typedef int int32;
+#endif
+</pre></td></tr></table>
+<p>On machines where integers are only 2 bytes, INT_2_BYTES can be #defined, and the program will be compiled with the top set of typedefs.  On machines where integers are 4 bytes, leaving INT_2_BYTES undefined will cause the bottom set of typedefs to be used.  In this way, int8 will resolve to a 1 byte integer, int16 will resolve to a 2 bytes integer, and int32 will resolve to a 4 byte integer using the combination of char, short, int, and long that is appropriate for the machine the program is being compiled on.</p>

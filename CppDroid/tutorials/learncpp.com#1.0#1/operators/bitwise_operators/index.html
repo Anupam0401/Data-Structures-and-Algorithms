@@ -1,0 +1,197 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Bit manipulation operators manipulate individual bits within a variable.</p>
+<p><strong>Why bother with bitwise operators?</strong></p>
+<p>In the past, memory was extremely expensive, and computers did not have much of it.  Consequently, there were incentives to make use of every bit of memory available.  Consider the bool data type &#8212; even though it only has two possible values (true and false), which can be represented by a single bit, it takes up an entire byte of memory!  This is because variables need unique addresses, and memory can only be addressed in bytes.  The bool uses 1 bit and the other 7 go to waste.</p>
+<p>Using bitwise operators, it is possible to write functions that allow us to compact 8 booleans into a single byte-sized variable, enabling significant memory savings at the expense of more complex code.  In the past, this was a good trade-off.  Today, it is not.</p>
+<p>Now memory is significantly cheaper, and programmers have found that it is often a better idea to code what is easiest to understand and maintain than what is most efficient.  Consequently, bitwise operators have somewhat fallen out of favor, except in certain circumstances where maximum optimization is needed (eg. scientific programs that use enormous data sets, or games where bit manipulation tricks can be used for extra speed).  Nevertheless, it is good to at least know about their existence.</p>
+<p>There are 6 bit manipulation operators:</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>left shift</td>
+<td>&lt;&lt;</td>
+<td>x &lt;&lt; y</td>
+<td>all bits in x shifted left y bits</td>
+</tr>
+<tr>
+<td>right shift</td>
+<td>&gt;&gt;</td>
+<td>x &gt;&gt; y</td>
+<td>all bits in x shifted right y bits</td>
+</tr>
+<tr>
+<td>bitwise NOT</td>
+<td>~</td>
+<td>~x</td>
+<td>all bits in x flipped</td>
+</tr>
+<tr>
+<td>bitwise AND</td>
+<td>&#038;</td>
+<td>x &#038; y</td>
+<td>each bit in x AND each bit in y</td>
+</tr>
+<tr>
+<td>bitwise OR</td>
+<td>|</td>
+<td>x | y</td>
+<td>each bit in x OR each bit in y</td>
+</tr>
+<tr>
+<td>bitwise XOR</td>
+<td>^</td>
+<td>x ^ y</td>
+<td>each bit in x XOR each bit in y</td>
+</tr>
+</table>
+<p>Note: In the following examples, we will largely be working with 4-bit binary values.  This is for the sake of convenience and keeping the examples simple.  In C++, the number of bits used will be based on the size of the data type (8 bits per byte).</p>
+<p><strong>Left shift and right shift operator</strong></p>
+<p>The bitwise left shift (<<) shifts operator bits to the left.  For example, consider the number 3, which is binary 0011.  Left shifting by 1 (3 << 1) changes 0011 to 0110, which is decimal 6.  Note how each bit moved 1 place to the left.  Left shifting by 2 (3 << 2) changes 0011 to 1100, which is decimal 12.  Left shifting by 3 (3 << 3) changes 0011 to 1000.  Note that we shifted a bit off the end of the number!  Bits that are shifted off the end of the binary number are lost.</p>
+<p>The bitwise right shift (>>) operator shifts bits to the right.  Right shifting by 1 (3 >> 1) changes 0011 to 0001, or decimal 1.  The rightmost bit shifted off the end and was lost!</p>
+<p>Although our examples above are shifting literals, you can shift variables as well:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+unsigned int nValue = 4;
+nValue = nValue &lt;&lt; 1; // nValue will be 8
+</pre></td></tr></table>
+<p><em>Rule: When dealing with bit operators, use unsigned variables.</em></p>
+<p>Programs today typically do not make much use of the bitwise left and right shift operator in this capacity.  Rather, you tend to see the bitwise left shift operator used with cout in a way that doesn&#8217;t involve shifting bits at all!  If << is a bitwise left shift operator, then how does <code>cout &lt;&lt; &quot;Hello, world!&quot;;</code> print to the screen?  The answer is that cout has <strong>overridden</strong> (replaced) the default meaning of the << operator and given it a new meaning.  We will talk more about operator overloading in a future section!</p>
+<p><strong>Bitwise NOT</strong></p>
+<p>The bitwise NOT operator (~) is perhaps the easiest to understand of all the bitwise operators.  It simply flips each bit from a 0 to a 1, or vice versa.  Note that the result of a bitwise NOT is dependent on what size your data type is!  For example, with 4 bits, ~4 (0100 binary) evaluates to 1011, which is 11 in decimal.  In an 8 bit data type (such as an unsigned char), ~4 (represented as ~0000 0100) evaluates to 1111 1011, which is 251 in decimal!</p>
+<p><strong>Bitwise AND, OR, and XOR</strong></p>
+<p>Bitwise AND (&#038;) and bitwise OR (|) work similarly to their logical AND and logical OR counterparts.  However, rather than evaluating a single boolean value, they are applied to each bit!  For example, consider the expression <code>5 | 6</code>.  In binary, this is represented as 0101 | 0110.  To do (any) bitwise operations, it is easiest to line the two operands up like this:</p>
+<pre>
+0 1 0 1 // 5
+0 1 1 0 // 6
+</pre>
+<p>and then apply the operation to each <em>column</em> of bits.  If you remember, logical OR evaluates to true (1) if either the left or the right or both operands are true (1).  Bitwise OR evaluates to 1 if either bit (or both) is 1.  Consequently, 5 | 6 evaluates like this:</p>
+<pre>
+0 1 0 1 // 5
+0 1 1 0 // 6
+-------
+0 1 1 1 // 7
+</pre>
+<p>Our result is 0111 binary (7 decimal).</p>
+<p>We can do the same thing to compound OR expressions, such as <code>1 | 4 | 6</code>.  If any of the bits in a column are 1, the result of that column is 1.</p>
+<pre>
+0 0 0 1 // 1
+0 1 0 0 // 4
+0 1 1 0 // 6
+--------
+0 1 1 1 // 7
+</pre>
+<p>1 | 4 | 6 evaluates to 7.</p>
+<p>Bitwise AND works similarly.  Logical AND evaluates to true if both the left and right operand evaluate to true.  Bitwise AND evaluates to true if both bits in the column are 1)  Consider the expression <code>5 &amp; 6</code>.  Lining each of the bits up and applying an AND operation to each column of bits:</p>
+<pre>
+0 1 0 1 // 5
+0 1 1 0 // 6
+--------
+0 1 0 0 // 4
+</pre>
+<p>Similarly, we can do the same thing to compound AND expressions, such as <code>1 &amp; 3 &amp; 7</code>.  If all of the bits in a column are 1, the result of that column is 1.</p>
+<pre>
+0 0 0 1 // 1
+0 0 1 1 // 3
+0 1 1 1 // 7
+--------
+0 0 0 1 // 1
+</pre>
+<p>The last operator is the bitwise XOR (^), also known as <em>exclusive or</em>. When evaluating two operands, XOR evaluates to true (1) if one <em>and only one</em> of it's operands is true (1).  If neither or both are true, it evaluates to 0.  Consider the expression <code>6 ^ 3</code>:</p>
+<pre>
+0 1 1 0 // 6
+0 0 1 1 // 3
+-------
+0 1 0 1 // 5
+</pre>
+<p>It is also possible to evaluate compound XOR expression column style, such as <code>1 ^ 3 ^ 7</code>.  If there are an even number of 1 bits in a column, the result is 0.  If there are an odd number of 1 bits in a column, the result is 1.</p>
+<pre>
+0 0 0 1 // 1
+0 0 1 1 // 3
+0 1 1 1 // 7
+--------
+0 1 0 1 // 5
+</pre>
+<p><strong>Bitwise assignment operators</strong></p>
+<p>As with the arithmetic assignment operators, C++ provides bitwise assignment operators in order to facilitate easy modification of variables.</p>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<th>Operator</th>
+<th>Symbol</th>
+<th>Form</th>
+<th>Operation</th>
+</tr>
+<tr>
+<td>Left shift assignment</td>
+<td>&lt;&lt;=</td>
+<td>x <<= y</td>
+<td>Shift x left by y bits</td>
+</tr>
+<tr>
+<td>Right shift assignment</td>
+<td>&gt;&gt;=</td>
+<td>x >>= y</td>
+<td>Shift x right by y bits</td>
+</tr>
+<tr>
+<td>Bitwise OR assignment</td>
+<td>|=</td>
+<td>x |= y</td>
+<td>Assign x | y to x</td>
+</tr>
+<tr>
+<td>Bitwise AND assignment</td>
+<td>&#038;=</td>
+<td>x &#038;= y</td>
+<td>Assign x &#038; y to x</td>
+</tr>
+<tr>
+<td>Bitwise XOR assignment</td>
+<td>^=</td>
+<td>x ^= y</td>
+<td>Assign x ^ y to x</td>
+</tr>
+</table>
+<p>For example, instead of writing <code>nValue = nValue &lt;&lt; 1;</code>, you can write <code>nValue &lt;&lt;= 1;</code>.</p>
+<p><strong>Summary</strong></p>
+<p>Summarizing how to evaluate bitwise operations utilizing the column method:</p>
+<p>When evaluating bitwise OR, if any bit in a column is 1, the result for that column is 1.<br />
+When evaluating bitwise AND, if all bits in a column are 1, the result for that column is 1.<br />
+When evaluating bitwise XOR, if there are an odd number of 1 bits in a column, the result for that column is 1.</p>
+<p><strong>Quiz</strong></p>
+<p>1) What does 0110 >> 2 evaluate to in binary?<br />
+2) What does 5 | 6 evaluate to in decimal?<br />
+3) What does 5 &#038; 6 evaluate to in decimal?<br />
+4) What does 5 ^ 6 evaluate to in decimal?</p>
+<p><strong>Quiz answers</strong></p>
+<p>1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1276103486'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1276103486" style="display:none">
+0110 >> 2 evaluates to 0001
+</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1055084506'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1055084506" style="display:none">
+5 | 6 =<br />
+0 1 0 1<br />
+0 1 1 0<br />
+--------<br />
+0 1 1 1 = 7
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1158273326'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1158273326" style="display:none">
+5 &#038; 6 =<br />
+0 1 0 1<br />
+0 1 1 0<br />
+--------<br />
+0 1 0 0 = 4
+</div>
+<p>4) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id619931718'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id619931718" style="display:none">
+5 ^ 6 =<br />
+0 1 0 1<br />
+0 1 1 0<br />
+--------<br />
+0 0 1 1 = 3
+</div>

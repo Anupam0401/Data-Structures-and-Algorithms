@@ -1,0 +1,193 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>Take a look at this seemingly innocent sample program called add.cpp:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y)
+{
+    return x + y;
+}
+</pre></td></tr></table>
+<p>You would expect this program to produce the result:</p>
+<pre>The sum of 3 and 4 is: 7</pre>
+<p>But in fact, it doesn&#8217;t compile at all!  Visual Studio 2005 Express produces the following compile errors:</p>
+<pre>
+add.cpp(10) : error C3861: &#039;add&#039;: identifier not found
+add.cpp(15) : error C2365: &#039;add&#039; : redefinition; previous definition was &#039;formerly unknown identifier&#039;
+</pre>
+<p>The reason this program doesn&#8217;t compile is because the compiler reads files sequentially.  When it reaches the function call to add() inside of main(), it doesn&#8217;t know what add is, because we haven&#8217;t defined add() until later!  That produces the error on line 10.  Then when it gets to the actual declaration of add(), it complains about add being redefined (which seems slightly misleading, given that it wasn&#8217;t ever defined in the first place).  Often times, a single error in your code will end up producing multiple warnings.</p>
+<p><em>Rule: When addressing compile errors in your programs, always resolve the first error produced first.</em></p>
+<p>In this case, that means we need to address the fact that the compiler doesn&#8217;t know what add is.  There are three ways to fix this problem.</p>
+<p>The first way is to reorder our function calls so add is defined before main:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int add(int x, int y)
+{
+    return x + y;
+}
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>That way, by the time main() calls add(), it will already know what add is.  Because this is such a simple program, this change is relatively easy to do.  However, in a large program, it would be extremely tedious trying to decipher which functions called which other functions so they could be declared in the correct order.</p>
+<p>Furthermore, this option is not always available.  Let&#8217;s say we&#8217;re writing a program that has two functions A and B.  If function A calls function B, and function B calls function A, then there&#8217;s no way to order the functions in a way that they will both be happy.  If you define A first, the compiler will complain it doesn&#8217;t know what B is.  If you define B first, the compiler will complain that it doesn&#8217;t know what A is.  </p>
+<p>Consequently, a better solution is to use a forward declaration.  In a <strong>forward declaration</strong>, we declare (but do not define) our function in advance of where we use it, typically at the top of the file.  This way, the compiler will understand what our function looks like when it encounters a call to it later.  We do this by writing a declaration statement known as a function prototype.  A <strong>function prototype</strong> is a declaration of a function that includes the function&#8217;s name, parameters, and return type, but does not implement the function.</p>
+<p>Here&#8217;s our original program with a forward declaration:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+
+int add(int x, int y); // forward declaration of add() using a function prototype
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y)
+{
+    return x + y;
+}
+</pre></td></tr></table>
+<p>Now when the compiler reaches add() in main, it will know what add looks like (a function that takes two integer parameters and returns an integer), and it won&#8217;t complain.</p>
+<p>It is worth noting that function prototypes do not need to specify the names of the parameters.  In the above code, you could also forward declare your function like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int add(int, int);
+</pre></td></tr></table>
+<p>However, we prefer the method where the parameters are named because it&#8217;s more descriptive to a human reader.</p>
+<p>One question many new programmers have is: what happens if we forward declare a function but do not define it?</p>
+<p>The answer is: it depends.  If a forward declaration is made, but the function is never called, the program will compile and run fine.  However, if a forward declaration is made, the function is called, but the program never defines the function, the program will compile okay, but the linker will complain that it can&#8217;t resolve the function call.  Consider the following program:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &quot;stdafx.h&quot;
+#include &lt;iostream&gt;
+
+int add(int x, int y);
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;The sum of 3 and 4 is: &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+</pre></td></tr></table>
+<p>In this program, we forward declare add(), and we call add(), but we never define add().  When we try and compile this program, Visual Studio 2005 Express produces the following message:</p>
+<pre>
+Compiling...
+add.cpp
+Linking...
+add.obj : error LNK2001: unresolved external symbol &quot;int __cdecl add(int,int)&quot; (?add@@YAHHH@Z)
+add.exe : fatal error LNK1120: 1 unresolved externals
+</pre>
+<p>As you can see, the program compiled okay, but it failed at the link stage because int add(int, int) was never defined.</p>
+<p>The third solution is to use a header file, which we will discuss shortly.</p>
+<p><strong>Quiz</strong></p>
+<p>1) What&#8217;s the difference between a function prototype and a forward declaration?</p>
+<p>2) Write the function prototype for this function:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int DoMath(int first, int second, int third, int fourth)
+{
+     return first + second * third / fourth;
+}
+</pre></td></tr></table>
+<p>For each of the following programs, state whether they fail to compile, fail to link, or compile and link.  If you are not sure, try compiling them!</p>
+<p>3)</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int add(int x, int y);
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;3 + 4 + 5 = &quot; &lt;&lt; add(3, 4, 5) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y)
+{
+    return x + y;
+}
+</pre></td></tr></table>
+<p>4)</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int add(int x, int y);
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;3 + 4 + 5 = &quot; &lt;&lt; add(3, 4, 5) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y, int z)
+{
+    return x + y + z;
+}
+</pre></td></tr></table>
+<p>5)</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int add(int x, int y);
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;3 + 4 + 5 = &quot; &lt;&lt; add(3, 4) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y, int z)
+{
+    return x + y + z;
+}
+</pre></td></tr></table>
+<p>6)</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+int add(int x, int y, int z);
+
+int main()
+{
+    using namespace std;
+    cout &lt;&lt; &quot;3 + 4 + 5 = &quot; &lt;&lt; add(3, 4, 5) &lt;&lt; endl;
+    return 0;
+}
+
+int add(int x, int y, int z)
+{
+    return x + y + z;
+}
+</pre></td></tr></table>
+<p><strong>Quiz Answers</strong><br />
+1) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1860316771'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1860316771" style="display:none">A function prototype is declaration statement that tells the compiler what a function&#8217;s return type is, what the name of the function is, and what the types of it&#8217;s parameters are.  A function prototype can be used to forward declare a function.  A forward declaration is when something (such as a function or class) is declared in advance of where it is implemented.</div>
+<p>2) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1407752164'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1407752164" style="display:none">
+<pre>
+// Either of these is correct.
+// Do not forget the semicolon on the end, since these are statements.
+int DoMath(int first, int second, int third, int fourth);
+int DoMath(int, int, int, int);
+</pre>
+</div>
+<p>3) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id854345626'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id854345626" style="display:none">Doesn&#8217;t compile.  The compiler will complain that the add() called in main() does not have the same number of parameters as the one that was forward declared.</div>
+<p>4) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id637322960'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id637322960" style="display:none">Doesn&#8217;t compile.  The compiler will complain that the add() called in main() does not have the same number of parameters as the one that was forward declared. </div>
+<p>5) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id1347402241'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id1347402241" style="display:none">Doesn&#8217;t link.  The compiler will match the forward declared prototype of add to the function call to add() in main().  However, no add() function that takes two parameters was ever implemented (we only implemented one that took 3 parameters), so the linker will complain.</div>
+<p>6) <a class="solution_link_show" href="javascript:void(0)" onclick="wpSolutionToggle(document.getElementById('id855081642'), this, 'Show Solution', 'Hide Solution')">Show Solution</a></p>
+<div class="solution_div" id="id855081642" style="display:none">Compiles and links.  The function call to add() matches the prototype that was forward declared, the the implemented function also matches.</div>

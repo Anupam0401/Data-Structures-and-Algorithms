@@ -1,0 +1,111 @@
+<div style='float:left;padding:8px 8px 8px 0px;'>
+</div><p>One of the big questions that new programmers often ask is, &#8220;When a member function is called, how does C++ know which object it was called on?&#8221;.  The answer is that C++ utilizes a hidden pointer named &#8220;this&#8221;!  Let&#8217;s take a look at &#8220;this&#8221; in more detail.</p>
+<p>The following is a simple class that holds an integer and provides a constructor and access functions.  Note that no destructor is needed because C++ can clean up integers for us.</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Simple
+{
+private:
+    int m_nID;
+
+public:
+    Simple(int nID)
+    {
+        SetID(nID);
+    }
+
+    void SetID(int nID) { m_nID = nID; }
+    int GetID() { return m_nID; }
+};
+</pre></td></tr></table>
+<p>Here&#8217;s a sample program that uses this class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+int main()
+{
+    Simple cSimple(1);
+    cSimple.SetID(2);
+    std::cout &lt;&lt; cSimple.GetID() &lt;&lt; std::endl;
+}
+</pre></td></tr></table>
+<p>Let&#8217;s take a closer look at the following line: <code>cSimple.SetID(2);</code>.  Although it looks like this function only has one parameter, it actually has two!  When you call <code>cSimple.SetID(2);</code>, C++ internally converts this to <code>SetID(&amp;cSimple, 2);</code>.  Note that this is just a normal function call where C++ has added a parameter, and automatically passed in the address of the class object!  </p>
+<p>Since C++ converts the function call, it also needs to convert the function itself.  It does so like this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    void SetID(int nID) { m_nID = nID; }
+</pre></td></tr></table>
+<p>becomes:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+    void SetID(Simple* const this, int nID) { this-&gt;m_nID = nID; }
+</pre></td></tr></table>
+<p>C++ has added a new parameter to the function.  The added parameter is a pointer to the class object the class function is working with, and it is always named &#8220;this&#8221;.  The <strong>this pointer</strong> is a hidden pointer inside every class member function that points to the class object the member function is working with.</p>
+<p>Note that <code>m_nID</code> (which is a class member variable) has been converted to <code>this-&gt;m_nID</code>.  Since &#8220;this&#8221; is currently pointing to cSimple, this actually resolves to cSimple->m_nID, which is exactly what we wanted!</p>
+<p>Most of the time, you never need to explicitly reference the &#8220;this&#8221; pointer.  However, there are a few occasions where it can be useful:</p>
+<p>1) If you have a constructor (or member function) that has a parameter of the same name as a member variable, you can disambiguate them by using &#8220;this&#8221;:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Something
+{
+private:
+    int nData;
+
+public:
+    Something(int nData)
+    {
+        this-&gt;nData = nData;
+    }
+};
+</pre></td></tr></table>
+<p>Note that our constructor is taking a parameter of the same name as a member variable.  In this case, &#8220;nData&#8221; refers to the parameter, and &#8220;this->nData&#8221; refers to the member variable.  Although this is acceptable coding practice, we find using the &#8220;m_&#8221; prefix on all member variable names provides a better solution by preventing duplicate names altogether!</p>
+<p>2) Occasionally it can be useful to have a function return the object it was working with.  Returning *this will return a reference to the object that was implicitly passed to the function by C++.</p>
+<p>One use for this feature is that it allows a series of functions to be &#8220;chained&#8221; together, so that the output of one function becomes the input of another function!  The following is somewhat more advanced and can be considered optional material at this point.</p>
+<p>Consider the following class:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Calc
+{
+private:
+    int m_nValue;
+
+public:
+    Calc() { m_nValue = 0; }
+
+    void Add(int nValue) { m_nValue += nValue; }
+    void Sub(int nValue) { m_nValue -= nValue; }
+    void Mult(int nValue) { m_nValue *= nValue; }
+
+    int GetValue() { return m_nValue; }
+};
+</pre></td></tr></table>
+<p>If you wanted to add 5, subtract 3, and multiply by 4, you&#8217;d have to do this:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Calc cCalc;
+cCalc.Add(5);
+cCalc.Sub(3);
+cCalc.Mult(4);
+</pre></td></tr></table>
+<p>However, if we make each function return *this, we can chain the calls together.  Here is the new version of Calc with &#8220;chainable&#8221; functions:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+class Calc
+{
+private:
+    int m_nValue;
+
+public:
+    Calc() { m_nValue = 0; }
+
+    Calc&amp; Add(int nValue) { m_nValue += nValue; return *this; }
+    Calc&amp; Sub(int nValue) { m_nValue -= nValue; return *this; }
+    Calc&amp; Mult(int nValue) { m_nValue *= nValue; return *this; }
+
+    int GetValue() { return m_nValue; }
+};
+</pre></td></tr></table>
+<p>Note that Add(), Sub() and Mult() are now returning *this, which is a reference to the class itself.  Consequently, this allows us to do the following:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+Calc cCalc;
+cCalc.Add(5).Sub(3).Mult(4);
+</pre></td></tr></table>
+<p>We have effectively condensed three lines into one expression!  Let&#8217;s take a closer look at how this works.</p>
+<p>First, cCalc.Add(5) is called, which adds 5 to our m_nValue.  Add() then returns *this, which is a reference to cCalc.  Our expression is now cCalc.Sub(3).Mult(4).  cCalc.Sub(3) subtracts 3 from m_nValue and returns cCalc.  Our expression is now cCalc.Mult(4).  cCalc.Mult(4) multiplies m_nValue by 4 and returns cCalc, which is then ignored.  However, since each function modified cCalc as it was executed, cCalc now contains the value ((0 + 5) &#8211; 3) * 4), which is 8.</p>
+<p>Although this is a pretty contrived example, chaining functions in such a manner is common with String classes.  For example, it is possible to overload the + operator to do a string append.  If the + operator returns *this, then it becomes possible to write expressions like:</p>
+<table><tr><td class="source"><pre class="brush: cpp; title: ; notranslate" title="">
+cMyString = &quot;Hello &quot; + strMyName + &quot; welcome to &quot; + strProgramName + &quot;.&quot;;
+</pre></td></tr></table>
+<p>And it is pretty easy to see the benefit in being able to do that!  We will cover overloading the + operator (and other operators) in a future lesson.</p>
+<p>The important point to take away from this lesson is that the &#8220;this&#8221; pointer is a hidden parameter of any member function.  Most of the time, you will not need to access it directly.  It&#8217;s worth noting that &#8220;this&#8221; is a const pointer &#8212; you can change the value of the object it points to, but you can not make it point to something else!</p>
