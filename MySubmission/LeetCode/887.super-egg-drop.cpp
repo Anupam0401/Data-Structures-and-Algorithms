@@ -18,6 +18,7 @@ class Solution
 public:
     int superEggDrop(int K, int N)
     {
+        // O(n^2.k)
         // vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
         // int ans = INT_MAX, i, j;
         // for (i = 1; i <= n; i++)
