@@ -1,40 +1,70 @@
-// You have a chat log of n messages. You are given two string arrays messages and senders where messages[i] is a message sent by senders[i].
+// A concert hall has n rows numbered from 0 to n - 1, each with m seats, numbered from 0 to m - 1. You need to design a ticketing system that can allocate seats in the following cases:
 
-// A message is list of words that are separated by a single space with no leading or trailing spaces. The word count of a sender is the total number of words sent by the sender. Note that a sender may send more than one message.
+// If a group of k spectators can sit together in a row.
+// If every member of a group of k spectators can get a seat. They may or may not sit together.
+// Note that the spectators are very picky. Hence:
 
-// Return the sender with the largest word count. If there is more than one sender with the largest word count, return the one with the lexicographically largest name.
+// They will book seats only if each member of their group can get a seat with row number less than or equal to maxRow. maxRow can vary from group to group.
+// In case there are multiple rows to choose from, the row with the smallest number is chosen. If there are multiple seats to choose in the same row, the seat with the smallest number is chosen.
+// Implement the BookMyShow class:
 
-// Note:
+// BookMyShow(int n, int m) Initializes the object with n as number of rows and m as number of seats per row.
+// int[] gather(int k, int maxRow) Returns an array of length 2 denoting the row and seat number (respectively) of the first seat being allocated to the k members of the group, who must sit together. In other words, it returns the smallest possible r and c such that all [c, c + k - 1] seats are valid and empty in row r, and r <= maxRow. Returns [] in case it is not possible to allocate seats to the group.
+// boolean scatter(int k, int maxRow) Returns true if all k members of the group can be allocated seats in rows 0 to maxRow, who may or may not sit together. If the seats can be allocated, it allocates k seats to the group with the smallest row numbers, and the smallest possible seat numbers in each row. Otherwise, returns false
 
-// - Uppercase letters come before lowercase letters in lexicographical order.
-// - "Alice" and "alice" are distinct.
-
-
-class Solution {
+class BookMyShow {
 public:
-    int wordSize(string sentence){
-        //find the number of words in the sentence
-        int count = 0;
-        for(int i = 0; i < sentence.size(); i++){
-            if(sentence[i] == ' '){
-                count++;
-            }
-        }
-        return count + 1;
+    
+    BookMyShow(int n, int m) {
+        this->n = n;
+        this->m = m;
     }
-    string largestWordCount(vector<string>& messages, vector<string>& senders) {
-        unordered_map<string, int> m;
-        for (int i = 0; i < messages.size(); ++i) {
-            m[senders[i]] += wordSize(messages[i]);
-        }
-        string res;
-        int max_cnt = 0;
-        for (auto& p : m) {
-            if (p.second > max_cnt || (p.second == max_cnt && p.first > res)) {
-                max_cnt = p.second;
-                res = p.first;
+    
+    vector<int> gather(int k, int maxRow) {
+        vector<int> ans;
+        if (k > n * m)
+            return ans;
+        int i = 0, j = 0;
+        while (i < n)
+        {
+            if (j + k - 1 <= m)
+            {
+                ans.push_back(i);
+                ans.push_back(j);
+                j += k;
+            }
+            else
+            {
+                i++;
+                j = 0;
             }
         }
-        return res;
+        return ans;
+    }
+    
+    bool scatter(int k, int maxRow) {
+        if (k > n * m)
+            return false;
+        int i = 0, j = 0;
+        while (i < n)
+        {
+            if (j + k - 1 <= m)
+            {
+                j += k;
+            }
+            else
+            {
+                i++;
+                j = 0;
+            }
+        }
+        return true;
     }
 };
+
+/**
+ * Your BookMyShow object will be instantiated and called as such:
+ * BookMyShow* obj = new BookMyShow(n, m);
+ * vector<int> param_1 = obj->gather(k,maxRow);
+ * bool param_2 = obj->scatter(k,maxRow);
+ */
