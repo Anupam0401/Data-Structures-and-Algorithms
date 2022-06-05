@@ -1,70 +1,29 @@
-// A concert hall has n rows numbered from 0 to n - 1, each with m seats, numbered from 0 to m - 1. You need to design a ticketing system that can allocate seats in the following cases:
+// You are given a 0-indexed integer array nums whose length is a power of 2.
 
-// If a group of k spectators can sit together in a row.
-// If every member of a group of k spectators can get a seat. They may or may not sit together.
-// Note that the spectators are very picky. Hence:
+// Apply the following algorithm on nums:
 
-// They will book seats only if each member of their group can get a seat with row number less than or equal to maxRow. maxRow can vary from group to group.
-// In case there are multiple rows to choose from, the row with the smallest number is chosen. If there are multiple seats to choose in the same row, the seat with the smallest number is chosen.
-// Implement the BookMyShow class:
+// Let n be the length of nums. If n == 1, end the process. Otherwise, create a new 0-indexed integer array newNums of length n / 2.
+// For every even index i where 0 <= i < n / 2, assign the value of newNums[i] as min(nums[2 * i], nums[2 * i + 1]).
+// For every odd index i where 0 <= i < n / 2, assign the value of newNums[i] as max(nums[2 * i], nums[2 * i + 1]).
+// Replace the array nums with newNums.
+// Repeat the entire process starting from step 1.
+// Return the last number that remains in nums after applying the algorithm.
 
-// BookMyShow(int n, int m) Initializes the object with n as number of rows and m as number of seats per row.
-// int[] gather(int k, int maxRow) Returns an array of length 2 denoting the row and seat number (respectively) of the first seat being allocated to the k members of the group, who must sit together. In other words, it returns the smallest possible r and c such that all [c, c + k - 1] seats are valid and empty in row r, and r <= maxRow. Returns [] in case it is not possible to allocate seats to the group.
-// boolean scatter(int k, int maxRow) Returns true if all k members of the group can be allocated seats in rows 0 to maxRow, who may or may not sit together. If the seats can be allocated, it allocates k seats to the group with the smallest row numbers, and the smallest possible seat numbers in each row. Otherwise, returns false
-
-class BookMyShow {
+class Solution {
 public:
-    
-    BookMyShow(int n, int m) {
-        this->n = n;
-        this->m = m;
-    }
-    
-    vector<int> gather(int k, int maxRow) {
-        vector<int> ans;
-        if (k > n * m)
-            return ans;
-        int i = 0, j = 0;
-        while (i < n)
-        {
-            if (j + k - 1 <= m)
-            {
-                ans.push_back(i);
-                ans.push_back(j);
-                j += k;
+    int minMaxGame(vector<int>& nums) {
+        int n = nums.size();
+        if(n==1) return nums[0];
+        vector<int> newNums(n/2);
+        // For every even index i where 0 <= i < n / 2, assign the value of newNums[i] as min(nums[2 * i], nums[2 * i + 1]).
+        for(int i=0;i<n/2;i++){
+            if(i%2==0){
+                newNums[i] = min(nums[2*i],nums[2*i+1]);
             }
-            else
-            {
-                i++;
-                j = 0;
+            else{
+                newNums[i] = max(nums[2*i],nums[2*i+1]);
             }
         }
-        return ans;
-    }
-    
-    bool scatter(int k, int maxRow) {
-        if (k > n * m)
-            return false;
-        int i = 0, j = 0;
-        while (i < n)
-        {
-            if (j + k - 1 <= m)
-            {
-                j += k;
-            }
-            else
-            {
-                i++;
-                j = 0;
-            }
-        }
-        return true;
+        return minMaxGame(newNums);
     }
 };
-
-/**
- * Your BookMyShow object will be instantiated and called as such:
- * BookMyShow* obj = new BookMyShow(n, m);
- * vector<int> param_1 = obj->gather(k,maxRow);
- * bool param_2 = obj->scatter(k,maxRow);
- */
