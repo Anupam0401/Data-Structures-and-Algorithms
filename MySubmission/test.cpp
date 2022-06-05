@@ -1,29 +1,59 @@
-// You are given a 0-indexed integer array nums whose length is a power of 2.
+// Design a text editor with a cursor that can do the following:
 
-// Apply the following algorithm on nums:
+// Add text to where the cursor is.
+// Delete text from where the cursor is (simulating the backspace key).
+// Move the cursor either left or right.
+// When deleting text, only characters to the left of the cursor will be deleted. The cursor will also remain within the actual text and cannot be moved beyond it. More formally, we have that 0 <= cursor.position <= currentText.length always holds.
 
-// Let n be the length of nums. If n == 1, end the process. Otherwise, create a new 0-indexed integer array newNums of length n / 2.
-// For every even index i where 0 <= i < n / 2, assign the value of newNums[i] as min(nums[2 * i], nums[2 * i + 1]).
-// For every odd index i where 0 <= i < n / 2, assign the value of newNums[i] as max(nums[2 * i], nums[2 * i + 1]).
-// Replace the array nums with newNums.
-// Repeat the entire process starting from step 1.
-// Return the last number that remains in nums after applying the algorithm.
+// Implement the TextEditor class:
 
-class Solution {
+// TextEditor() Initializes the object with empty text.
+// void addText(string text) Appends text to where the cursor is. The cursor ends to the right of text.
+// int deleteText(int k) Deletes k characters to the left of the cursor. Returns the number of characters actually deleted.
+// string cursorLeft(int k) Moves the cursor to the left k times. Returns the last min(10, len) characters to the left of the cursor, where len is the number of characters to the left of the cursor.
+// string cursorRight(int k) Moves the cursor to the right k times. Returns the last min(10, len) characters to the left of the cursor, where len is the number of characters to the left of the cursor.
+
+class TextEditor {
 public:
-    int minMaxGame(vector<int>& nums) {
-        int n = nums.size();
-        if(n==1) return nums[0];
-        vector<int> newNums(n/2);
-        // For every even index i where 0 <= i < n / 2, assign the value of newNums[i] as min(nums[2 * i], nums[2 * i + 1]).
-        for(int i=0;i<n/2;i++){
-            if(i%2==0){
-                newNums[i] = min(nums[2*i],nums[2*i+1]);
-            }
-            else{
-                newNums[i] = max(nums[2*i],nums[2*i+1]);
-            }
-        }
-        return minMaxGame(newNums);
+    TextEditor() {
+        //initialize the object with an empty text
+        TextEditor *text = new TextEditor();
+        text->cursor = 0;
+        text->currentText = "";
+    }
+    
+    void addText(string text) {
+        //append text to the right of the cursor
+        currentText.insert(cursor, text);
+        cursor += text.length();
+    }
+    
+    int deleteText(int k) {
+        //delete k characters to the left of the cursor
+        int deleted = min(k, cursor);
+        currentText.erase(cursor - deleted, deleted);
+        cursor -= deleted;
+        return deleted;
+    }
+    
+    string cursorLeft(int k) {
+        //move the cursor to the left k times
+        cursor = max(0, cursor - k);
+        return currentText.substr(cursor, min(10, currentText.length() - cursor));
+    }
+    
+    string cursorRight(int k) {
+        //move the cursor to the right k times
+        cursor = min(currentText.length(), cursor + k);
+        return currentText.substr(cursor, min(10, currentText.length() - cursor));
     }
 };
+
+/**
+ * Your TextEditor object will be instantiated and called as such:
+ * TextEditor* obj = new TextEditor();
+ * obj->addText(text);
+ * int param_2 = obj->deleteText(k);
+ * string param_3 = obj->cursorLeft(k);
+ * string param_4 = obj->cursorRight(k);
+ */
