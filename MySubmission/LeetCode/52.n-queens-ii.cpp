@@ -7,9 +7,9 @@
 // @lc code=start
 class Solution {
 public:
-    void solve(int col,int n,int ans,vector<int> &leftRow,vector<int> lowerD, vector<int> upperD){
+    void solve(int col,int n,int &ans,vector<int> &leftRow,vector<int> lowerD, vector<int> upperD){
         if(col==n){
-            ans.push_back(board);
+            ans++;
             return;
         }
         for(int i=0;i<n;i++){
@@ -18,7 +18,7 @@ public:
                 lowerD[i+col] = 1;
                 upperD[n-1+col-i] = 1;
                 // board[i][col] = 'Q';
-                solve(col+1,n,ans,board,leftRow,lowerD,upperD);
+                solve(col+1,n,ans,leftRow,lowerD,upperD);
                 leftRow[i] = 0;
                 lowerD[i+col] = 0;
                 upperD[n-1+col-i] = 0;
