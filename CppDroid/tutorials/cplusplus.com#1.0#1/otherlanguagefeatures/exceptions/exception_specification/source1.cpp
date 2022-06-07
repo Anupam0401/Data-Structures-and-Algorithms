@@ -1,1 +1,0 @@
-double myfunction (char param) throw (int);

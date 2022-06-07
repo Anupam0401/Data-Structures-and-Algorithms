@@ -1,1 +1,0 @@
-MyClass& operator= (const MyClass&);

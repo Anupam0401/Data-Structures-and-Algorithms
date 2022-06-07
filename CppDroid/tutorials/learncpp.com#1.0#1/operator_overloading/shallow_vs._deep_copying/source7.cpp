@@ -1,1 +1,0 @@
-std::cout << cHello.GetString() << std::endl; // this will crash

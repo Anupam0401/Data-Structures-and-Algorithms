@@ -1,4 +1,0 @@
-while(condition)
-{
-   statement(s);
-}

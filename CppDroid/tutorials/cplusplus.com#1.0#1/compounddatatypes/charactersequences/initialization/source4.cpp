@@ -1,2 +1,0 @@
-myword = "Bye";
-myword[] = "Bye"; 

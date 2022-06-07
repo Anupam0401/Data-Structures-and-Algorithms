@@ -1,1 +1,0 @@
-char *strHello = new char[7];

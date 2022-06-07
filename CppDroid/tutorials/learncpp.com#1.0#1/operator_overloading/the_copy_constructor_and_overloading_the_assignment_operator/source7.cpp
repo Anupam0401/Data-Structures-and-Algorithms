@@ -1,1 +1,0 @@
-cMark = cMark; // valid assignment

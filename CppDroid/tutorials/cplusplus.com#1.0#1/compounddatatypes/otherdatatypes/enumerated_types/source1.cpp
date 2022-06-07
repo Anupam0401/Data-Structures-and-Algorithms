@@ -1,1 +1,0 @@
-enum colors_t {black, blue, green, cyan, red, purple, yellow, white};

@@ -1,1 +1,0 @@
-MyString cCopy = cHello; // use default copy constructor

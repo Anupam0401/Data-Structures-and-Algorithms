@@ -1,1 +1,0 @@
-type variable { data, elements }; // note: no assignment operator

@@ -1,1 +1,0 @@
-cout << "The third result is " << subtraction (x,y);

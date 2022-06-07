@@ -1,1 +1,0 @@
-Example2 ex;         // not valid: no default constructor 

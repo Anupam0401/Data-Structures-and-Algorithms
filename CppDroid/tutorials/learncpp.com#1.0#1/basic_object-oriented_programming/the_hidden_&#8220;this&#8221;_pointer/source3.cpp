@@ -1,1 +1,0 @@
-void SetID(int nID) { m_nID = nID; }

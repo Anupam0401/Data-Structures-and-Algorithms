@@ -1,1 +1,0 @@
-PrintResult( CalculateResult(nInput1, chOperator, nInput2) );

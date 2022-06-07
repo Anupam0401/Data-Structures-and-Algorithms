@@ -1,1 +1,0 @@
-template <> class mycontainer <char> { ... };

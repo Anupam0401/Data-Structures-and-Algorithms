@@ -1,1 +1,0 @@
-double adTemperature[365] = { 0 };

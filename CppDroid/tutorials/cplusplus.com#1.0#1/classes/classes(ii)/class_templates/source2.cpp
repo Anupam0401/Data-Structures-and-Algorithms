@@ -1,1 +1,0 @@
-mypair<int> myobject (115, 36);

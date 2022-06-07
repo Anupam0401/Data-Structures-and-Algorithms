@@ -1,1 +1,0 @@
-class Daughter: protected Mother;

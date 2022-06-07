@@ -1,1 +1,0 @@
-void procedure (int arg[])

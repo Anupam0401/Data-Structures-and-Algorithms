@@ -1,2 +1,0 @@
-book.dollars
-book.yen

@@ -1,1 +1,0 @@
-iofile.seekg(iofile.tellg(), ios::beg); // seek to current file position

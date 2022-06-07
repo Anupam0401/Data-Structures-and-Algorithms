@@ -1,1 +1,0 @@
-cMyString = "Hello " + strMyName + " welcome to " + strProgramName + ".";

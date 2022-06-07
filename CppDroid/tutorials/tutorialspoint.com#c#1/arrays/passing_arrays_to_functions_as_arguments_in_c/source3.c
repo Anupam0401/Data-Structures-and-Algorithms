@@ -1,6 +1,0 @@
-void myFunction(int param[])
-{
-.
-.
-.
-}

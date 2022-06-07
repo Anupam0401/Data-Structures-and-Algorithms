@@ -1,1 +1,0 @@
-Polygon mypolygon;   // not working if Polygon is abstract base class 

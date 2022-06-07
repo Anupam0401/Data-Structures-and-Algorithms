@@ -1,1 +1,0 @@
-fruit = apples + oranges;   // get the total fruit

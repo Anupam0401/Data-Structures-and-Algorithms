@@ -1,1 +1,0 @@
-Fraction Six(6); // calls Fraction(int, int) constructor

@@ -1,1 +1,0 @@
-for (auto itr = myvector.begin(); itr != myvector.end(); ++itr)

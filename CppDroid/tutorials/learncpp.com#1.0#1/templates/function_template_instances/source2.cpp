@@ -1,1 +1,0 @@
-int nValue = max(3, 7); // calls max(int, int)

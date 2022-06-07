@@ -1,1 +1,0 @@
-int anTestScores[30]; // allocate 30 integers

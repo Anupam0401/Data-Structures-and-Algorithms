@@ -1,1 +1,0 @@
-tSum += atArray[nCount];

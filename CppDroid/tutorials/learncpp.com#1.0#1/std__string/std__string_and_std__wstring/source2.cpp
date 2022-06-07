@@ -1,1 +1,0 @@
-strcpy(strHello, "hello!");

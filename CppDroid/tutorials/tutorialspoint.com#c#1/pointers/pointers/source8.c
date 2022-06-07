@@ -1,1 +1,0 @@
-The value of ptr is 0

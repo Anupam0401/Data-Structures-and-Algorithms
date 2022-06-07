@@ -1,1 +1,0 @@
-nValue = 6; // nValue is non-const

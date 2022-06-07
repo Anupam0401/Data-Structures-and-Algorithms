@@ -1,1 +1,0 @@
-MyClass::MyClass(const MyClass& x) : a(x.a), b(x.b), c(x.c) {}

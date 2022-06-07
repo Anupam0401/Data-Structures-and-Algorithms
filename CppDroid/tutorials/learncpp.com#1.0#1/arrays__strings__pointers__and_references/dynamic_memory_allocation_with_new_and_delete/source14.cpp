@@ -1,2 +1,0 @@
-if (pnValue)
-    delete pnValue;

@@ -1,1 +1,0 @@
-void procedure (int myarray[][3][4])

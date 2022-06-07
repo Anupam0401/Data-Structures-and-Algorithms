@@ -1,2 +1,0 @@
-delete pointer;
-delete[] pointer;

@@ -1,2 +1,0 @@
-myNamespace::a
-myNamespace::b 

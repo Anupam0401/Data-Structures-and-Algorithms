@@ -1,1 +1,0 @@
-value of area : 50

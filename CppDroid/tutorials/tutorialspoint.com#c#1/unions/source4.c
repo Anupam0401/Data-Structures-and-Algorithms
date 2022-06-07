@@ -1,1 +1,0 @@
-Memory size occupied by data : 20

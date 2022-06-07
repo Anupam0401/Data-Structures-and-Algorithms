@@ -1,1 +1,0 @@
-string sFour(4);

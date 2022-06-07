@@ -1,1 +1,0 @@
-const type variable = value;

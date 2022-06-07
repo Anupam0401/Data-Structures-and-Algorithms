@@ -1,1 +1,0 @@
-padd = (Addition*) &d;

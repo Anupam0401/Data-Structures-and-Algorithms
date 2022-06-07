@@ -1,1 +1,0 @@
-Storage size for int : 4

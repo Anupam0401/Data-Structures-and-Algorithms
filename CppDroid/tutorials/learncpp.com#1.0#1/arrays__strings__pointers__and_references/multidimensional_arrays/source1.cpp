@@ -1,1 +1,0 @@
-int anArray[3][5]; // a 3-element array of 5-element arrays

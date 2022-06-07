@@ -1,1 +1,0 @@
-Example3 (const string& str);

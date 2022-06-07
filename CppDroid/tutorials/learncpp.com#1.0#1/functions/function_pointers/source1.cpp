@@ -1,1 +1,0 @@
-int nArray[10];

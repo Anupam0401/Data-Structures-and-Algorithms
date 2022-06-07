@@ -1,1 +1,0 @@
-MonsterType eMonsterType = MONSTER_TROLL;

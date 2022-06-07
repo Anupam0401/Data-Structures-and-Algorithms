@@ -1,1 +1,0 @@
-catch(...) {} // ignore any unanticipated exceptions

@@ -1,1 +1,0 @@
-Animal eAnimal = static_cast<Animal>(5); // compiler won't complain, but bad style

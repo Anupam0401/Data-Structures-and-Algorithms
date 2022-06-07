@@ -1,1 +1,0 @@
-cout << "This is a string literal";

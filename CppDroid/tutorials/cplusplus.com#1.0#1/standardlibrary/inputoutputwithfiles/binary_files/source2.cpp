@@ -1,1 +1,0 @@
-memblock = new char[size];

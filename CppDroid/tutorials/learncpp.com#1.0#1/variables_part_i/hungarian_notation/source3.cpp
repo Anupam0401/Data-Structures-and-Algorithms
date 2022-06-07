@@ -1,1 +1,0 @@
-float fApplesPerPerson = nTotalApples / nTotalPersons;

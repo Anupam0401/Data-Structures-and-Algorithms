@@ -1,1 +1,0 @@
-int DoSomething() throw(...); // may throw anything

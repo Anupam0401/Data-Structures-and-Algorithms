@@ -1,1 +1,0 @@
-char *fgets( char *buf, int n, FILE *fp );

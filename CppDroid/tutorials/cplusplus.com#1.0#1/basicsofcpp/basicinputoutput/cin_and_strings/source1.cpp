@@ -1,2 +1,0 @@
-string mystring;
-cin >> mystring;

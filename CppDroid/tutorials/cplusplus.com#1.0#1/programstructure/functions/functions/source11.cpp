@@ -1,1 +1,0 @@
-z = subtraction (x,y) + 4;

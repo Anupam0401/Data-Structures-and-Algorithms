@@ -1,5 +1,0 @@
-printf
-(
-"Hello, World! \n"
-)
-;

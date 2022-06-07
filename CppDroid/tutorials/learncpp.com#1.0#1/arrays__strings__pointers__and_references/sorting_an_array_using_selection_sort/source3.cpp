@@ -1,1 +1,0 @@
-if (anArray[nCurrentIndex] < anArray[nSmallestIndex])

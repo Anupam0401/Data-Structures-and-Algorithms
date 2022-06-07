@@ -1,1 +1,0 @@
-FILE *fopen( const char * filename, const char * mode );

@@ -1,2 +1,0 @@
-int GetRandomValue();
-double GetRandomValue();

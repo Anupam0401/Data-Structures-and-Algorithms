@@ -1,3 +1,0 @@
-++mychar;
-++myshort;
-++mylong;

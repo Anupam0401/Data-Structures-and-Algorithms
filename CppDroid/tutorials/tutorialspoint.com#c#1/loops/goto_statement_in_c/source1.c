@@ -1,4 +1,0 @@
-goto label;
-..
-.
-label: statement;

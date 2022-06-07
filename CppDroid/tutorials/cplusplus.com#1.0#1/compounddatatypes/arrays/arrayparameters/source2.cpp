@@ -1,1 +1,0 @@
-int myarray [40];

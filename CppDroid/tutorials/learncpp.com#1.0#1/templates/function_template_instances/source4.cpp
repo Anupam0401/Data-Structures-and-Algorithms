@@ -1,1 +1,0 @@
-double dValue = max(6.34, 18.523); // calls max(double, double)

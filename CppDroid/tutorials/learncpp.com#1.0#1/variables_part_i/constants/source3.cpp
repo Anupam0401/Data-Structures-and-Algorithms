@@ -1,1 +1,0 @@
-float fValue = 5.0f; // float constant

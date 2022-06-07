@@ -1,1 +1,0 @@
-using new_type_name = existing_type ;

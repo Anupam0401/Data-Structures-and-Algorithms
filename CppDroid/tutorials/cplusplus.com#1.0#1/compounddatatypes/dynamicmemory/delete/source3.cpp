@@ -1,1 +1,0 @@
-p= new (nothrow) int[i];

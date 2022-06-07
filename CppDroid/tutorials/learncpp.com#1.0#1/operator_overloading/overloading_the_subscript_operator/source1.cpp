@@ -1,1 +1,0 @@
-anArray[0] = 7; // put the value 7 in the first element of the array

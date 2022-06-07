@@ -1,8 +1,0 @@
-
-In earlier chapters, variables have been explained as locations in the computer's memory which can be accessed by their identifier (their name). This way, the program does not need to care about the physical address of the data in memory; it simply uses the identifier whenever it needs to refer to the variable.<br>
-<br>
-For a C++ program, the memory of a computer is like a succession of memory cells, each one byte in size, and each with a unique address. These single-byte memory cells are ordered in a way that allows data representations larger than one byte to occupy memory cells that have consecutive addresses.<br>
-<br>
-This way, each cell can be easily located in the memory by means of its unique address. For example, the memory cell with the address <code>1776</code> always follows immediately after the cell with address <code>1775</code> and precedes the one with <code>1777</code>, and is exactly one thousand cells after <code>776</code> and exactly one thousand cells before <code>2776</code>.<br>
-<br>
-When a variable is declared, the memory needed to store its value is assigned a specific location in memory (its memory address). Generally, C++ programs do not actively decide the exact memory addresses where its variables are stored. Fortunately, that task is left to the environment where the program is run - generally, an operating system that decides the particular memory locations on runtime. However, it may be useful for a program to be able to obtain the address of a variable during runtime in order to access data cells that are at a certain position relative to it.<br>

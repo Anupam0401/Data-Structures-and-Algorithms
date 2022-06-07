@@ -1,2 +1,0 @@
-int a;
-float mynumber;

@@ -1,2 +1,0 @@
-int age;
-cin >> age;

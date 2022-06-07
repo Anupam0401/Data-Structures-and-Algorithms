@@ -1,1 +1,0 @@
-for (auto itr = myvector.cbegin(); itr != myvector.cend(); ++itr)

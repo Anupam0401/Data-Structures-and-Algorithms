@@ -1,1 +1,0 @@
-int fputc( int c, FILE *fp );

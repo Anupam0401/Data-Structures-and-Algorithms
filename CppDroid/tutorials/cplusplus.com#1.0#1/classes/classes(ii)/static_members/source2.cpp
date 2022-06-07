@@ -1,1 +1,0 @@
-int Dummy::n=0;

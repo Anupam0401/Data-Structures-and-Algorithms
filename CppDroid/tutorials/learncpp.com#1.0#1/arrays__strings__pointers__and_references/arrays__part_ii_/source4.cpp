@@ -1,1 +1,0 @@
-int anArray[] = { 0, 1, 2, 3, 4 }; // declare array of 5 elements

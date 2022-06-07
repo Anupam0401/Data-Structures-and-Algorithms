@@ -1,1 +1,0 @@
-#define identifier value

@@ -1,1 +1,0 @@
-type varName; // type is the type (eg. int), varName is the name of the variable

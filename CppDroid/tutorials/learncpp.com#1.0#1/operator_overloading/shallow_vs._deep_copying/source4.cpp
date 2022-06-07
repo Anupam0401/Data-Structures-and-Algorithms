@@ -1,1 +1,0 @@
-MyString cHello("Hello, world!");

@@ -1,1 +1,0 @@
-Factorial of 15 is 2004310016
