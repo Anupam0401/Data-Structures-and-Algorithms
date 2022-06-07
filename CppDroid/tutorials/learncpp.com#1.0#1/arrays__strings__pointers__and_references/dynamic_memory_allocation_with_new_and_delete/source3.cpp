@@ -1,0 +1,1 @@
+int *pnValue = new int; // dynamically allocate an integer

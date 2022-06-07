@@ -1,0 +1,1 @@
+type name[size1][size2]...[sizeN];

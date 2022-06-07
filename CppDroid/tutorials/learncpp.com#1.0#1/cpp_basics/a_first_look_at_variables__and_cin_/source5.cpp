@@ -1,0 +1,1 @@
+int x = 0; // declare integer variable x and assign the value of 0 to it.

@@ -1,0 +1,1 @@
+cout << add(1, multiply(2, 3)) << endl; // evalues 1 + (2 * 3)

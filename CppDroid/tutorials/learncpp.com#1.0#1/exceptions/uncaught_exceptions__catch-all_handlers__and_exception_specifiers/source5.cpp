@@ -1,0 +1,1 @@
+int DoSomething() throw(); // does not throw exceptions

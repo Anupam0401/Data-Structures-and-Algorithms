@@ -1,0 +1,1 @@
+cout << x;  // prints the value of x (memory location 140) to the console

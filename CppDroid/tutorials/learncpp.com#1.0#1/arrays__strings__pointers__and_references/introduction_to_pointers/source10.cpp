@@ -1,0 +1,1 @@
+int *pnPtr = NULL; // assign address 0 to pnPtr

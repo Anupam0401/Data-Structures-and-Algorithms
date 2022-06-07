@@ -1,0 +1,1 @@
+#define getmax(a,b) a>b?a:b 

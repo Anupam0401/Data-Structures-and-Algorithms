@@ -1,0 +1,1 @@
+bool Validate(int nX, int nY, bool (*pfcn)(int, int));

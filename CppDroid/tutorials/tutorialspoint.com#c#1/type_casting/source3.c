@@ -1,0 +1,1 @@
+Value of mean : 3.400000

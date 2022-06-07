@@ -1,0 +1,1 @@
+type arrayName [ x ][ y ];

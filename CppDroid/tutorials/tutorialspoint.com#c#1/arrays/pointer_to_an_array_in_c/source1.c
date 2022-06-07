@@ -1,0 +1,1 @@
+double balance[50];

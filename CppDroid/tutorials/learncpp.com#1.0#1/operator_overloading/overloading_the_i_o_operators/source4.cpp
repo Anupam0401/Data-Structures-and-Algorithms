@@ -1,0 +1,1 @@
+friend ostream& operator<< (ostream &out, Point &cPoint);

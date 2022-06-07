@@ -1,0 +1,1 @@
+int x = 5; // 5 is a literal constant

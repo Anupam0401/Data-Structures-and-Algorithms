@@ -1,0 +1,4 @@
+while(condition)
+{
+   statement(s);
+}

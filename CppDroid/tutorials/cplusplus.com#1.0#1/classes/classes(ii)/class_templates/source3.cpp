@@ -1,0 +1,1 @@
+mypair<double> myfloats (3.0, 2.18); 

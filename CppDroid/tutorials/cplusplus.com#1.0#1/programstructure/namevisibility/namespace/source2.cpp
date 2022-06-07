@@ -1,0 +1,2 @@
+myNamespace::a
+myNamespace::b 

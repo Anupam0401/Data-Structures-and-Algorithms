@@ -1,0 +1,1 @@
+std::vector<int> vArray[5] = {3, 2, 7, 5, 8}; // vArray initialized using an initializer_list

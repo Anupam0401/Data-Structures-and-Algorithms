@@ -1,0 +1,1 @@
+*pnPtr = 6; // pnPtr treats its value as const

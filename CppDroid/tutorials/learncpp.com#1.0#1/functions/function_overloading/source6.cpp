@@ -1,0 +1,2 @@
+int GetRandomValue();
+double GetRandomValue();

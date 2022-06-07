@@ -1,0 +1,1 @@
+MyClass::MyClass (const MyClass&);

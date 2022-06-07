@@ -1,0 +1,1 @@
+foo = new (nothrow) int [5]; 

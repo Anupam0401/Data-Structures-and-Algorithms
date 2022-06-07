@@ -1,0 +1,1 @@
+int nElements = sizeof(anArray) / sizeof(anArray[0]);

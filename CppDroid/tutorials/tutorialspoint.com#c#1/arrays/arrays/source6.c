@@ -1,0 +1,1 @@
+double salary = balance[9];

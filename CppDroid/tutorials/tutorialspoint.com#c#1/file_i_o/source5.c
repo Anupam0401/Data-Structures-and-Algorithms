@@ -1,0 +1,1 @@
+int fputs( const char *s, FILE *fp );

@@ -1,0 +1,2 @@
+std::vector<int> v1(8); // creates an empty vector of size 8, using the int constructor
+std::vector<int> v1{8}; // creates a one-element vector with data value 8, using the initializer_list constructor

@@ -1,0 +1,1 @@
+void SetID(Simple* const this, int nID) { this->m_nID = nID; }

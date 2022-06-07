@@ -1,0 +1,1 @@
+int nValue = ANIMAL_PIG;

@@ -1,0 +1,1 @@
+cout << "Hello world!" << endl; // Everything from here to the right is ignored.
