@@ -1,3 +1,5 @@
 # add ignore for html files anywhere 
 *.html
-
+*.bin
+*.exe
+*.out
