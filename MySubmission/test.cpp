@@ -1,25 +1,32 @@
-// Given an array of n elements, where each element is at most k away from its target position, you need to sort the array optimally.
-
+// Given a string find all the substrings of the given string
+// check if the substrings have capital letters more than small letters
 
 class Solution
 {
     public:
     //Function to return the sorted array.
-    vector <int> nearlySorted(int arr[], int num, int k){
-        priority_queue<int,vector<int>,greater<int>> pq;
-        for(int i = 0; i <= k; i++){
-            pq.push(arr[i]);
+    bool isGood(string s){
+        //count the number of uppercase letter
+        int uppercase = 0;
+        //count the number of lowercase letter
+        int lowercase = 0;
+        for(int i=0; i<s.length(); i++){
+            if(isupper(s[i])) uppercase++;
+            else lowercase++;
         }
-        vector<int> ans;
-        for(int i = k+1; i < num; i++){
-            ans.push_back(pq.top());
-            pq.pop();
-            pq.push(arr[i]);
+        return uppercase>lowercase;
+    }
+    int numberOf(string str){
+        //find all the substrings of the given string
+        int n = str.length();
+        int count = 0;
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                string sub = str.substr(i,j-i+1);
+                //check if the substrings have capital letters more than small letters
+                if(isGood(sub)) count++;
+            }
         }
-        while(pq.size() > 0){
-            ans.push_back(pq.top());
-            pq.pop();
-        }
-        return ans;
+        return count;
     }
 };
