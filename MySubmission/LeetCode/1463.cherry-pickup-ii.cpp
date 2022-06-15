@@ -13,17 +13,20 @@ public:
         if(j1 < 0 || j2 < 0 || j1 >= n || j2 >= n)
             return -1e8;
         if(i==m-1)
-            return dp[i][j1][j2] = grid[i][j1] + grid[i][j2];
+            if(j1!=j2)
+                return dp[i][j1][j2] = grid[i][j1] + grid[i][j2];
+            else
+                return dp[i][j1][j2] = grid[i][j1];
         if(dp[i][j1][j2]!=-1){
             return dp[i][j1][j2];
         }
         int maxi=-1e8;
-        for(int i=-1;i<=1;i++){
-            for(int j=-1;j<=1;j++){
+        for(int di=-1;di<=1;di++){
+            for(int dj=-1;dj<=1;dj++){
             if(j1==j2)
-                maxi = max(maxi, grid[i][j1] + solve(grid,i+1,j1+i,j2+j,dp));
+                maxi = max(maxi, grid[i][j1] + solve(grid,i+1,j1+di,j2+dj,dp));
             else 
-                maxi = max(maxi, grid[i][j1] + grid[i][j2] + solve(grid,i+1,j1+i,j2+j,dp)); 
+                maxi = max(maxi, grid[i][j1] + grid[i][j2] + solve(grid,i+1,j1+di,j2+dj,dp)); 
             }
         }
         return dp[i][j1][j2] = maxi;
