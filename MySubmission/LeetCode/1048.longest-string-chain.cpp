@@ -17,8 +17,56 @@
 
 class Solution {
 public:
+    // int longestStrChain(vector<string>& words) {
+    //     int n = words.size();
+    //     if(n == 0)
+    //         return 0;
+    //     if(n == 1)
+    //         return 1;
+    //     sort(words.begin(), words.end());
+    //     int ans = 1;
+    //     unordered_map<string, int> mp;
+    //     for(int i = 0; i < n; i++){
+    //         mp[words[i]] = i;
+    //     }
+    //     for(int i = 0; i < n; i++){
+    //         int len = words[i].length();
+    //         for(int j = 0; j < len; j++){
+    //             string s = words[i];
+    //             s.erase(j, 1);
+    //             if(mp.find(s) != mp.end()){
+    //                 ans = max(ans, i + 1);
+    //             }
+    //         }
+    //     }
+    //     return ans;
+    // }
+    bool isPredecessor(string s1, string s2){
+        int len = s1.length();
+        for(int i = 0; i < len; i++){
+            string s = s1;
+            s.erase(i, 1);
+            if(s == s2)
+                return true;
+        }
+        return false;
+    }
     int longestStrChain(vector<string>& words) {
-        
+        int n = words.size();
+        //start from the largest sized word and delete characters from it to get the smaller strings
+        for(int i=n-1;i>0;i--){
+            for(int j=0;j<i;j++){
+                if(isPredecessor(words[i],words[j])){
+                    words[i].erase(0,1);
+                }
+            }
+        }
+        int max = 0;
+        for(int i=0;i<n;i++){
+            if(words[i].length() > max)
+                max = words[i].length();
+        }
+        return max;
     }
 };
 // @lc code=end
