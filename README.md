@@ -11,7 +11,9 @@ This repo contains most of my codes written while doing some course, practicing 
 - iBHubs: [here](https://github.com/Anupam0401/Data-Structures-and-Algorithms/tree/master/MySubmission/iBHubs)
 - Google Hash_Code and Kickstart: [here](https://github.com/Anupam0401/Data-Structures-and-Algorithms/tree/master/MySubmission/Codeforces)
 
-**Find all my submissions in Python [here](https://github.com/Anupam0401/Data-Structures-and-Algorithms/tree/master/MySubmission/Python_codes).**
+__Find all my submissions in Python [here](https://github.com/Anupam0401/Data-Structures-and-Algorithms/tree/master/MySubmission/Python_codes).__
+
+
 ---
 *Refer [these](https://github.com/Anupam0401/Data-Structures-and-Algorithms/blob/master/CONTRIBUTING.md) instructions to start contributing to this repository.*
 ---
