@@ -56,4 +56,4 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/Anup
 
 ## Getting Help
 
-Ping me, I woould love to help out!
+Ping me, I would love to be of any help!
