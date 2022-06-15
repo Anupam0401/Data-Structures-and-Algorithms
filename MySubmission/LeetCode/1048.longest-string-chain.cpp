@@ -17,56 +17,23 @@
 
 class Solution {
 public:
-    // int longestStrChain(vector<string>& words) {
-    //     int n = words.size();
-    //     if(n == 0)
-    //         return 0;
-    //     if(n == 1)
-    //         return 1;
-    //     sort(words.begin(), words.end());
-    //     int ans = 1;
-    //     unordered_map<string, int> mp;
-    //     for(int i = 0; i < n; i++){
-    //         mp[words[i]] = i;
-    //     }
-    //     for(int i = 0; i < n; i++){
-    //         int len = words[i].length();
-    //         for(int j = 0; j < len; j++){
-    //             string s = words[i];
-    //             s.erase(j, 1);
-    //             if(mp.find(s) != mp.end()){
-    //                 ans = max(ans, i + 1);
-    //             }
-    //         }
-    //     }
-    //     return ans;
-    // }
-    bool isPredecessor(string s1, string s2){
-        int len = s1.length();
-        for(int i = 0; i < len; i++){
-            string s = s1;
-            s.erase(i, 1);
-            if(s == s2)
-                return true;
-        }
-        return false;
+    //comparator for sorting the words based on its length
+    static bool compare(const string &s1, const string &s2) {
+        return s1.length() < s2.length();
     }
+
     int longestStrChain(vector<string>& words) {
-        int n = words.size();
-        //start from the largest sized word and delete characters from it to get the smaller strings
-        for(int i=n-1;i>0;i--){
-            for(int j=0;j<i;j++){
-                if(isPredecessor(words[i],words[j])){
-                    words[i].erase(0,1);
-                }
+        sort(words.begin(), words.end(), compare);
+        unordered_map<string, int> dp;
+        int res = 0;
+        for (string w : words) {
+            for (int i = 0; i < w.length(); i++) {
+                string pre = w.substr(0, i) + w.substr(i + 1);
+                dp[w] = max(dp[w], dp.find(pre) == dp.end() ? 1 : dp[pre] + 1);
             }
+            res = max(res, dp[w]);
         }
-        int max = 0;
-        for(int i=0;i<n;i++){
-            if(words[i].length() > max)
-                max = words[i].length();
-        }
-        return max;
+        return res;
     }
 };
 // @lc code=end
