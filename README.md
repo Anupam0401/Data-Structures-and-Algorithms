@@ -13,7 +13,7 @@ This repo contains most of my codes written while doing some course, practicing 
 
 **Find all my submissions in Python [here](https://github.com/Anupam0401/Data-Structures-and-Algorithms/tree/master/MySubmission/Python_codes).**
 ---
-**Refer [these](https://github.com/Anupam0401/Data-Structures-and-Algorithms/blob/master/CONTRIBUTING.md) instructions to start contributing to this repositiry.**
+*Refer [these](https://github.com/Anupam0401/Data-Structures-and-Algorithms/blob/master/CONTRIBUTING.md) instructions to start contributing to this repository.*
 ---
 
 MIT License
