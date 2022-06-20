@@ -10,7 +10,7 @@ public:
     int maxSubArray(vector<int>& nums) {
         int n = nums.size();
         int currSum=0,sum=INT_MIN;
-        for(int i=0;i<n;i++){
+        for(int i=0;i<n;i++){ //kadane 's algorithm
             currSum = max(nums[i],nums[i]+currSum);
             sum = max(sum,currSum);
         }
