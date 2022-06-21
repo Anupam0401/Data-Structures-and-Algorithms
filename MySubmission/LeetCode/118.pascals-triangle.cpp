@@ -5,27 +5,23 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> pascalValues;
-        int x = 1;
-        while(numRows>0){
-            vector<int> pascalRow;
-            for(int i=0; i<x; i++){
-                if(i==0 || i==x-1){
-                    pascalRow.push_back(1);
-                }
-                else{
-                    pascalRow.push_back(pascalValues[pascalValues.size()-1][i-1]+pascalValues[pascalValues.size()-1][i]);
-                }
-            }
-            pascalValues.push_back(pascalRow);
-            numRows--;
-            x++;
+    vector<vector<int>> generate(int numRows)
+    {
+        vector<vector<int>> r(numRows);
+
+        for (int i = 0; i < numRows; i++)
+        {
+            r[i].resize(i + 1);
+            r[i][0] = r[i][i] = 1;
+
+            for (int j = 1; j < i; j++)
+                r[i][j] = r[i - 1][j - 1] + r[i - 1][j];
         }
-        return pascalValues;
+
+        return r;
     }
 };
 // @lc code=end
-
