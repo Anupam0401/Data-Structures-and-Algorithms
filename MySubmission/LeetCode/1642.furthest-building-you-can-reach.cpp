@@ -15,39 +15,48 @@
 // Return the furthest building index (0-indexed) you can reach if you use the given ladders and bricks optimally.
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    int solve(int ind, int count, vector<int> &heights, int bricks, int ladders, vector<vector<int>> &dp)
+    int furthestBuilding(vector<int> &H, int bricks, int ladders)
     {
-        if (ladders < 0 || bricks < 0)
+        int i = 0, n = size(H), jumpHeight;
+        // pq will store the first ladder number of largest jumps
+        priority_queue<int, vector<int>, greater<int>> pq;
+        // first ladder number of jumps would be assumed to be the largest
+        // hence, push all these jumps into the queue
+        while (i < n - 1 && size(pq) < ladders)
         {
-            return count-1;
+            jumpHeight = H[i + 1] - H[i];
+            if (jumpHeight > 0)
+                pq.push(jumpHeight);
+            i++;
         }
-        if (ind == heights.size() - 1)
+        // From here, we can't just use ladder and need to spend bricks from now on...
+        while (i < n - 1)
         {
-            return count;
+            jumpHeight = H[i + 1] - H[i];
+            // if next building is bigger than current, bricks need to be used
+            if (jumpHeight > 0)
+            {
+                // First check if we have a previous jump requiring less number of bricks than currentDiff
+                if (!pq.empty() && pq.top() < jumpHeight)
+                {
+                    // if there is, just use bricks for that jump and assign ladder for current one
+                    bricks -= pq.top();
+                    pq.pop();
+                    pq.push(jumpHeight);
+                }
+                // jumpHeight is already minimum jump size. So, no choice than spending that many bricks
+                else
+                    bricks -= jumpHeight;
+            }
+            // if bricks become negative, we can't travel any further as all bricks and ladders are used up
+            if (bricks < 0)
+                return i;
+            i++;
         }
-        if (heights[ind + 1] <= heights[ind])
-        {
-            return solve(ind + 1, count + 1, heights, bricks, ladders, dp);
-        }
-        else
-        {
-            int bricks_needed = heights[ind + 1] - heights[ind];
-            int useBricks = solve(ind + 1, count + 1, heights, bricks - bricks_needed, ladders, dp);
-            if(dp[ind][ladders]!=-1)
-                return max(dp[ind][ladders],useBricks);
-            dp[ind][ladders] = solve(ind + 1, count + 1, heights, bricks, ladders - 1, dp);
-            return max(useBricks, dp[ind][ladders]);
-        }
-    }
-    int furthestBuilding(vector<int> &heights, int bricks, int ladders)
-    {
-        // trying out recursive approach
-        int n = heights.size();
-        vector<vector<int>> dp(n+1, vector<int>(ladders+1, -1));
-        return solve(0, 0, heights, bricks, ladders, dp);
+        return i;
     }
 };
 // @lc code=end
-
