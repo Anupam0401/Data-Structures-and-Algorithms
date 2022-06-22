@@ -18,19 +18,13 @@
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        ListNode* temp = head;
-        if(head==NULL || head->next==NULL) return head;
-        vector<int> arr;
-        while(temp){
-            arr.push_back(temp->val);
-            temp = temp->next;
+        //using two pointer - slow and fast
+        ListNode *slow = head, *fast = head;
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
         }
-        int mid = arr.size()/2;
-        while(mid>0){
-            head = head->next;
-            mid--;
-        }
-        return head;
+        return slow;
     }
 };
 // @lc code=end
