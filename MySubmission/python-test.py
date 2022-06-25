@@ -1,21 +1,14 @@
-import sys
-from math import factorial
+class FunEvent:
+    def __init__(self, tags, year):
+        self.tags = tags
+        self.year = year
+    
+    def __str__(self):
+        return f"FunEvent(tags={self.tags}, year={self.year})"
 
-
-
-
-# Take the input string which may contain whitespaces at the end
-
-
-k = int(input())
-p = int(input())
-sum = 0
-for i in range(0,k):
-    sum += (k*p)**i/factorial(i)
-
-sum+=(k*p)**k/(factorial(k)*(1-p))
-sum= 1/sum
-sum *= (k*p)**k/(factorial(k)*(1-p))
-print(sum)
-
-
+tags = ["google", "ml"]
+year = 2022
+bootcamp = FunEvent(tags, year)
+tags.append("bootcamp")
+year = 2023
+print(bootcamp)
