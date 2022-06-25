@@ -1,28 +1,25 @@
-// Given a string s, the task is to check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
+// You are given a string s, where every two consecutive vertical bars '|' are grouped into a pair. In other words, the 1st and 2nd '|' make a pair, the 3rd and 4th '|' make a pair, and so forth.
 
-class Solution
-{
+// Return the number of '*' in s, excluding the '*' between each pair of '|'.
+
+// Note that each '|' will belong to exactly one pair.
+
+class Solution {
 public:
-    int isRepeat(string s)
-    {
-        int n = s.length();
-        unordered_set<char> set;
-        for (int i = 0; i < n; i++)
+    int countAsterisks(string s) {
+        int countBars = 0 , ans=0;
+        int l = s.length();
+        for(int i=0;i<l;i++)
         {
-            if (set.find(s[i]) == set.end())
-                set.insert(s[i]);
+            if(s[i]=='|')
+            {
+                countBars++;
+            }
+            if(countBars%2==0 && s[i]=='*')
+            {
+                ans++;
+            }
         }
-        if (n % set.size() != 0)
-            return 0;
-        string str = "";
-        // store the string formed from the unordered_set set in opposite order
-        for (auto it = set.rbegin(); it != set.rend(); it++)
-            str += *it;
-        for (int i = 0; i < n; i++)
-        {
-            if (s[i] != str[i % str.length()])
-                return 0;
-        }
-        return 1;
+        return ans;
     }
 };
