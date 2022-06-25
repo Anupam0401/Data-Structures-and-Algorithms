@@ -1,25 +1,26 @@
-// You are given a string s, where every two consecutive vertical bars '|' are grouped into a pair. In other words, the 1st and 2nd '|' make a pair, the 3rd and 4th '|' make a pair, and so forth.
+// You are given a 0-indexed integer array nums. In one operation, select any non-negative integer x and an index i, then update nums[i] to be equal to nums[i] AND (nums[i] XOR x).
 
-// Return the number of '*' in s, excluding the '*' between each pair of '|'.
+// Note that AND is the bitwise AND operation and XOR is the bitwise XOR operation.
 
-// Note that each '|' will belong to exactly one pair.
+// Return the maximum possible bitwise XOR of all elements of nums after applying the operation any number of times.
 
 class Solution {
 public:
-    int countAsterisks(string s) {
-        int countBars = 0 , ans=0;
-        int l = s.length();
-        for(int i=0;i<l;i++)
-        {
-            if(s[i]=='|')
-            {
-                countBars++;
+    int maximumXOR(vector<int>& nums) { // do it in O(n log n)
+        int n = nums.size();
+        if(n==1)    return nums[0];
+        int ans = 0;
+        for(int i=31; i>=0; i--){
+            ans |= (1<<i);
+            set<int> s;
+            for(int j=0; j<n; j++){
+                s.insert(nums[j]&ans);
             }
-            if(countBars%2==0 && s[i]=='*')
-            {
-                ans++;
+            int tmp = ans;
+            ans = 0;
+            for(int x: s){
+                ans = max(ans, x^tmp);
             }
         }
-        return ans;
     }
 };
