@@ -7,17 +7,37 @@
 // @lc code=start
 class Solution {
 public:
-    int solve(vector<int>& cardPoints,int left, int right, int sum, int k,vector<vector<int>>& dp){
-        if(k<=0)    return sum;
-        if(dp[left][right]!=-1) return dp[left][right];
-        int ls = solve(cardPoints, left+1,right,sum+cardPoints[left],k-1,dp);
-        int rs = solve(cardPoints, left, right-1,sum+cardPoints[right],k-1,dp);
-        return dp[left][right] = max(ls, rs);
-    }
     int maxScore(vector<int>& cardPoints, int k) {
+        int sum = 0;
         int n = cardPoints.size();
-        vector<vector<int>> dp(n, vector<int>(n, -1));
-        return solve(cardPoints,0,n-1,0,k,dp);
+        
+        vector<int> cummulativeSumFromFront(n+1, 0);
+        vector<int> cummulativeSumFromBehind(n+1, 0);
+        
+        sum = 0;
+        for (int i=0; i<n; i++) {
+            sum += cardPoints[i];
+            cummulativeSumFromFront[i+1] = sum;
+        }
+        sum = 0;
+        for (int i=n-1; i>=0; i--) {
+            sum += cardPoints[i];
+            cummulativeSumFromBehind[i] = sum;
+        }
+        
+        // Reversing is optional. I reversed it so that it would be easy
+        // to access sum of last (k-i) elements by just indexing at [k-i]
+        // Otherwise, I would have had to index it at [n-k+i] which would
+        // have made it difficult to read.
+        reverse(cummulativeSumFromBehind.begin(), cummulativeSumFromBehind.end());
+        
+        int answer = 0;
+        for(int i=0; i<=k; i++) {      
+            answer = max(answer, 
+                           cummulativeSumFromFront[i] // Sum of first 'i' cards.
+                         + cummulativeSumFromBehind[k-i]); // Sum of last 'k-i' cards.
+        }
+        return answer;
     }
 };
 // @lc code=end
