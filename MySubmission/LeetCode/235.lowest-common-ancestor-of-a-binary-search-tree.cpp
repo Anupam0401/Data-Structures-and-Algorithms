@@ -17,28 +17,19 @@
 
 class Solution {
 public:
-    void getPath(TreeNode* root, TreeNode* target, vector<TreeNode*>& path, bool found) {
-        if(root == nullptr) return;
-        path.push_back(root);
-        if(root == target) {
-            found = true;
-            return;
-        }
-        getPath(root->left, target, path, found);
-        if(found) return;
-        getPath(root->right, target, path, found);
-        if(found) return;
-        path.pop_back();
-    }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        vector<TreeNode*> pathOfP;
-        vector<TreeNode*> pathOfQ;
-        getPath(root, p, pathOfP,0);
-        getPath(root, q, pathOfQ,0);
-        int i = 0;
-        while(i<pathOfP.size() && i<pathOfQ.size() && pathOfP[i] == pathOfQ[i]) i++;
-        // cout<< pathOfP[i-1] <<endl;
-        return pathOfP[i-1];
+        if (root == NULL) {
+            return NULL;
+        }
+        if (root == p || root == q) {
+            return root;
+        }
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if (left && right) {
+            return root;
+        }
+        return left ? left : right;
     }
 };
 // @lc code=end
