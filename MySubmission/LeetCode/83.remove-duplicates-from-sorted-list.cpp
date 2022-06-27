@@ -21,14 +21,11 @@ public:
         if(head==NULL)  return head;
         ListNode* dummy = head;
         while(dummy!=NULL){
-            if(dummy->next!=NULL){
-                ListNode* temp = dummy->next;   
-                while(temp!=NULL && dummy->val == temp->val){
-                    temp = temp->next;
-                }
-                dummy->next = temp;
-            }
-            dummy = dummy->next;
+            if(dummy->next==NULL)
+                break;
+            if(dummy->next->val == dummy->val)  dummy->next = dummy->next->next;
+            else
+                dummy = dummy->next;
         }
         return head;
     }
