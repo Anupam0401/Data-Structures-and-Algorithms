@@ -16,23 +16,12 @@
  */
 class Solution {
 public:
-    void get_path(vector<TreeNode*>& path,TreeNode* root,TreeNode* x){
-        if(root==x) return;
-        if(root->left) get_path(path,root->left,x);
-        if(root->right) get_path(path,root->right,x);
-        path.push_back(root);
-    }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        vector<TreeNode*> pathOfP;
-        vector<TreeNode*> pathOfQ;
-        get_path(pathOfP,root,p);
-        get_path(pathOfQ,root,q);
-        int i=0,j=0;
-        while(pathOfP[i]==pathOfQ[j]){
-            i++;
-            j++;
-        }
-        return pathOfP[i-1];
+        if(root == NULL || root == p || root == q) return root;
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if(left && right) return root;
+        return left ? left : right;
     }
 };
 // @lc code=end
