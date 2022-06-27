@@ -19,18 +19,26 @@
 class Solution
 {
 public:
-    void get_inorder(TreeNode *root, vector<int> &res)
-    {
-        if (root == NULL)
-            return;
-        get_inorder(root->left, res);
-        res.push_back(root->val);
-        get_inorder(root->right, res);
-    }
+    
     vector<int> inorderTraversal(TreeNode *root)
     {
         vector<int> res;
-        get_inorder(root, res);
+        if(root==nullptr)   return res;
+        stack<TreeNode*> st;
+        TreeNode* temp = root;
+        while(true){
+            if(temp!=NULL){
+                st.push(temp);
+                temp = temp->left;
+            }
+            else{
+                if(st.empty())  break;
+                temp = st.top();
+                st.pop();
+                res.push_back(temp->val);
+                temp = temp->right;
+            }
+        }
         return res;
     }
 };
