@@ -12,6 +12,7 @@ public:
         int ans=-1;
         for(int i=0;i<n;i++){
             ans = max(ans,s[i]-'0');
+            if(ans==9)  break;
         }
         return ans;
     }
