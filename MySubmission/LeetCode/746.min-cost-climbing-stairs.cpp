@@ -8,21 +8,18 @@
 class Solution
 {
 public:
-    int get_minCost(int index, vector<int> &cost, vector<int> &dp)
-    {
-        if (index < 0)
-            return 0;
-        if (index == 0 || index == 1)
-            return cost[index];
-        if (dp[index] != -1)
-            return dp[index];
-        return dp[index] = cost[index] + min(get_minCost(index - 1, cost, dp), get_minCost(index - 2, cost, dp));
-    }
     int minCostClimbingStairs(vector<int> &cost)
     {
         int n = cost.size();
         vector<int> dp(n, -1);
-        return min(get_minCost(n - 1, cost, dp), get_minCost(n - 2, cost, dp));
+        for (int i = 0; i < n; i++)
+        {
+            if (i == 0 || i == 1)
+                dp[i] = cost[i];
+            else
+                dp[i] = cost[i] + min(dp[i - 1], dp[i - 2]);
+        }
+        return min(dp[n - 1], dp[n - 2]);
     }
 };
 // @lc code=end
