@@ -18,6 +18,18 @@ public:
         }
         return ans;
     }
+
+    //the approach below does the same in O(n) time complexity
+    // int minMoves2(vector<int>& nums) {
+    //     int n = nums.size(), steps = 0;
+    //     //fixes the median element in the n/2 th position of the array rest stays the same
+    //     nth_element(nums.begin(), nums.begin()+(n/2), nums.end()); 
+    //     int median = nums[n/2];
+    //     for(int i=0; i<n; i++){
+    //         steps += abs(nums[i] - median);
+    //     }
+    //     return steps;
+    // }
 };
 // @lc code=end
 
