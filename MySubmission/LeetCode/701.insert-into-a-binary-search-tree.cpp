@@ -21,13 +21,15 @@ class Solution
 public:
     TreeNode *insertIntoBST(TreeNode *root, int val)
     {
-        if (root == NULL)
-            return new TreeNode(val);
-        if (root->val > val)
-            root->left = insertIntoBST(root->left, val);
-        else
-            root->right = insertIntoBST(root->right, val);
-        return root;
+        //iterative approach
+        if(!root)   return new TreeNode(val);
+        TreeNode *temp = root;
+        while(temp!=NULL){
+            //insersion to left
+            
+            if(temp->val>val)   temp = temp->left;
+            else temp = temp->right;
+        }
     }
 };
 // @lc code=end
