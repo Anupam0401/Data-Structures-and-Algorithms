@@ -3,4 +3,5 @@
 *.bin
 *.exe
 *.out
+*.prob
 /env
