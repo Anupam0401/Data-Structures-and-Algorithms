@@ -5,7 +5,8 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
     // // memoization aaproach
     // int solve(int index, int n, vector<int> &nums, vector<int> &dp){
@@ -27,29 +28,33 @@ public:
     //     int y = solve(0, n-1, nums, dp);
     //     return max(x,y);
     // }
-    //doing tabulation and space optimization
+    // doing tabulation and space optimization
 
-    int solve(int n, vector<int> &nums,int a,int b,int p){
+    int solve(int n, vector<int> &nums, int a, int b, int p)
+    {
         // vector<int> dp(n+1,0);
         // int a=0,b=nums[0];
         // dp[1] = nums[0];
-        for(int i=p;i<=n;i++){
-            int c = max(b,a+nums[i-1]);
-            a=b;
-            b=c;
+        for (int i = p; i <= n; i++)
+        {
+            int c = max(b, a + nums[i - 1]);
+            a = b;
+            b = c;
         }
         return b;
     }
-    int rob(vector<int>& nums) {
+    int rob(vector<int> &nums)
+    {
         int n = nums.size();
-        if(n==0) return 0;
-        if(n==1) return nums[0];
-        int a = 0,b=nums[1];
-        int x = n>=2?solve(n, nums,a,b,3):INT_MIN;
-        b=nums[0];
-        int y = solve(n-1, nums,a,b,2);
-        return max(x,y);
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return nums[0];
+        int a = 0, b = nums[1];
+        int x = n >= 2 ? solve(n, nums, a, b, 3) : INT_MIN;
+        b = nums[0];
+        int y = solve(n - 1, nums, a, b, 2);
+        return max(x, y);
     }
 };
 // @lc code=end
-
