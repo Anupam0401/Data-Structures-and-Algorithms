@@ -7,28 +7,40 @@
 // @lc code=start
 class MyQueue {
 private:
-    queue<int> q;
+    stack<int> mem;
 public:
     MyQueue() {
-        // q.clear();
+        
     }
     
     void push(int x) {
-        q.push(x);
-        return;
+        stack<int> temp;
+        while(!mem.empty())
+        {
+            temp.push(mem.top());
+            mem.pop();
+        }
+        
+        mem.push(x);
+        while(!temp.empty())
+        {
+            mem.push(temp.top());
+            temp.pop();
+        }
     }
     
     int pop() {
-        int x = q.front();
-        q.pop();
+        int p = mem.top();
+        mem.pop();
+        return p;
     }
     
     int peek() {
-        return q.front();
+        return mem.top();
     }
     
     bool empty() {
-        return q.empty();
+        return mem.empty();
     }
 };
 
@@ -41,4 +53,3 @@ public:
  * bool param_4 = obj->empty();
  */
 // @lc code=end
-
