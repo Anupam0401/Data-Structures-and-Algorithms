@@ -9,15 +9,15 @@ class Solution {
 public:
     int lastStoneWeight(vector<int>& stones) {
         int n=stones.size();
-        for(int i=0;i<n-1;i++){
-            sort(stones.begin(),stones.end());
-            stones[n-1]-=stones[n-2];
-            stones[n-2]=0;
+        priority_queue<int> pq(stones.begin(),stones.end());
+        while(pq.size()>1){
+            int x = pq.top();
+            pq.pop();
+            int y = pq.top();
+            pq.pop();
+            pq.push(abs(x-y));
         }
-        // for(int i=0;i<n;i++){
-        //     cout<<stones[i]<<" ";
-        // }
-        return stones[n-1];
+        return pq.top();
     }
 };
 // @lc code=end
