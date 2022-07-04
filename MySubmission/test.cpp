@@ -1,26 +1,56 @@
-// You are given a 0-indexed integer array nums. In one operation, select any non-negative integer x and an index i, then update nums[i] to be equal to nums[i] AND (nums[i] XOR x).
 
-// Note that AND is the bitwise AND operation and XOR is the bitwise XOR operation.
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
 
-// Return the maximum possible bitwise XOR of all elements of nums after applying the operation any number of times.
-
+ // } Driver Code Ends
 class Solution {
 public:
-    int maximumXOR(vector<int>& nums) { // do it in O(n log n)
-        int n = nums.size();
-        if(n==1)    return nums[0];
-        int ans = 0;
-        for(int i=31; i>=0; i--){
-            ans |= (1<<i);
-            set<int> s;
-            for(int j=0; j<n; j++){
-                s.insert(nums[j]&ans);
-            }
-            int tmp = ans;
-            ans = 0;
-            for(int x: s){
-                ans = max(ans, x^tmp);
-            }
+// Given a directed acyclic graph(DAG) with n nodes labeled from 0 to n-1. Given edges, s and d ,count the number of ways to reach from s to d.There is a directed Edge from vertex edges[i][0] to the vertex edges[i][1].
+
+	int possible_paths(vector<vector<int>>edges, int n, int s, int d){
+        vector<vector<int>>adj(n);
+        for(auto &e:edges){
+            adj[e[0]].push_back(e[1]);
         }
-    }
+        vector<int>visited(n,0);
+        queue<int>q;
+        q.push(s);
+        visited[s]=1;
+        int count=0;
+        while(!q.empty()){
+            int curr=q.front();
+            q.pop();
+            if(curr==d)
+                return count;
+            for(auto &v:adj[curr]){
+                if(visited[v]==0){
+                    visited[v]=1;
+                    q.push(v);
+                }
+            }
+            count++;
+        }
+        return count;
+	}
 };
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n, m, s, d;
+		cin >> n >> m >> s >> d;
+		vector<vector<int>>edges;
+		for(int i = 0; i < m; i++){
+			int u, v;
+			cin >> u >> v;
+			edges.push_back({u,v});
+		}
+		Solution obj;
+		int ans = obj.possible_paths(edges, n, s, d);
+		cout << ans <<"\n";
+	}
+	return 0;
+}  // } Driver Code Ends
