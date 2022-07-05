@@ -15,7 +15,8 @@
         "valarray": "cpp",
         "vector": "cpp",
         "string": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "random": "cpp"
     },
     "cmake.configureOnOpen": true,
     "python.formatting.provider": "autopep8",
