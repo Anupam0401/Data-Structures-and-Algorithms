@@ -25,8 +25,18 @@ public:
         int n = nums.size();
         if (n == 1)
             return 0;
-        vector<int> dp(n, 10001);
-        return solve(0, nums, dp);
+        // vector<int> dp(n, 10001);
+        // return solve(0, nums, dp);
+        int i=0, lastJumped = 0, maxReach = 0, jumps=0;
+        while(lastJumped<n-1){
+            maxReach = max(maxReach,nums[i]+i);
+            if(i==lastJumped){
+                lastJumped = maxReach;
+                jumps++;
+            }
+            i++;
+        }
+        return jumps;
     }
 };
 // @lc code=end
