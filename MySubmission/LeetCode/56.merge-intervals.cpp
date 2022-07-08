@@ -5,27 +5,37 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    vector<vector<int>> merge(vector<vector<int>> &intervals)
+    {
         int n = intervals.size();
-        if(n==1)    return intervals;
-        sort(intervals.begin(), intervals.end(), [](vector<int>& a, vector<int>& b){
-            return a[0]<b[0];
-        });
+        if (n == 1)
+            return intervals;
+        sort(intervals.begin(), intervals.end(), [](vector<int> &a, vector<int> &b)
+             {
+            if(a[0]==b[0])  return a[1]<b[1];
+            return a[0]<b[0]; });
         vector<vector<int>> ans;
         ans.push_back(intervals[0]);
-        int j=0;
-        for(int i=1;i<n;i++){
-            while(ans[j][1]>=intervals[i][0]){
-                ans[j][1] = max(ans[j][1],intervals[i][1]);
+        int j = 0;
+        for (int i = 1; i < n; i++)
+        {
+            bool flag = 0;
+            while (i < n && ans[j][1] >= intervals[i][0])
+            {
+                ans[j][1] = max(ans[j][1], intervals[i][1]);
                 i++;
+                flag = 1;
             }
-            ans.push_back(intervals[i]);
-            j++;
+            if (i < n && ans[j][1] < intervals[i][0])
+            {
+                ans.push_back(intervals[i]);
+                j++;
+            }
         }
         return ans;
     }
 };
 // @lc code=end
-
