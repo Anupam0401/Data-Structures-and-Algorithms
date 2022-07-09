@@ -5,27 +5,32 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    vector<vector<int>> merge(vector<vector<int>> &intervals)
+    {
         int n = intervals.size();
-        if(n==1)    return intervals;
-        sort(intervals.begin(), intervals.end(), [](vector<int>& a, vector<int>& b){
-            return a[0]<b[0];
-        });
-        vector<vector<int>> ans;
-        ans.push_back(intervals[0]);
-        int j=0;
-        for(int i=1;i<n;i++){
-            while(ans[j][1]>=intervals[i][0]){
-                ans[j][1] = max(ans[j][1],intervals[i][1]);
-                i++;
+        if (n == 1)
+            return intervals;
+        sort(intervals.begin(), intervals.end(), [](vector<int> &a, vector<int> &b)
+             {
+            if(a[0]==b[0])  return a[1]<b[1];
+            return a[0]<b[0]; });
+        vector<vector<int>> merged;
+        for (auto interval : intervals) {
+            // if the list of merged intervals is empty or if the current
+            // interval does not overlap with the previous, simply append it.
+            if (merged.empty() || merged.back()[1] < interval[0]) {
+                merged.push_back(interval);
             }
-            ans.push_back(intervals[i]);
-            j++;
+            // otherwise, there is overlap, so we merge the current and previous
+            // intervals.
+            else {
+                merged.back()[1] = max(merged.back()[1], interval[1]);
+            }
         }
-        return ans;
+        return merged;
     }
 };
 // @lc code=end
-
