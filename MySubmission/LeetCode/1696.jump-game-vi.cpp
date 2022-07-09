@@ -23,20 +23,15 @@ public:
     }
     int maxResult(vector<int> &nums, int k)
     {
-        int n = nums.size();
-        if (n == 1)
-            return nums[0];
-        vector<int> dp(n, INT_MIN);
-        // return memoization(0,k,nums,dp);
-        dp[0] = nums[0];
-        for (int i = 1; i < n; i++)
+        vector<int> dp(size(nums), INT_MIN);
+        multiset<int> s({dp[0] = nums[0]}); // set dp[0] = nums[0] and insert it into set
+        for (int i = 1; i < size(nums); i++)
         {
-            for (int j = 1; j <= k && i - j >= 0; j++)
-            {
-                dp[i] = max(dp[i], dp[i - j] + nums[i]);
-            }
+            if (i > k)
+                s.erase(s.find(dp[i - k - 1]));     // erase elements from which we cant jump to current index
+            s.insert(dp[i] = *rbegin(s) + nums[i]); // choose element with max score and jump from that to the current index
         }
-        return dp[n - 1];
+        return dp.back();
     }
 };
 // @lc code=end
