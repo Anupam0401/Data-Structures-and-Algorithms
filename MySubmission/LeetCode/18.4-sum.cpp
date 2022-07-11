@@ -16,8 +16,8 @@ public:
         for(int i=0;i<n-3;i++){
             for(int j=i+1;j<n-2;j++){
                 for(int k = j+1;k<n-1;k++){
-                    long long int sum = nums[i]+nums[j]+nums[k];
-                    long long int required = (long long int)target - sum;
+                    long long int sum = (long long)nums[i]+nums[j]+nums[k];
+                    long long int required =  - sum + (long long int)target;
                     if(required < -1e9 || required > 1e9)
                         continue;
                     if(binary_search(nums.begin()+k+1,nums.end(),(int)required)){
