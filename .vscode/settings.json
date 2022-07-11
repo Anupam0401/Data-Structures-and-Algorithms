@@ -16,7 +16,10 @@
         "vector": "cpp",
         "string": "cpp",
         "list": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "functional": "cpp"
     },
     "cmake.configureOnOpen": true,
     "python.formatting.provider": "autopep8",
@@ -25,5 +28,5 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Disabled"
 }
