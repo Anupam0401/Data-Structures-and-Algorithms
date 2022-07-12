@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "*.ejs": "html",
-        "random": "cpp"
+        "random": "cpp",
+        "ostream": "cpp"
     }
 }
