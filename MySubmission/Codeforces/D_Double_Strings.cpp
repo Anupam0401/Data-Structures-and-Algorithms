@@ -24,15 +24,20 @@ int main()
         for(int i=0;i<n;i++){
             cin >> s[i];
         }
-        vector<string> ans(n);//ans contains binary characters
-        // TC: O(nlogn)
+        string ans;
+        set<string> st;
         for(int i=0;i<n;i++){
-            string s1 = s[i];
-            string s2 = s[i];
-            reverse(s2.begin(),s2.end());
-            string s3 = s1+s2;
-            ans[i] = s3;
+            st.insert(s[i]);
         }
+        for(int i=0;i<n;i++){
+            bool flag = false;
+            for(int j =0;j<s[i].length();j++){
+                if(st.count(s[i].substr(0,j))==1 && st.count(s[i].substr(j))==1)  flag = 1;
+            }
+            if(flag)    ans+='1';
+            else ans+='0';
+        }
+        cout<<ans<<endl;
     }
 
     return 0;
