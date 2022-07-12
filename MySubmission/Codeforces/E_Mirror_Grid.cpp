@@ -7,45 +7,6 @@
 #define lli long long int
 using namespace std;
 
-int makeSymmetric(vector<vector<char>>& grid, int n)
-{
-    int ans = 0;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n && i!=j;j++){
-            if(grid[i][j]!=grid[j][i]){
-                ans++;
-                grid[i][j]=grid[j][i];
-            }
-        }
-    }
-    return ans;
-}
-int makeRowsPalindomre(vector<vector<char>>& grid, int n)
-{
-    int ans = 0;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n/2;j++){
-            if(grid[i][j]!=grid[i][n-j-1]){
-                ans++;
-                grid[i][j]=grid[i][n-j-1];
-            }
-        }
-    }
-    return ans;
-}
-int makeColsPalindomre(vector<vector<char>>& grid, int n)
-{
-    int ans = 0;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n/2;j++){
-            if(grid[j][i]!=grid[n-j-1][i]){
-                ans++;
-                grid[j][i]=grid[n-j-1][i];
-            }
-        }
-    }
-    return ans;
-}
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -57,24 +18,26 @@ int main()
     {
         int n;
         cin >> n;
-        vector<vector<char>> grid(n,vector<char>(n));
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                cin >> grid[i][j];
+        vector<vector<int>> a(n, vector<int>(n));
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = 0; k < n; k++)
+            {
+                char c;
+                cin >> c;
+                a[j][k] = c - '0';
             }
         }
-        vector<vector<char>> temp;
-        temp.resize(n,vector<char>(n));
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                temp[i][j]=grid[j][i];
+        int ans = 0;
+        for (int j = 0; j < (n + 1) / 2; j++)
+        {
+            for (int k = 0; k < n / 2; k++)
+            {
+                int s = a[j][k] + a[k][n - 1 - j] + a[n - 1 - j][n - 1 - k] + a[n - 1 - k][j];
+                ans += min(s, 4 - s);
             }
         }
-        int ans;
-        // call the 3 function in all orders and determine the minimum ans
-        ans = makeRowsPalindomre(grid,n) + makeColsPalindomre(grid,n) + makeSymmetric(grid,n);
-        cout<<ans<<endl;
-
+        cout << ans << endl;
     }
 
     return 0;
