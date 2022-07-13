@@ -32,7 +32,7 @@ public:
                         res.push_back({nums[i],nums[j],nums[left],nums[right]});
                     }
                     else if(sum<required)   left++;
-                    else right --;
+                    else right--;
                 }
             }
         }
