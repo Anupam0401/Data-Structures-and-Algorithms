@@ -22,7 +22,7 @@ public:
                 carry = temp/10;
                 str = to_string(temp%10)+str;
             }
-            res.push(zero+str);
+            res.push_back(zero+str);
             zero+='0';
         }
         string ans = res[res.size()-1];
