@@ -10,9 +10,9 @@ public:
     string multiply(string num1, string num2) {
         int l1 = num1.length();
         int l2 = num2.length();
-        vector<vector<string>> res;
+        vector<string> res;
         int carry = 0;
-        string zero = "";
+        string zeros = "";
         for(int i=l1-1;i>=0;i--){
             int n1 = num1[i]-'0';
             string str="";
@@ -22,8 +22,9 @@ public:
                 carry = temp/10;
                 str = to_string(temp%10)+str;
             }
-            res.push_back(zero+str);
-            zero+='0';
+            string x = zeros+str;
+            res.push_back(x);
+            zeros+='0';
         }
         string ans = res[res.size()-1];
         carry = 0;
@@ -32,16 +33,16 @@ public:
             for(int k=0;k<max(l1,l2);k++){
                 int n1 = ans[k]-'0';
                 if(k>=res[i].size()){
-                    ans[k] = to_string((n1+carry)%10);
+                    ans[k] = (char)((n1+carry)%10);
                     carry = (n1+carry)/10;
                 }
                 else{
                     int n2 = res[i][k]-'0';
-                    ans[k] = to_string((n1+n2carry)%10);
+                    ans[k] = (char)((n1+n2+carry)%10);
                     carry = (n1+n2+carry)/10;
                 }
             }
-            if(carry)   ans.push_back(to_string(carry));
+            if(carry)   ans.push_back((char)(carry));
         }
         // reverse ans
         reverse(ans.begin(),ans.end());
