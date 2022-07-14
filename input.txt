@@ -1,7 +1,0 @@
-Sleeping-Bag 30 20 0
-Rope 10 10 0
-Bottle 5 20 0
-Torch+Battery 15 25 20
-Glucose 5 30 0
-Pocket-Knife 10 15 10
-Umbrella 20 10 0
