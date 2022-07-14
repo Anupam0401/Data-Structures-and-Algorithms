@@ -27,25 +27,16 @@
  * };
  */
 class Solution {
-    ListNode* beginHead;
 public:
-    bool helper(ListNode* head, TreeNode* root, int level){
-        if(head==NULL)  return true;
-        if(root==nullptr)   return head == NULL?true:false;
-        bool val = false;
-        if(root->val == head->val){
-            val = helper(head->next,root->left,level+1)||helper(head->next,root->right,level+1);
-            if(val) return val;
-        }
-        else val = helper(head,root->left,0) || helper(head,root->right,0);
-        if(val == false && level>=1){
-            val = helper(beginHead,root->left,0) || helper(beginHead,root->right,0);
-        }
-        return val;
+    bool dfs(ListNode* head, TreeNode* root){
+        if(head==nullptr)   return true;
+        if(root==nullptr)   return false;
+        return root->val == head->val && (dfs(head->next,root->left)||dfs(head->next,root->right));
     }
     bool isSubPath(ListNode* head, TreeNode* root) {
-        beginHead = head;
-        return helper(head,root,0);
+        if(head==nullptr)   return true;
+        if(root==nullptr)   return false;
+        return dfs(head,root) || isSubPath(head,root->left) || isSubPath(head,root->right);
     }
 };
 // @lc code=end
