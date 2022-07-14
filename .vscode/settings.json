@@ -19,7 +19,8 @@
         "random": "cpp",
         "deque": "cpp",
         "forward_list": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "chrono": "cpp"
     },
     "cmake.configureOnOpen": true,
     "python.formatting.provider": "autopep8",
