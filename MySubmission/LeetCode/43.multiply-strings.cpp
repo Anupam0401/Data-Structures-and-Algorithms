@@ -30,10 +30,22 @@ public:
         for(int i=res.size()-2;i>=0;i--){
             l1 = ans.size(), l2 = res[i].size();
             for(int k=0;k<max(l1,l2);k++){
-                if(k>=res[i].size())    continue;
                 int n1 = ans[k]-'0';
+                if(k>=res[i].size()){
+                    ans[k] = to_string((n1+carry)%10);
+                    carry = (n1+carry)/10;
+                }
+                else{
+                    int n2 = res[i][k]-'0';
+                    ans[k] = to_string((n1+n2carry)%10);
+                    carry = (n1+n2+carry)/10;
+                }
             }
+            if(carry)   ans.push_back(to_string(carry));
         }
+        // reverse ans
+        reverse(ans.begin(),ans.end());
+        return ans;
     }
 };
 // @lc code=end
