@@ -8,7 +8,7 @@
 class Solution {
     int row,col;
 public:
-    recursive approach
+    // recursive approach
     int dfs_explore(int r,int c,vector<vector<int>>& grid){
         if(r<0 || c<0 || r>=row || c>=col || grid[r][c]==0) return 0;
         grid[r][c]=0;
