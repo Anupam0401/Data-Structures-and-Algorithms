@@ -1,30 +1,45 @@
-// You are given a 0-indexed array nums consisting of positive integers. You can choose two indices i and j, such that i != j, and the sum of digits of the number nums[i] is equal to that of nums[j].
+// You are given a 0-indexed array of strings nums, where each string is of equal length and consists of only digits.
 
-// Return the maximum value of nums[i] + nums[j] that you can obtain over all possible indices i and j that satisfy the conditions.
+// You are also given a 0-indexed 2D integer array queries where queries[i] = [ki, trimi]. For each queries[i], you need to:
 
-class Solution
-{
+// Trim each number in nums to its rightmost trimi digits.
+// Determine the index of the kith smallest trimmed number in nums. If two trimmed numbers are equal, the number with the lower index is considered to be smaller.
+// Reset each number in nums to its original length.
+// Return an array answer of the same length as queries, where answer[i] is the answer to the ith query.
+
+// Note:
+
+// To trim to the rightmost x digits means to keep removing the leftmost digit, until only x digits remain.
+// Strings in nums may contain leading zeros.
+
+
+class Solution {
 public:
-    int getSumDigit(int num)
-    {
-        int sum = 0;
-        while (num)
-        {
-            sum += num % 10;
-            num /= 10;
+    vector<int> smallestTrimmedNumbers(vector<string>& nums, vector<vector<int>>& queries) {
+        int n = nums.size();
+        vector<int> ans(queries.size());
+        for(int i=0;i<queries.size();i++){
+            int k = queries[i][0], trim = queries[i][1];
+            map<int,int> m;
+            for(int j=0;j<n;j++){
+                int len = nums[j].size();
+                int num;
+                if(len<=trim) num = stoi(nums[j]);
+                else num = stoi(nums[j].substr(len-trim));
+                m[num] = j;
+            }
+            // get the index of k-th smallest element in m
+            int cnt = 0;
+            int ind = 0;
+            for(auto it=m.begin();it!=m.end();it++){
+                cnt++;
+                if(cnt==k){
+                    ind = it->second;
+                    break;
+                }
+            }
+            ans[i] = ind;
         }
-        return sum;
-    }
-    int maximumSum(vector<int> &nums)
-    {
-        int res = -1, d_n[82] = {}; // 9 * 9
-        for (int n : nums)
-        {
-            int d = getSumDigit(n);
-            if (d_n[d])
-                res = max(res, d_n[d] + n);
-            d_n[d] = max(d_n[d], n);
-        }
-        return res;
+        return ans;
     }
 };
