@@ -1,40 +1,30 @@
-// You are given two positive 0-indexed integer arrays nums1 and nums2, both of length n.
+// You are given a 0-indexed array nums consisting of positive integers. You can choose two indices i and j, such that i != j, and the sum of digits of the number nums[i] is equal to that of nums[j].
 
-// The sum of squared difference of arrays nums1 and nums2 is defined as the sum of (nums1[i] - nums2[i])2 for each 0 <= i < n.
+// Return the maximum value of nums[i] + nums[j] that you can obtain over all possible indices i and j that satisfy the conditions.
 
-// You are also given two positive integers k1 and k2. You can modify any of the elements of nums1 by +1 or -1 at most k1 times. Similarly, you can modify any of the elements of nums2 by +1 or -1 at most k2 times.
-
-// Return the minimum sum of squared difference after modifying array nums1 at most k1 times and modifying array nums2 at most k2 times.
-class Solution {
+class Solution
+{
 public:
-    long long minSumSquareDiff(vector<int>& nums1, vector<int>& nums2, int k1, int k2) {
-        long long n = nums1.size();
-        //make a max heap of absSum
-        priority_queue<long long, vector<long long>, greater<long long>> pq;
-        long long maxSum = 0;
-        for(int i=0;i<n;i++)
+    int getSumDigit(int num)
+    {
+        int sum = 0;
+        while (num)
         {
-            int absDiff = abs(nums1[i]-nums2[i]);
-            pq.push(absDiff);
-            maxSum += absDiff*absDiff;
+            sum += num % 10;
+            num /= 10;
         }
-        int k = k1+k2;
-        long long maxDiff = 0;
-        while(k>0)
+        return sum;
+    }
+    int maximumSum(vector<int> &nums)
+    {
+        int res = -1, d_n[82] = {}; // 9 * 9
+        for (int n : nums)
         {
-            int x = pq.top();
-            maxDiff+=x*x;
-            pq.pop();
-            x--;
-            if(x>=0)
-            {
-                pq.push(x-1);
-            }
-            else break;
-            maxDiff-=x*x;
-            k--;
-            if(maxDiff>=maxSum) return 0;
+            int d = getSumDigit(n);
+            if (d_n[d])
+                res = max(res, d_n[d] + n);
+            d_n[d] = max(d_n[d], n);
         }
-        return maxSum-maxDiff;
+        return res;
     }
 };
