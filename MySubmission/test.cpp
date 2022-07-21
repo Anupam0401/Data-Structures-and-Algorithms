@@ -1,45 +1,29 @@
-// You are given a 0-indexed array of strings nums, where each string is of equal length and consists of only digits.
+// You are given two positive integer arrays nums and numsDivide. You can delete any number of elements from nums.
 
-// You are also given a 0-indexed 2D integer array queries where queries[i] = [ki, trimi]. For each queries[i], you need to:
+// Return the minimum number of deletions such that the smallest element in nums divides all the elements of numsDivide. If this is not possible, return -1.
 
-// Trim each number in nums to its rightmost trimi digits.
-// Determine the index of the kith smallest trimmed number in nums. If two trimmed numbers are equal, the number with the lower index is considered to be smaller.
-// Reset each number in nums to its original length.
-// Return an array answer of the same length as queries, where answer[i] is the answer to the ith query.
-
-// Note:
-
-// To trim to the rightmost x digits means to keep removing the leftmost digit, until only x digits remain.
-// Strings in nums may contain leading zeros.
-
+// Note that an integer x divides y if y % x == 0.
 
 class Solution {
 public:
-    vector<int> smallestTrimmedNumbers(vector<string>& nums, vector<vector<int>>& queries) {
+    int minOperations(vector<int>& nums, vector<int>& numsDivide) {
         int n = nums.size();
-        vector<int> ans(queries.size());
-        for(int i=0;i<queries.size();i++){
-            int k = queries[i][0], trim = queries[i][1];
-            map<int,int> m;
-            for(int j=0;j<n;j++){
-                int len = nums[j].size();
-                int num;
-                if(len<=trim) num = stoi(nums[j]);
-                else num = stoi(nums[j].substr(len-trim));
-                m[num] = j;
-            }
-            // get the index of k-th smallest element in m
-            int cnt = 0;
-            int ind = 0;
-            for(auto it=m.begin();it!=m.end();it++){
-                cnt++;
-                if(cnt==k){
-                    ind = it->second;
-                    break;
-                }
-            }
-            ans[i] = ind;
+        int m = numsDivide.size();
+        // find the gcd of elements in numsDivide
+        int g = numsDivide[0];
+        for(int i=1; i<m; i++){
+            g = gcd(g, numsDivide[i]);
         }
-        return ans;
+        sort(nums.begin(), nums.end());
+        int ans = 0;
+        bool flag = 0;
+        for(int i=0; i<n; i++){
+            if(g%nums[i]!=0)  ans++;
+            else{
+                flag=1;
+                break;
+            }
+        }
+        return flag?ans:-1;
     }
 };
