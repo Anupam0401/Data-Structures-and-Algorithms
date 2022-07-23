@@ -18,31 +18,26 @@
 class Solution
 {
 public:
-    ListNode *partition(ListNode *head, int x)
-    {
-        ListNode *temp = head;
+    ListNode* partition(ListNode* head, int x) {
         ListNode *left = new ListNode(0);
         ListNode *right = new ListNode(0);
         ListNode *left_tail = left;
         ListNode *right_tail = right;
-        while (temp != NULL)
+        while (head != NULL)
         {
-            if (temp->val < x)
+            if (head->val < x)
             {
-                left_tail->next = new ListNode(temp->val);
+                left_tail->next = head;
                 left_tail = left_tail->next;
             }
             else
             {
-                right_tail->next = new ListNode(temp->val);
+                right_tail->next = head;
                 right_tail = right_tail->next;
             }
-            temp = temp->next;
+            head = head->next;
         }
-        if (left == NULL)
-        {
-            return right->next;
-        }
+        right_tail->next=NULL;
         left_tail->next = right->next;
         return left->next;
     }
