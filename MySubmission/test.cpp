@@ -1,43 +1,26 @@
-// Design a number container system that can do the following:
+// You are given an integer array rolls of length n and an integer k. You roll a k sided dice numbered from 1 to k, n times, where the result of the ith roll is rolls[i].
 
-// Insert or Replace a number at the given index in the system.
-// Return the smallest index for the given number in the system.
-// Implement the NumberContainers class:
+// Return the length of the shortest sequence of rolls that cannot be taken from rolls.
 
-// NumberContainers() Initializes the number container system.
-// void change(int index, int number) Fills the container at index with the number. If there is already a number at that index, replace it.
-// int find(int number) Returns the smallest index for the given number, or -1 if there is no index that is filled by number in the system.
+// A sequence of rolls of length len is the result of rolling a k sided dice len times.
 
+// Note that the sequence taken does not have to be consecutive as long as it is in order.
 
-class NumberContainers {
-private:
-    // vector<int> v;
-    map<int, int> m;
+class Solution {
 public:
-    NumberContainers() {
-        m.clear();
-    }
-    
-    void change(int index, int number) {
-        m[index] = number;
-    }
-    
-    int find(int number) {
-        // number is in m.second
-        // find number
-        for(auto i:m){
-            if(i.second == number){
-                return i.first;
+    int shortestSequence(vector<int>& rolls, int k) {
+        set<int> S;
+        for (int x : rolls)
+            S.insert(x);
+        int n = rolls.size();
+        int ans = n;
+        for (int i = 1; i <= k; i++)
+        {
+            if (S.find(i) == S.end())
+            {
+                ans = min(ans, shortestSequence(rolls, i));
             }
         }
-        return -1;
+        return ans;
     }
 };
-
-/**
- * Your NumberContainers object will be instantiated and called as such:
- * NumberContainers* obj = new NumberContainers();
- * obj->change(index,number);
- * int param_2 = obj->find(number);
- */
-
