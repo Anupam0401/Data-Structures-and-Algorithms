@@ -1,29 +1,37 @@
-// You are given two positive integer arrays nums and numsDivide. You can delete any number of elements from nums.
+// Given an integer array nums, return the number of subarrays filled with 0.
 
-// Return the minimum number of deletions such that the smallest element in nums divides all the elements of numsDivide. If this is not possible, return -1.
-
-// Note that an integer x divides y if y % x == 0.
+// A subarray is a contiguous non-empty sequence of elements within an array.
 
 class Solution {
 public:
-    int minOperations(vector<int>& nums, vector<int>& numsDivide) {
-        int n = nums.size();
-        int m = numsDivide.size();
-        // find the gcd of elements in numsDivide
-        int g = numsDivide[0];
-        for(int i=1; i<m; i++){
-            g = gcd(g, numsDivide[i]);
-        }
-        sort(nums.begin(), nums.end());
-        int ans = 0;
-        bool flag = 0;
-        for(int i=0; i<n; i++){
-            if(g%nums[i]!=0)  ans++;
-            else{
-                flag=1;
-                break;
+    long long zeroFilledSubarray(vector<int>& nums) {
+        long long int n = nums.size();
+        long long int count = 0;
+        for(long long int i=0;i<n;i++)    
+            if(nums[i]==0){
+                count++;
             }
+        if(count==0)
+            return 0;
+        if(count==n)    return (long long)n*(n+1)/2;
+        long long int ans = 0;
+        long long int i=0;
+        while(i<n)
+        {
+            if(nums[i]==0)
+            {
+                count=0;
+                while(i<n && nums[i]==0)
+                {
+                    i++;
+                    count++;
+                }
+                ans+=count*(count+1)/2;
+            }
+            else
+                i++;
         }
-        return flag?ans:-1;
+        return ans;
     }
 };
+
