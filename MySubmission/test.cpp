@@ -1,37 +1,43 @@
-// Given an integer array nums, return the number of subarrays filled with 0.
+// Design a number container system that can do the following:
 
-// A subarray is a contiguous non-empty sequence of elements within an array.
+// Insert or Replace a number at the given index in the system.
+// Return the smallest index for the given number in the system.
+// Implement the NumberContainers class:
 
-class Solution {
+// NumberContainers() Initializes the number container system.
+// void change(int index, int number) Fills the container at index with the number. If there is already a number at that index, replace it.
+// int find(int number) Returns the smallest index for the given number, or -1 if there is no index that is filled by number in the system.
+
+
+class NumberContainers {
+private:
+    // vector<int> v;
+    map<int, int> m;
 public:
-    long long zeroFilledSubarray(vector<int>& nums) {
-        long long int n = nums.size();
-        long long int count = 0;
-        for(long long int i=0;i<n;i++)    
-            if(nums[i]==0){
-                count++;
+    NumberContainers() {
+        m.clear();
+    }
+    
+    void change(int index, int number) {
+        m[index] = number;
+    }
+    
+    int find(int number) {
+        // number is in m.second
+        // find number
+        for(auto i:m){
+            if(i.second == number){
+                return i.first;
             }
-        if(count==0)
-            return 0;
-        if(count==n)    return (long long)n*(n+1)/2;
-        long long int ans = 0;
-        long long int i=0;
-        while(i<n)
-        {
-            if(nums[i]==0)
-            {
-                count=0;
-                while(i<n && nums[i]==0)
-                {
-                    i++;
-                    count++;
-                }
-                ans+=count*(count+1)/2;
-            }
-            else
-                i++;
         }
-        return ans;
+        return -1;
     }
 };
+
+/**
+ * Your NumberContainers object will be instantiated and called as such:
+ * NumberContainers* obj = new NumberContainers();
+ * obj->change(index,number);
+ * int param_2 = obj->find(number);
+ */
 
