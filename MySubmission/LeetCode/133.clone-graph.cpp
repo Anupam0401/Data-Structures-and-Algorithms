@@ -30,12 +30,22 @@ class Solution {
 public:
     Node* dfs(Node* current,unordered_map<Node*,Node*>& m){
         vector<Node*> neighbour;
-        Node* clone = new Node()
+        Node* clone = new Node(current->val);
+        m[current] = clone;
+        for(auto it:current->neighbors){
+            if(m.find(it)!=m.end())
+                neighbour.push_back(m[it]);
+            else
+                neighbour.push_back(dfs(it,m));
+        }
+        clone->neighbors = neighbour;
+        return clone;
     }
     Node* cloneGraph(Node* node) {
         if(node==nullptr)   return NULL;
-        if(node->neighbours == NULL){
-            return new Node(node->val);
+        if(node->neighbors.size()==0){
+            Node* clone  = new Node(node->val);
+            return clone;
         }
         unordered_map<Node*, Node*> m;
         return dfs(node,m);
