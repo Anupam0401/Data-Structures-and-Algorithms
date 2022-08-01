@@ -43,10 +43,8 @@ public:
     }
     Node* cloneGraph(Node* node) {
         if(node==nullptr)   return NULL;
-        if(node->neighbors.size()==0){
-            Node* clone  = new Node(node->val);
-            return clone;
-        }
+        if(node->neighbors.size()==0)
+            return new Node(node->val);
         unordered_map<Node*, Node*> m;
         return dfs(node,m);
     }
