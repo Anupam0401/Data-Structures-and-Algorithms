@@ -46,20 +46,37 @@ public:
         // return q.top();
 
         // done using binary search in O(n^2) time and O(1) space
+        // int n = matrix.size();
+        // int left = matrix[0][0];
+        // int right = matrix[n-1][n-1];
+        // while(left<right){
+        //     int mid = left+(right-left)/2;
+        //     int count = 0;
+        //     for(int i=0;i<n;i++){
+        //         int j = upper_bound(matrix[i].begin(),matrix[i].end(),mid)-matrix[i].begin();
+        //         count+=j;
+        //     }
+        //     if(count<k) left = mid+1;
+        //     else right = mid;
+        // }
+        // return left;
+
+
+        // done using min heap in O(klogk) and O(k) space
         int n = matrix.size();
-        int left = matrix[0][0];
-        int right = matrix[n-1][n-1];
-        while(left<right){
-            int mid = left+(right-left)/2;
-            int count = 0;
-            for(int i=0;i<n;i++){
-                int j = upper_bound(matrix[i].begin(),matrix[i].end(),mid)-matrix[i].begin();
-                count+=j;
-            }
-            if(count<k) left = mid+1;
-            else right = mid;
+        priority_queue<vector<int>,vector<vector<int>>, greater<>> minHeap;
+        for(int r = 0;r<min(n,k);r++){
+            minHeap.push({matrix[r][0],r,0});
         }
-        return left;
+        int ans = -1;
+        while(k--){
+            auto minVec = minHeap.top();
+            int r = minVec[1], c = minVec[2];
+            ans = minVec[0];
+            minHeap.pop();
+            if(c<n-1)   minHeap.push({matrix[r][c+1],r,c+1});
+        }
+        return ans;
     }
 };
 // @lc code=end
