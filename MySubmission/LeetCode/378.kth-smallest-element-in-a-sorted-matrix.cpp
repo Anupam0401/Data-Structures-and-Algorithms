@@ -32,15 +32,34 @@ public:
         //     res = min(res,matrix[i][ptr[i]]);
         // }
         // return res;
+
+
+        // done using priority queue in O(k) space and O(n^2) time
+        // int n = matrix.size();
+        // priority_queue<int> q;
+        // for(int i=0;i<n;i++){
+        //     for(int j=0;j<n;j++){
+        //         q.push(matrix[i][j]);
+        //         if(q.size()>k)  q.pop();
+        //     }
+        // }
+        // return q.top();
+
+        // done using binary search in O(n^2) time and O(1) space
         int n = matrix.size();
-        priority_queue<int> q;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                q.push(matrix[i][j]);
-                if(q.size()>k)  q.pop();
+        int left = matrix[0][0];
+        int right = matrix[n-1][n-1];
+        while(left<right){
+            int mid = left+(right-left)/2;
+            int count = 0;
+            for(int i=0;i<n;i++){
+                int j = upper_bound(matrix[i].begin(),matrix[i].end(),mid)-matrix[i].begin();
+                count+=j;
             }
+            if(count<k) left = mid+1;
+            else right = mid;
         }
-        return q.top();
+        return left;
     }
 };
 // @lc code=end
