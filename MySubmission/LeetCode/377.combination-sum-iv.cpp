@@ -22,7 +22,7 @@ public:
     int combinationSum4(vector<int> &nums, int target)
     {
         int n = nums.size();
-        vector<int> dp(target+1,0);
+        vector<uint> dp(target+1,0);
         // return count(nums, target, dp);
         // tabulation approach
         dp[0] = 1; // for target=0, we have 1 subset as the base case
