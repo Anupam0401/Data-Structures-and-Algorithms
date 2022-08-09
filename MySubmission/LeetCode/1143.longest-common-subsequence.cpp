@@ -28,14 +28,31 @@ public:
         // vector<vector<int>> dp(l1, vector<int>(l2, -1));
         // return recursMemo(l1 - 1, l2 - 1, a, b, dp);
 
-        vector<vector<int>> dp(l1+1,vector<int>(l2+1,0));
-        for(int i=1;i<=l1;i++){
-            for(int j=1;j<=l2;j++){
-                if(a[i-1]==b[j-1])  dp[i][j] = 1+dp[i-1][j-1];
-                else dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+        // tabulation
+        //  vector<vector<int>> dp(l1+1,vector<int>(l2+1,0));
+        //  for(int i=1;i<=l1;i++){
+        //      for(int j=1;j<=l2;j++){
+        //          if(a[i-1]==b[j-1])  dp[i][j] = 1+dp[i-1][j-1];
+        //          else dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+        //      }
+        //  }
+        //  return dp[l1][l2];
+
+        // tabulation with space optimization
+        vector<int> prev(l2 + 1, 0);
+        vector<int> curr(l2 + 1, 0);
+        for (int i = 1; i <= l1; i++)
+        {
+            for (int j = 1; j <= l2; j++)
+            {
+                if (a[i - 1] == b[j - 1])
+                    curr[j] = 1 + prev[j - 1];
+                else
+                    curr[j] = max(prev[j], curr[j - 1]);
             }
+            prev = curr;
         }
-        return dp[l1][l2];
+        return prev[l2];
     }
 };
 // @lc code=end
