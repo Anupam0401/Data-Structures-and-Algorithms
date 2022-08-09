@@ -37,6 +37,15 @@ public:
         }
         return ans;
     }
+    int recurseMemo(int n,unordered_map<char,vector<char>>& mappings,char start,unordered_map<char,vector<int>>& dp){
+        if(n==0)    return 1;
+        int ans = 0;
+        if(dp[start][n]!=-1)    return dp[start][n];
+        for(auto vowel: mappings[start]){
+            ans = (ans+recurseMemo(n-1,mappings,vowel,dp))%MOD;
+        }
+        return dp[start][n] = ans;
+    }
     int countVowelPermutation(int n)
     {
         unordered_map<char,vector<char>> mappings{{'s', {'a', 'e', 'i', 'o', 'u'}},
@@ -45,7 +54,9 @@ public:
                                             {'i', {'a', 'e', 'o', 'u'}},
                                             {'o', {'i', 'u'}},
                                             {'u', {'a'}}};
-        return recurse(n,mappings,'s');
+        unordered_map<char,vector<int>> dp;
+        dp['s'] = dp['a'] = dp['e'] = dp['i'] = dp['o'] = dp['u'] = vector<int>(n+1,-1);
+        return recurseMemo(n,mappings,'s',dp);
     }
 };
 // @lc code=end
