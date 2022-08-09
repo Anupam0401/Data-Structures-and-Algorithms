@@ -33,7 +33,7 @@ public:
         if(n==0)    return 1;
         int ans = 0;
         for(auto vowel: mappings[start]){
-            ans += recurse(n-1,mappings,vowel);
+            ans = (ans+recurse(n-1,mappings,vowel))%MOD;
         }
         return ans;
     }
