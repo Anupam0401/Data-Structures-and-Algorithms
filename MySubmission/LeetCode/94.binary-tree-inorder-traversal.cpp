@@ -72,3 +72,10 @@ public:
     }
 };
 // @lc code=end
+
+Morris Traversal Overview:
+Every time we iterate throught the tree,
+for every node in the tree, we traverse to the right most child in the left subtree of that tree and create a link of the node to the current node.
+Now if the left subtree does not ecist for a node, we simply insert the current node and traverse to the right.
+Also since we are making new links connecting the rightmost child to the local root so, we also check if we reach some node, if the right most child is already pointing to the root, we remove that link and add that node and traverse towards the right.
+Effctively the provess takes O(depth of some node) for all the nodes in the tree which is approx O(n) time and the spce taken in cleary O(1)
