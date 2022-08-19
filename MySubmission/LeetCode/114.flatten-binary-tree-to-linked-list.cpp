@@ -37,26 +37,48 @@ public:
     //     root = temp->right;
 
     // }
-    void flatten(TreeNode *root) {
-		TreeNode*now = root;
-		while (now)
-		{
-			if(now->left)
-			{
-                //Find current node's prenode that links to current node's right subtree
-				TreeNode* pre = now->left;
-				while(pre->right)
-				{
-					pre = pre->right;
-				}
-				pre->right = now->right;
-                //Use current node's left subtree to replace its right subtree(original right 
-                //subtree is already linked by current node's prenode
-				now->right = now->left;
-				now->left = NULL;
-			}
-			now = now->right;
-		}
+    // void flatten(TreeNode *root) {
+	// 	TreeNode*now = root;
+	// 	while (now)
+	// 	{
+	// 		if(now->left)
+	// 		{
+    //             //Find current node's prenode that links to current node's right subtree
+	// 			TreeNode* pre = now->left;
+	// 			while(pre->right)
+	// 			{
+	// 				pre = pre->right;
+	// 			}
+	// 			pre->right = now->right;
+    //             //Use current node's left subtree to replace its right subtree(original right 
+    //             //subtree is already linked by current node's prenode
+	// 			now->right = now->left;
+	// 			now->left = NULL;
+	// 		}
+	// 		now = now->right;
+	// 	}
+    // }
+
+    //brute force approach
+    void preorder(TreeNode* root, vector<int>& pre){
+        if(root==NULL)  return;
+        pre.push_back(root->val);
+        preorder(root->left,pre);
+        preorder(root->right,pre);
+    }   
+    void flatten(TreeNode* root) {
+        if(root==NULL)  return;
+        vector<int> pre;
+        preorder(root,pre);
+        TreeNode* temp = root;
+        for(int i=1;i<pre.size();i++){
+            if(root->left!=NULL)    root->left=NULL;
+            if(root->right!=NULL)   root->right->val = pre[i];
+            else    root->right = new TreeNode(pre[i]);
+            root = root->right;
+        }
+        root->left = root->right = NULL;
+        root = temp;
     }
 };
 // @lc code=end
