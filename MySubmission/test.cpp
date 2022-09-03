@@ -14,12 +14,12 @@ public:
             int mask = 0; // mask represents the columns covered by row i
             for(int j=0;j<m;j++){
                 if(mat[i][j]==1){ 
-                    mask |= (1<<j);
+                    mask |= (1<<j); // if mat[i][j] is 1, then we add jth bit to mask
                 }
             }
             for(int j=0;j<(1<<m);j++){
-                if((j&mask)==mask){ 
-                    dp[j] = dp[j] + 1;
+                if((j&mask)==mask){  // if mask is a subset of j, then we can add row i to j
+                    dp[j] = dp[j] + 1; // we add 1 to dp[j] because we are adding row i to j
                 }
             }
         }
