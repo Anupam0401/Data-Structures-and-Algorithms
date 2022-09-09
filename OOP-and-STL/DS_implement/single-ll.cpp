@@ -66,4 +66,5 @@ int main(){
     cin>>del;
     deleteNode(root,del);
     printList(root);
+    return 0;
 }
