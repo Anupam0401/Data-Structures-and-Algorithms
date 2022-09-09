@@ -13,71 +13,62 @@ typedef struct Queue
     queueNode *rear;
 }queue;
 
-void init(queue *q)
-{
+void init(queue* &q){
     q->front = NULL;
     q->rear = NULL;
 }
 
-void enqueue(queue *q, int data)
-{
-    queueNode *newNode = (queueNode *)malloc(sizeof(queueNode));
-    newNode->data = data;
+void insert(queue* &q, int n){
+    queueNode* newNode = (queueNode*)malloc(sizeof(queueNode));
+    newNode->data = n;
     newNode->next = NULL;
-    if (q->front == NULL)
-    {
+    if(q->front == NULL){
         q->front = newNode;
         q->rear = newNode;
         return;
     }
     q->rear->next = newNode;
-    q->rear = newNode;
+    q->rear = q->rear->next;
+    return;
 }
 
-void dequeue(queue *q)
-{
-    if (q->front == NULL)
-    {
-        cout << "Queue is empty" << endl;
-        return;
-    }
-    queueNode *temp = q->front;
-    q->front = q->front->next;
-    free(temp);
-}
-
-void print(queue *q)
-{
-    queueNode *temp = q->front;
-    while (temp != NULL)
-    {
-        cout << temp->data << " ";
+void printQueue(queue* q){
+    queueNode* temp = q->front;
+    cout<<"\nThe elements in the queue are as follows"<<endl;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
         temp = temp->next;
     }
-    cout << endl;
+    cout<<endl;
+    return;
 }
 
-int main()
-{
-    queue q;
-    init(&q);
-    enqueue(&q, 1);
-    enqueue(&q, 2);
-    enqueue(&q, 3);
-    enqueue(&q, 4);
-    enqueue(&q, 5);
-    print(&q);
-    dequeue(&q);
-    print(&q);
-    dequeue(&q);
-    print(&q);
-    dequeue(&q);
-    print(&q);
-    dequeue(&q);
-    print(&q);
-    dequeue(&q);
-    print(&q);
-    dequeue(&q);
-    print(&q);
+void dequeue(queue* &q){
+    if(q->front==NULL){
+        cout<<"Queue is empty!"<<endl;
+        return;
+    }
+    cout<<"\nThe front of the queue is "<<q->front->data<<endl;
+    q->front = q->front->next;
+    cout<<"Dequeue successfully done!\n"<<endl;
+    return;
+}
+
+int main(){
+    queue* q;
+    init(q);
+    cout<<"\nEnter the number of nodes to insert: ";
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int temp;
+        cin>>temp;
+        insert(q,temp);
+    }
+    printQueue(q);
+    dequeue(q);
+    printQueue(q);
+    dequeue(q);
+    printQueue(q);
     return 0;
 }
