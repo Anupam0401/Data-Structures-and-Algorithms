@@ -40,17 +40,6 @@ private:
             heapify(smallest);
         }
     }
-    void deleteRoot()
-    {
-        if(size==0)
-        {
-            cout<<"Heap is empty"<<endl;
-            return;
-        }
-        arr[0] = arr[size-1];
-        size--;
-        heapify(0);
-    }
 
 public:
     MinHeap(int capacity)
@@ -110,8 +99,6 @@ int main()
     h.insert(5);
     h.insert(4);
     h.insert(45);
-    h.print();
-    cout << h.extractMin() << endl;
     h.print();
     cout << h.extractMin() << endl;
     h.print();
