@@ -32,6 +32,17 @@ private:
             heapify(largest);
         }
     }
+    void deleteRoot()
+    {
+        if (size == 0)
+        {
+            cout << "Heap is empty" << endl;
+            return;
+        }
+        arr[0] = arr[size - 1];
+        size--;
+        heapify(0);
+    }
 
 public:
     MaxHeap(int capacity)
