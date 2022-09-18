@@ -7,14 +7,16 @@
 // @lc code=start
 class Solution {
 public:
-    int solve(int index, int fuel, int target, int fuel, vector<vector<int>> &stations){
-        if(index==stations.size()){
-            return fuel>=target?0:INT_MAX;
-        }
+    // comparator for sorting
+    static bool comp(const pair<int, int> &a, const pair<int, int> &b) {
+        return a.second < b.second;
     }
     int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations) {
-        //recursive solution
-        solve(0,target,startFuel,stations);                                                       
+        int n = stations.size();
+        sort(stations.begin(), stations.end(),comp);
+        priority_queue<int, vector<int>, greater<int>> pq;
+        int ans = 0;
+        
     }
 };
 // @lc code=end
