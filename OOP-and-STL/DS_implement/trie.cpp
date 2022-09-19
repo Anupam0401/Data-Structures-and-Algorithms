@@ -87,6 +87,9 @@ public:
     }
 
     // misc
+//     Then, we are going to generate all substrings of the given string. It can be done by 2 nested loops. For each iteration, the outer loop fixes the starting point and the inner loop traverses the substring from the starting point to the end of the string.
+// For each character encountered in the traversal of the inner loop, we are checking whether that particular node in the trie already contains the character or not. 
+// If it has, it means that the currently generated substring is a duplicate one. And we can just go to the next iteration to check the next character. But if the current character is not in the current node, then it means that the current substring generated is a brand new one.
     int countDistinctSubstrings(string &s)
     {
         Node *root = new Node();
