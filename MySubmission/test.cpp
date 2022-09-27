@@ -1,34 +1,74 @@
-// You are given a 0-indexed m x n binary matrix mat and an integer cols, which denotes the number of columns you must choose.
+// //table name: Loan
+// // PK- id
+// // user_id: attribute
 
-// A row is covered by a set of columns if each cell in the row that has a value of 1 also lies in one of the columns of the chosen set.
 
-// Return the maximum number of rows that can be covered by a set of cols columns.
+// //
+// userid|id
+// // 12 - 1
+// // 12 - 2 
+// // 13 - 3 
+// // 14 - 4
 
-class Solution {
-public:
-    int maximumRows(vector<vector<int>>& mat, int cols) {
-        int n = mat.size();
-        int m = mat[0].size();
-        vector<int> dp(1<<m,0); // dp[i] = number of rows covered by columns represented by i
-        for(int i=0;i<n;i++){ 
-            int mask = 0; // mask represents the columns covered by row i
-            for(int j=0;j<m;j++){
-                if(mat[i][j]==1){ 
-                    mask |= (1<<j); // if mat[i][j] is 1, then we add jth bit to mask
-                }
-            }
-            for(int j=0;j<(1<<m);j++){
-                if((j&mask)==mask){  // if mask is a subset of j, then we can add row i to j
-                    dp[j] = dp[j] + 1; // we add 1 to dp[j] because we are adding row i to j
-                }
-            }
-        }
-        int ans = 0;
-        for(int i=0;i<(1<<m);i++){
-            if(__builtin_popcount(i)==cols){ //no of ones
-                ans = max(ans,dp[i]);
-            }
-        }
-        return ans;
+
+
+
+// (SELECT DISTINCT Loan.userid from Loan)
+
+// SELECT * FROM Loan
+// GROUP BY userid
+// ORDER BY id DESC;
+
+// //SFML
+
+
+// //a,b
+
+// a=a+b 
+// b=a-b
+// a=a-b
+
+// [1,0,0,0,1,0,1,0]
+// Approach:
+// 1. Replace the value 0 by -1
+// 2. Maintain a hash map to store the points where we find the sum value 0
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int getMaxLength(vector<int> &arr){
+    int n = arr.size();
+    unordered_map<int,int> mp;
+    for(int i=0;i<n;i++){
+        if(arr[i]==0)   arr[i]=-1;
     }
-};
+    int sum = 0;
+    int maxL = 0;
+    for(int i=0;i<n;i++){
+        sum+=arr[i];
+        if(sum==0){
+            maxL = i+1;
+        }
+        if(mp.find(sum)!=mp.end()){ //mp[i] = ind at which we encountered the sum = 0, i.e., till then the number of values of 0==1
+            if(maxL<i-mp[sum]){ //i-mp[sum]: new_length where the condition is satisfied
+                maxL = i-mp[sum];
+            } 
+        }
+        else{
+            mp[sum]=i;
+        }
+    }
+    return maxL;
+}
+
+int main(){
+    vector<int> arr={1,0,0,0,1,0,1,0};
+    cout<<getMaxLength(arr);
+    return 0;
+}
+
+
+
+
+
