@@ -21,7 +21,8 @@
         "forward_list": "cpp",
         "functional": "cpp",
         "chrono": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "complex": "cpp"
     },
     "cmake.configureOnOpen": true,
     "python.formatting.provider": "autopep8",
