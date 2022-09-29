@@ -33,21 +33,31 @@ public:
         // sort(ans.begin(),ans.end());
         // return ans;
 
-        int sum = 0;
-        for(int i=0;i<k;i++)    sum+=abs(arr[i]-x);
-        pair<int,int> window = {0,k-1};
-        int m = sum;
-        for(int i=1;i<=n-k;i++){
-            sum-=abs(arr[i-1]-x);
-            sum+=abs(arr[i+k-1]-x);
-            if(sum<m){
-                m = sum;
-                window = {i,i+k-1};
-            }
+        //sliding window approach
+        // int sum = 0;
+        // for(int i=0;i<k;i++)    sum+=abs(arr[i]-x);
+        // pair<int,int> window = {0,k-1};
+        // int m = sum;
+        // for(int i=1;i<=n-k;i++){
+        //     sum-=abs(arr[i-1]-x);
+        //     sum+=abs(arr[i+k-1]-x);
+        //     if(sum<m){
+        //         m = sum;
+        //         window = {i,i+k-1};
+        //     }
+        // }
+
+        // binary search
+        int r = lower_bound(arr.begin(),arr.end(),x)-arr.begin();
+        cout<<r<<endl;
+        int l = r-1;
+        int t = k;
+        while(t--){
+            if(r >= n || l >= 0 and abs(x-arr[l])<=abs(x-arr[r]))    l--;
+            else r++;
         }
         vector<int> ans;
-        int i=window.first, j=window.second;
-        for(int p=i;p<=j;p++)   ans.push_back(arr[p]);
+        for(int i=0;i<k;i++)    ans.push_back(arr[i+l+1]);
         return ans;
     }
 };
