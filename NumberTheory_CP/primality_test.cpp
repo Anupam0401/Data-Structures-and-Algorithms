@@ -14,7 +14,7 @@ void checkPrime(int n){
 }
 void checkPrimeII(int n){
     if(n==1)    cout<<"NOT PRIME"<<endl;
-    for(int i=2;i*i<n;i++){
+    for(int i=2;i*i<=n;i++){
         if(n%i==0){
             cout<<"NOT PRIME"<<endl;
             return;
