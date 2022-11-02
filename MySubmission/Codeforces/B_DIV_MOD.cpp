@@ -22,7 +22,7 @@ int main()
                 ans = max(ans, (i / a + (i % a)));
                 if ((i + 1) % a == 0)
                 {
-                    // ans=max(ans,(i/a + (i%a)));
+                    // ans=max(ans,(i/a + (i%a)));//
                     break;
                 }
             }
