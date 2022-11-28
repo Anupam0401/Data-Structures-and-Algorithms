@@ -1,35 +1,16 @@
+# Due to the nature of the space station's outer paneling, all of its solar panels must be squares. Fortunately, you have one very large and flat area of solar material, a pair of industrial-strength scissors, and enough MegaCorp Solar Tape(TM) to piece together any excess panel material into more squares. For example, if you had a total area of 12 square yards of solar material, you would be able to make one 3x3 square panel (with a total area of 9). That would leave 3 square yards, so you can turn those into three 1x1 square solar panels.
+# Write a function solution(area) that takes as its input a single unit of measure representing the total area of solar panels you have (between 1 and 1000000 inclusive) and returns a list of the areas of the largest squares you could make out of those panels, starting with the largest squares first. So, following the example above, solution(12) would return [9, 1, 1, 1].
 
-def maxSubArraySum(a,size):
-    # print(a)
-    max_so_far = -10**6
-    max_ending_here = 0
-      
-    for i in range(0, size):
-        max_ending_here = max_ending_here + a[i]
-        if (max_so_far < max_ending_here):
-            max_so_far = max_ending_here
- 
-        if max_ending_here < 0:
-            max_ending_here = 0  
-    return max_so_far
-
-n = int(input())
-k = int(input())
-# assign minimum value to ans
-ans =  -10**6
-# take input arr of size n
-arr = list(map(int, input().split()))
-# loop through arr and take maximum sum leaving a sliding window of size k
-start = 1
-end = k
-while end <= n-2:
-    leftSum  = maxSubArraySum(arr[0:start], start)
-    # leftSum = 0
-    rightSum = maxSubArraySum(arr[end+1:],n-end-1)
-    # rightSum = 0
-    ans = max(ans,leftSum + rightSum)
-    # ans = max(ans, maxSubArraySum(arr[start-1:end], k))
-    start += 1
-    end += 1
+def solution(area):
+    # Your code here
+    result = []
+    while area > 0:
+        temp = int(area ** 0.5)
+        result.append(temp * temp)
+        area -= temp * temp
+    return result
     
-print(ans)
+    
+print(solution(12))
+print(solution(15324))
+
