@@ -1,32 +1,64 @@
-// There are N clerks who sit on a long working bench. Their productivity is relative to their position in the bench.
-// Benches are labelled from 1 to N from left to right.
-// Each clerk's productivity is calculated by two factors A and B.
-// It is given that the ith clerk's productivity at position j is calaculated as :
-// {A[i] *(j-1) + B[i]*(N-j)}.
-// Task is to find the maximum productivity of the bench.
-// Return answer modulo 10^9+7.
+public class Solution {
 
-int Solution::solve(vector<int> &A, vector<int> &B) {
-    int n = A.size();
-    vector<pair<int,int>> v;
-    for(int i=0;i<n;i++){
-        v.push_back({A[i],B[i]});
+    public Stack<Integer> merge(Stack<Integer> stack){
+        
+        if(stack.size()<=1) 
+        {
+           // System.out.print(stack.peek()+", ");
+            return stack;
+        }
+        int size=stack.size();
+
+        Stack<Integer> sstack= new Stack<>();
+        
+        for(int i=1; i<=size/2;i++){
+            sstack.push(stack.pop());
+        }
+n
+        Stack<Integer> firstHalf= new Stack<>();
+        Stack<Integer> secondHalf= new Stack<>();
+
+        firstHalf=merge(sstack);
+        secondHalf=merge(stack);
+
+        Stack<Integer> resultantStack= new Stack<>();
+
+        while(!firstHalf.empty() && !secondHalf.empty()){
+            if(firstHalf.peek()<secondHalf.peek()){
+                resultantStack.push(firstHalf.pop());
+            }
+            else{
+                 resultantStack.push(secondHalf.pop());
+            }
+        }
+
+            while(!firstHalf.empty()){
+                 resultantStack.push(firstHalf.pop());
+            }
+
+            while(!secondHalf.empty()){
+                 resultantStack.push(secondHalf.pop());
+            }
+            return resultantStack;
     }
-    sort(v.begin(),v.end());
-    vector<int> pre(n,0);
-    vector<int> suf(n,0);
-    pre[0] = v[0].first;
-    suf[n-1] = v[n-1].second;
-    for(int i=1;i<n;i++){
-        pre[i] = pre[i-1] + v[i].first;
+
+    public ArrayList<Integer> solve(ArrayList<Integer> A) {
+        if(A.size()<=1) return A;
+        
+        Stack<Integer> stack = new Stack<>();
+
+        for(Integer i: A){
+            stack.push(i);
+        }
+
+        Stack<Integer> ans= merge(stack);
+        ArrayList<Integer> list= new ArrayList<>();
+       
+        while(!ans.empty()){
+            list.add(ans.pop());
+        }
+
+        return list;
+
     }
-    for(int i=n-2;i>=0;i--){
-        suf[i] = suf[i+1] + v[i].second;
-    }
-    int ans = 0;
-    for(int i=0;i<n;i++){
-        int temp = pre[i] + suf[i];
-        ans = max(ans,temp);
-    }
-    return ans;
 }

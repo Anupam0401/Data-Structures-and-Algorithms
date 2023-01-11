@@ -1,20 +1,49 @@
-// Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+"use strict";
 
-// You may assume that each input would have exactly one solution, and you may not use the same element twice.
+process.stdin.resume();
+process.stdin.setEncoding("utf-8");
 
-// You can return the answer in any order.
+let inputString = "";
+let currentLine = 0;
 
-/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function (nums, target) {
-    var hash = {};
-    for (var i = 0; i < nums.length; i++) {
-        if (hash[nums[i]] !== undefined) {
-            return [hash[nums[i]], i];
-        }
-        hash[target - nums[i]] = i;
-    }
-};
+process.stdin.on("data", (inputStdin) => {
+  inputString += inputStdin;
+});
+
+process.stdin.on("end", (_) => {
+  inputString = inputString
+    .trim()
+    .split("\n")
+    .map((str) => str.trim());
+
+  main();
+});
+
+function readLine() {
+  return inputString[currentLine++];
+}
+
+function main() {
+  // objectKey
+  let objectKey = readLine();
+  // val
+  let val = JSON.parse(readLine().replace(/'/g, '"'));
+  // cat
+  let cat = {
+    name: "lizzie",
+    age: 18,
+    "fur color": "grey",
+    likes: ["catnip", "milk"],
+    birthday: { month: 7, day: 17, year: 1994 }
+  };
+
+  /*
+   * Write your code here and log the output.
+   */
+  //  update the  value of the object with the key objectKey to val
+  cat[objectKey] = val;
+  console.log(cat);
+    
+}
+
+
