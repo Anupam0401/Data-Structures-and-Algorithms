@@ -1,64 +1,39 @@
-public class Solution {
+// You are given a tree (i.e. a connected, undirected graph that has no cycles) rooted at node 0 consisting of n nodes numbered from 0 to n - 1. The tree is represented by a 0-indexed array parent of size n, where parent[i] is the parent of node i. Since node 0 is the root, parent[0] == -1.
 
-    public Stack<Integer> merge(Stack<Integer> stack){
-        
-        if(stack.size()<=1) 
-        {
-           // System.out.print(stack.peek()+", ");
-            return stack;
+// You are also given a string s of length n, where s[i] is the character assigned to node i.
+
+// Return the length of the longest path in the tree such that no pair of adjacent nodes on the path have the same character assigned to them.
+
+
+class Solution {
+public:
+    int longestPath(vector<int>& parent, string s) {
+        int n = parent.size();
+        vector<vector<int>> graph(n);
+        for (int i = 1; i < n; i++) {
+            graph[parent[i]].push_back(i);
         }
-        int size=stack.size();
-
-        Stack<Integer> sstack= new Stack<>();
-        
-        for(int i=1; i<=size/2;i++){
-            sstack.push(stack.pop());
-        }
-n
-        Stack<Integer> firstHalf= new Stack<>();
-        Stack<Integer> secondHalf= new Stack<>();
-
-        firstHalf=merge(sstack);
-        secondHalf=merge(stack);
-
-        Stack<Integer> resultantStack= new Stack<>();
-
-        while(!firstHalf.empty() && !secondHalf.empty()){
-            if(firstHalf.peek()<secondHalf.peek()){
-                resultantStack.push(firstHalf.pop());
-            }
-            else{
-                 resultantStack.push(secondHalf.pop());
+        vector<int> visited(n, 0);
+        vector<int> dp(n, 0);
+        int maxLen = 0;
+        for (int i = 0; i < n; i++) {
+            if (visited[i] == 0) {
+                maxLen = max(maxLen, dfs(graph, s, i, visited));
             }
         }
-
-            while(!firstHalf.empty()){
-                 resultantStack.push(firstHalf.pop());
-            }
-
-            while(!secondHalf.empty()){
-                 resultantStack.push(secondHalf.pop());
-            }
-            return resultantStack;
+        return maxLen;
     }
-
-    public ArrayList<Integer> solve(ArrayList<Integer> A) {
-        if(A.size()<=1) return A;
-        
-        Stack<Integer> stack = new Stack<>();
-
-        for(Integer i: A){
-            stack.push(i);
+    int dfs(vector<vector<int>>& graph, string& s, int node, vector<int>& visited) {
+        visited[node] = 1;
+        int maxLen = 0;
+        for (auto& child : graph[node]) {
+            if (visited[child] == 0) {
+                int childLen = dfs(graph, s, child, visited);
+                if (s[node] != s[child]) {
+                    maxLen = max(maxLen, childLen + 1);
+                }
+            }
         }
-
-        Stack<Integer> ans= merge(stack);
-        ArrayList<Integer> list= new ArrayList<>();
-       
-        while(!ans.empty()){
-            list.add(ans.pop());
-        }
-
-        return list;
-
+        return maxLen;
     }
-}
+};
