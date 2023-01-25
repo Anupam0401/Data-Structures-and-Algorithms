@@ -1,27 +1,21 @@
-# Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
+# Write a program to print maximum and minimum elements of the input array A of size N. The only line of the input would contain a single integer N that represents the length of the array followed by the N elements of the input array A
 
-# You may assume that the intervals were initially sorted according to their start times.
+def main():
+    # YOUR CODE GOES HERE
+    # Please take input and print output to standard input/output (stdin/stdout)
+    # E.g. 'input()/raw_input()' for input & 'print' for output
 
-# Definition for an interval.
-# class Interval:
-#     def _init_(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-
-class Solution:
-    # @param intervals, a list of Intervals
-    # @param newInterval, a Interval
-    # @return a list of Interval
-    def insert(self, intervals, newInterval):
-        if not intervals:
-            return []
-        intervals.append(newInterval)
-        intervals.sort(key=lambda x: x.start)
-        res = []
-        for i in intervals:
-            if not res or res[-1].end < i.start:
-                res.append(i)
-            else:
-                res[-1].end = max(res[-1].end, i.end)
-        return res
+    # Read the input
+    # N = int(input())
+    A = [int(x) for x in input().split()]
+#n is the first element of the lsit
+    n = A[0]
+    # A = A[1:]
     
+    # Find the maximum and minimum elements
+    max = A[0]
+
+    
+
+if __name__ == '__main__':
+    main()

@@ -1,49 +1,39 @@
-"use strict";
+// Given an integer A, you have to find the Ath Perfect Number.
 
-process.stdin.resume();
-process.stdin.setEncoding("utf-8");
+// A Perfect Number has the following properties:
 
-let inputString = "";
-let currentLine = 0;
+// It comprises only 1 and 2.
 
-process.stdin.on("data", (inputStdin) => {
-  inputString += inputStdin;
-});
+// The number of digits in a Perfect number is even.
 
-process.stdin.on("end", (_) => {
-  inputString = inputString
-    .trim()
-    .split("\n")
-    .map((str) => str.trim());
+// It is a palindrome number.
 
-  main();
-});
-
-function readLine() {
-  return inputString[currentLine++];
-}
-
-function main() {
-  // objectKey
-  let objectKey = readLine();
-  // val
-  let val = JSON.parse(readLine().replace(/'/g, '"'));
-  // cat
-  let cat = {
-    name: "lizzie",
-    age: 18,
-    "fur color": "grey",
-    likes: ["catnip", "milk"],
-    birthday: { month: 7, day: 17, year: 1994 }
-  };
-
-  /*
-   * Write your code here and log the output.
-   */
-  //  update the  value of the object with the key objectKey to val
-  cat[objectKey] = val;
-  console.log(cat);
-    
-}
+// For example, 11, 22, 112211 are Perfect numbers, where 123, 121, 782, 1 are not.
 
 
+module.exports = { 
+ //param A : integer
+ //return a strings
+	solve : function(A){
+        function find(N){
+            if(N<=2) return N;
+            let queue=[];
+            queue.push(1);
+            queue.push(2);
+            let count =2;
+            while(count<N){
+                let x = queue.shift();
+                let a = x*10+1;
+                let b = a+1;
+                if(count+1==N) return a;
+                if(count+2==N) return b;
+                queue.push(a);
+                queue.push(b);
+                count+=2;
+            }
+        }
+       let ans = find(A);
+       let temp = ans.toString().split('').reverse().join('');
+       return Number(ans+temp)
+	}
+};

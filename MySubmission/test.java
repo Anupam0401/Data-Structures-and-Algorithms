@@ -1,50 +1,50 @@
-// Given a stack of integers A, sort it using another stack.
+// Given an array A of N integers.
 
-// Return the array of integers after sorting the stack using another stack.
+// Find the count of the subarrays in the array which sums to zero. Since the answer can be very large, return the remainder on dividing the result with 109+7
 
 public class Solution {
+    public int solve(int[] A) {
+        int n=A.length;
+        //pf array
+        long [] pf=new long[n];
+        pf[0]=A[0];
+        for(int i=1;i<n;i++){
+            pf[i]=pf[i-1]+A[i];
+        }
+        
+        //int sum=pf[0];
+        double count=0;
+        HashMap<Long, Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+        
+        if (map.containsKey(pf[i])) {
+            map.put(pf[i],map.get(pf[i])+1);
+        }
+        else
+            map.put(pf[i],1);
+        
+        
+        if(pf[i]==0)
+        count++;
+        }
 
-    public Stack<Integer> merge(Stack<Integer> stack){
-        if(stack.size() == 1){
-            return stack;
+        //if pf array elements are repeating thn there exist an subarray with sum=0
+       // or pf[i]==0 thn there exist an subarray with sum=0
+
+       // int count=0;
+        // Getting an iterator
+        Iterator hmIterator = map.entrySet().iterator();
+
+        // Iterating through Hashmap and
+        
+        while (hmIterator.hasNext()) {
+            Map.Entry mapElement = (Map.Entry)hmIterator.next();
+            int val = ((int)mapElement.getValue());
+            count+=((val*(val-1))/2);
         }
-        int mid = stack.size()/2;
-        Stack<Integer> firstHalf = new Stack<Integer>();
-        Stack<Integer> secondHalf = new Stack<Integer>();
-        for(int i = 0; i < mid; i++){
-            firstHalf.push(stack.pop());
-        }
-        while(!stack.isEmpty()){
-            secondHalf.push(stack.pop());
-        }
-        firstHalf = merge(firstHalf);
-        secondHalf = merge(secondHalf);
-        while(!firstHalf.isEmpty() && !secondHalf.isEmpty()){
-            if(firstHalf.peek() < secondHalf.peek()){
-                stack.push(firstHalf.pop());
-            }
-            else{
-                stack.push(secondHalf.pop());
-            }
-        }
-        while(!firstHalf.isEmpty()){
-            stack.push(firstHalf.pop());
-        }
-        while(!secondHalf.isEmpty()){
-            stack.push(secondHalf.pop());
-        }
-        return stack;
-    }
-    public ArrayList<Integer> solve(ArrayList<Integer> A) {
-        Stack<Integer> stack = new Stack<Integer>();
-        for(int i = 0; i < A.size(); i++){
-            stack.push(A.get(i));
-        }
-        stack = merge(stack);
-        ArrayList<Integer> ans = new ArrayList<Integer>();
-        while(!stack.isEmpty()){
-            ans.add(stack.pop());
-        }
-        return ans;
+
+       return (int) count % 1000000007;
+
+ 
     }
 }

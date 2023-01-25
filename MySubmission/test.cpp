@@ -1,39 +1,32 @@
-// You are given a tree (i.e. a connected, undirected graph that has no cycles) rooted at node 0 consisting of n nodes numbered from 0 to n - 1. The tree is represented by a 0-indexed array parent of size n, where parent[i] is the parent of node i. Since node 0 is the root, parent[0] == -1.
-
-// You are also given a string s of length n, where s[i] is the character assigned to node i.
-
-// Return the length of the longest path in the tree such that no pair of adjacent nodes on the path have the same character assigned to them.
-
-
-class Solution {
-public:
-    int longestPath(vector<int>& parent, string s) {
-        int n = parent.size();
-        vector<vector<int>> graph(n);
-        for (int i = 1; i < n; i++) {
-            graph[parent[i]].push_back(i);
-        }
-        vector<int> visited(n, 0);
-        vector<int> dp(n, 0);
-        int maxLen = 0;
-        for (int i = 0; i < n; i++) {
-            if (visited[i] == 0) {
-                maxLen = max(maxLen, dfs(graph, s, i, visited));
-            }
-        }
-        return maxLen;
+public class Solution {
+    public int gcd(int A, int B) {
+        if (A == 0)
+            return B;
+        return gcd(B % A, A);
     }
-    int dfs(vector<vector<int>>& graph, string& s, int node, vector<int>& visited) {
-        visited[node] = 1;
-        int maxLen = 0;
-        for (auto& child : graph[node]) {
-            if (visited[child] == 0) {
-                int childLen = dfs(graph, s, child, visited);
-                if (s[node] != s[child]) {
-                    maxLen = max(maxLen, childLen + 1);
+    public ArrayList < Integer > solve(ArrayList < Integer > A) {
+        ArrayList < Integer > ans = new ArrayList < Integer > ();
+        Collections.sort(A, Collections.reverseOrder());
+        HashMap < Integer, Integer > mp = new HashMap < Integer, Integer > ();
+        // mp stores the count of A[i]'s that are to be deleted from the array
+        for (int i = 0; i < A.size(); i++) {
+            int x = A.get(i);
+            if (mp.containsKey(x) && mp.get(x) > 0)
+                mp.put(x, mp.get(x) - 1);
+            else {
+                for (int j = 0; j < ans.size(); j++) {
+                    int g = gcd(ans.get(j), x);
+
+                    if (mp.containsKey(g))
+                        mp.put(g, mp.get(g) + 2);
+                    else
+                        mp.put(g, 2);
+                        
+                    // we are adding 2 to the mp as there will 2 pairs gcd(ans[j],A[i]) and gcd(A[i],ans[j])
                 }
+                ans.add(x);
             }
         }
-        return maxLen;
+        return ans;
     }
-};
+}
