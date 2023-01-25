@@ -21,6 +21,8 @@ public:
             totalSum+=nums[i];
         }
         int minSum=INT_MAX;
+
+        
         currSum = 0;
         for (int i = 0; i < n; i++)
         {
