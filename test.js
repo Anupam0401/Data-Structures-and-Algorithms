@@ -1,39 +1,33 @@
-// Given an integer A, you have to find the Ath Perfect Number.
+// Given an array of integers A and an integer B.
 
-// A Perfect Number has the following properties:
-
-// It comprises only 1 and 2.
-
-// The number of digits in a Perfect number is even.
-
-// It is a palindrome number.
-
-// For example, 11, 22, 112211 are Perfect numbers, where 123, 121, 782, 1 are not.
+// Find the total number of subarrays having sum equals to B.
 
 
 module.exports = { 
- //param A : integer
- //return a strings
-	solve : function(A){
-        function find(N){
-            if(N<=2) return N;
-            let queue=[];
-            queue.push(1);
-            queue.push(2);
-            let count =2;
-            while(count<N){
-                let x = queue.shift();
-                let a = x*10+1;
-                let b = a+1;
-                if(count+1==N) return a;
-                if(count+2==N) return b;
-                queue.push(a);
-                queue.push(b);
-                count+=2;
+ //param A : array of integers
+ //param B : integer
+ //return an integer
+    solve : function(A, B){
+        // use hash map to store the sum of subarray
+        // if the sum of subarray equals to B, then count++
+        // if the sum of subarray - B equals to a value in the hash map, then count++
+        // if the sum of subarray - B equals to 0, then count++
+
+        let count = 0;
+        let sum = 0;
+        let map = {};
+        map[0] = 1;
+        for (let i = 0; i < A.length; i++) {
+            sum += A[i];
+            if (map[sum - B]) {
+                count += map[sum - B];
+            }
+            if (map[sum]) {
+                map[sum]++;
+            } else {
+                map[sum] = 1;
             }
         }
-       let ans = find(A);
-       let temp = ans.toString().split('').reverse().join('');
-       return Number(ans+temp)
-	}
+        return count;
+    }
 };

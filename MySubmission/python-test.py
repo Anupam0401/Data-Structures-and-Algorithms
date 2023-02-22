@@ -1,21 +1,16 @@
-# Write a program to print maximum and minimum elements of the input array A of size N. The only line of the input would contain a single integer N that represents the length of the array followed by the N elements of the input array A
+# You are given a n x n 2D matrix A representing an image.
 
-def main():
-    # YOUR CODE GOES HERE
-    # Please take input and print output to standard input/output (stdin/stdout)
-    # E.g. 'input()/raw_input()' for input & 'print' for output
+# Rotate the image by 90 degrees (clockwise).
 
-    # Read the input
-    # N = int(input())
-    A = [int(x) for x in input().split()]
-#n is the first element of the lsit
-    n = A[0]
-    # A = A[1:]
-    
-    # Find the maximum and minimum elements
-    max = A[0]
-
-    
-
-if __name__ == '__main__':
-    main()
+class Solution:
+    # @param A : list of list of integers
+    def solve(self, A):
+        newMatrix=[]
+        for i in range(len(A)):
+            newMatrix.append([])
+            for j in range(len(A)):
+                newMatrix[i].append(0)
+        for i in range(len(A)):
+            for j in range(len(A)):
+                newMatrix[i][j]=A[len(A)-1-j][i]
+        return newMatrix

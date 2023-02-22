@@ -1,32 +1,33 @@
-public class Solution {
-    public int gcd(int A, int B) {
-        if (A == 0)
-            return B;
-        return gcd(B % A, A);
-    }
-    public ArrayList < Integer > solve(ArrayList < Integer > A) {
-        ArrayList < Integer > ans = new ArrayList < Integer > ();
-        Collections.sort(A, Collections.reverseOrder());
-        HashMap < Integer, Integer > mp = new HashMap < Integer, Integer > ();
-        // mp stores the count of A[i]'s that are to be deleted from the array
-        for (int i = 0; i < A.size(); i++) {
-            int x = A.get(i);
-            if (mp.containsKey(x) && mp.get(x) > 0)
-                mp.put(x, mp.get(x) - 1);
-            else {
-                for (int j = 0; j < ans.size(); j++) {
-                    int g = gcd(ans.get(j), x);
+// Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
 
-                    if (mp.containsKey(g))
-                        mp.put(g, mp.get(g) + 2);
-                    else
-                        mp.put(g, 2);
-                        
-                    // we are adding 2 to the mp as there will 2 pairs gcd(ans[j],A[i]) and gcd(A[i],ans[j])
-                }
-                ans.add(x);
+// Try solving it using constant additional space.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ListNode* Solution::detectCycle(ListNode* A) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    ListNode *slow = A;
+    ListNode *fast = A;
+    while(fast != NULL && fast->next != NULL){
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast){
+            slow = A;
+            while(slow != fast){
+                slow = slow->next;
+                fast = fast->next;
             }
+            return slow;
         }
-        return ans;
     }
+    return NULL;
 }

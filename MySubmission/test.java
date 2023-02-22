@@ -1,50 +1,29 @@
-// Given an array A of N integers.
+// Given an integer array A containing N distinct integers, you have to find all the leaders in array A. An element is a leader if it is strictly greater than all the elements to its right side.
 
-// Find the count of the subarrays in the array which sums to zero. Since the answer can be very large, return the remainder on dividing the result with 109+7
+// NOTE: The rightmost element is always a leader.
 
 public class Solution {
-    public int solve(int[] A) {
+    public int[] solve(int[] A) {
         int n=A.length;
-        //pf array
-        long [] pf=new long[n];
-        pf[0]=A[0];
-        for(int i=1;i<n;i++){
-            pf[i]=pf[i-1]+A[i];
+        int maxRight = A[n-1]; //last element is always leader
+        int count=1;
+        for(int i=n-2;i>=0;i--){
+            if(A[i]>maxRight){
+                count++;
+                maxRight=A[i];
+            }
         }
-        
-        //int sum=pf[0];
-        double count=0;
-        HashMap<Long, Integer> map = new HashMap<>();
-        for(int i=0;i<n;i++){
-        
-        if (map.containsKey(pf[i])) {
-            map.put(pf[i],map.get(pf[i])+1);
+        int[] ans = new int[count];
+        ans[count-1]=A[n-1];
+        int j=count-2;
+        maxRight=A[n-1];
+        for(int i=n-2;i>=0;i--){
+            if(A[i]>maxRight){
+                ans[j]=A[i];
+                maxRight=A[i];
+                j--;
+            }
         }
-        else
-            map.put(pf[i],1);
-        
-        
-        if(pf[i]==0)
-        count++;
-        }
-
-        //if pf array elements are repeating thn there exist an subarray with sum=0
-       // or pf[i]==0 thn there exist an subarray with sum=0
-
-       // int count=0;
-        // Getting an iterator
-        Iterator hmIterator = map.entrySet().iterator();
-
-        // Iterating through Hashmap and
-        
-        while (hmIterator.hasNext()) {
-            Map.Entry mapElement = (Map.Entry)hmIterator.next();
-            int val = ((int)mapElement.getValue());
-            count+=((val*(val-1))/2);
-        }
-
-       return (int) count % 1000000007;
-
- 
+        return ans;
     }
 }
