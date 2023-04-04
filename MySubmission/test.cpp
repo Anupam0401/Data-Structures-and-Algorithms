@@ -1,33 +1,36 @@
-// Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+// Given an array of positive integers A and an integer B, find and return first continuous subarray which adds to B.
 
-// Try solving it using constant additional space.
+// If the answer does not exist return an array with a single element "-1".
 
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-ListNode* Solution::detectCycle(ListNode* A) {
-    // Do not write main() function.
-    // Do not read input, instead use the arguments to the function.
-    // Do not print the output, instead return values as specified
-    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
-    ListNode *slow = A;
-    ListNode *fast = A;
-    while(fast != NULL && fast->next != NULL){
-        slow = slow->next;
-        fast = fast->next->next;
-        if(slow == fast){
-            slow = A;
-            while(slow != fast){
-                slow = slow->next;
-                fast = fast->next;
+// First sub-array means the sub-array for which starting index in minimum.
+
+vector<int> Solution::solve(vector<int> &A, int B) {
+    int i=0,j=0,n=A.size();
+    long long sum=A[0];
+    while(j<n && i<=j){
+        if(sum==B){
+            vector<int> ans;
+            for(int k=i;k<=j;k++){
+                ans.push_back(A[k]);
             }
-            return slow;
+            return ans;
+        }
+        else if(sum<B){
+            j++;
+            if(j<n)
+                sum+=A[j];
+        }
+        else{
+            sum-=A[i];
+            i++;
+            if(i>j && i<n-1){
+                j++;
+                sum+=A[j];
+            }
         }
     }
-    return NULL;
+    vector<int> ans;
+    ans.push_back(-1);
+    return ans;
+    
 }

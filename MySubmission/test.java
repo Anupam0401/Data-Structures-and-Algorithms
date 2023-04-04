@@ -1,29 +1,41 @@
-// Given an integer array A containing N distinct integers, you have to find all the leaders in array A. An element is a leader if it is strictly greater than all the elements to its right side.
+// You are given a linked list that contains a loop.
+// You need to find the node, which creates a loop and break it by making the node point to NULL.
 
-// NOTE: The rightmost element is always a leader.
-
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     ListNode(int x) { val = x; next = null; }
+ * }
+ */
 public class Solution {
-    public int[] solve(int[] A) {
-        int n=A.length;
-        int maxRight = A[n-1]; //last element is always leader
-        int count=1;
-        for(int i=n-2;i>=0;i--){
-            if(A[i]>maxRight){
-                count++;
-                maxRight=A[i];
-            }
-        }
-        int[] ans = new int[count];
-        ans[count-1]=A[n-1];
-        int j=count-2;
-        maxRight=A[n-1];
-        for(int i=n-2;i>=0;i--){
-            if(A[i]>maxRight){
-                ans[j]=A[i];
-                maxRight=A[i];
-                j--;
-            }
-        }
-        return ans;
+    public ListNode solve(ListNode A) {
+
+        if(A == null) return A;
+
+        ListNode fast = A;
+        ListNode slow = A;
+        int flag = 0;
+
+        while(fast != null && fast.next != null){
+			fast = fast.next.next;
+			slow = slow.next;
+			if(fast == slow){
+				flag = 1;
+				break;
+			}
+		}
+
+		if(flag == 1){
+			slow = A;
+			while(slow.next != fast.next){
+				slow = slow.next;
+				fast = fast.next;
+			}
+			fast.next = null;
+		}
+
+		return A;
     }
 }
