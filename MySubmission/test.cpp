@@ -1,36 +1,24 @@
-// Given an array of positive integers A and an integer B, find and return first continuous subarray which adds to B.
+// Given an array A of N integers.
 
-// If the answer does not exist return an array with a single element "-1".
+// Find the count of the subarrays in the array which sums to zero. Since the answer can be very large, return the remainder on dividing the result with 10^9+7
 
-// First sub-array means the sub-array for which starting index in minimum.
-
-vector<int> Solution::solve(vector<int> &A, int B) {
-    int i=0,j=0,n=A.size();
-    long long sum=A[0];
-    while(j<n && i<=j){
-        if(sum==B){
-            vector<int> ans;
-            for(int k=i;k<=j;k++){
-                ans.push_back(A[k]);
-            }
-            return ans;
+int Solution::solve(vector<int> &A)
+{
+    int n = A.size();
+    int sum = 0;
+    int count = 0;
+    unordered_map<int, int> m;
+    int mod = 1000000007;
+    for (int i = 0; i < n; i++)
+    {
+        sum += A[i];
+        if (sum == 0)
+            count++;
+        if (m.find(sum) != m.end())
+        {
+            count += m[sum];
         }
-        else if(sum<B){
-            j++;
-            if(j<n)
-                sum+=A[j];
-        }
-        else{
-            sum-=A[i];
-            i++;
-            if(i>j && i<n-1){
-                j++;
-                sum+=A[j];
-            }
-        }
+        m[sum]++;
     }
-    vector<int> ans;
-    ans.push_back(-1);
-    return ans;
-    
+    return count % mod;
 }
